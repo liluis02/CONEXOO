@@ -1,0 +1,6 @@
+- João Vitor Alves de Souza
+- Pedro Henrique Melo Silva
+- Renato César Moreira da Silva
+- Luís Filipe Campos de Araújo
+- Keven José Silveira Santos
+- João Pedro da Silva
