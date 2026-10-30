@@ -51,17 +51,17 @@ public class Login_Frame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jBtnsair = new javax.swing.JButton();
         btnMostrarSenha = new javax.swing.JButton();
+        lblEsqueceuSenha = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CONEXOO | Login");
         setBackground(new java.awt.Color(51, 153, 255));
-        setForeground(new java.awt.Color(0, 2, 85));
+        setForeground(new java.awt.Color(19, 216, 245));
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel2.setBackground(new java.awt.Color(11, 29, 56));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(19, 216, 245)));
+        jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
 
         jTxtusuario.setBackground(new java.awt.Color(7, 21, 45));
         jTxtusuario.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -70,7 +70,7 @@ public class Login_Frame extends javax.swing.JFrame {
         jTxtusuario.addActionListener(this::jTxtusuarioActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(168, 201, 235));
         jLabel1.setText("E-mail");
 
         jTxtsenha.setBackground(new java.awt.Color(7, 21, 45));
@@ -80,7 +80,7 @@ public class Login_Frame extends javax.swing.JFrame {
         jTxtsenha.addActionListener(this::jTxtsenhaActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Arial Black", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(168, 201, 235));
         jLabel2.setText("Senha ");
 
         jBtnacessar.setBackground(new java.awt.Color(8, 124, 245));
@@ -112,13 +112,15 @@ public class Login_Frame extends javax.swing.JFrame {
         });
         JBtnRegistrar.addActionListener(this::JBtnRegistrarActionPerformed);
 
-        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Bem-vindo!");
 
         jLabel4.setBackground(new java.awt.Color(11, 29, 56));
         jLabel4.setFont(new java.awt.Font("Arial Black", 1, 10)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(169, 201, 232));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Acesse ou crie sua conta para encontrar oportunidades.");
 
         jBtnsair.setBackground(new java.awt.Color(7, 21, 45));
@@ -135,6 +137,7 @@ public class Login_Frame extends javax.swing.JFrame {
                 jBtnsairMouseClicked(evt);
             }
         });
+        jBtnsair.addActionListener(this::jBtnsairActionPerformed);
 
         btnMostrarSenha.setBackground(new java.awt.Color(20, 43, 73));
         btnMostrarSenha.setForeground(new java.awt.Color(19, 216, 245));
@@ -146,82 +149,100 @@ public class Login_Frame extends javax.swing.JFrame {
         btnMostrarSenha.setOpaque(true);
         btnMostrarSenha.addActionListener(this::btnMostrarSenhaActionPerformed);
 
+        lblEsqueceuSenha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblEsqueceuSenha.setForeground(new java.awt.Color(0, 213, 245));
+        lblEsqueceuSenha.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblEsqueceuSenha.setText("Esqueceu sua senha?");
+        lblEsqueceuSenha.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblEsqueceuSenha.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblEsqueceuSenhaMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\gemar\\Downloads\\conexoo_logo_transparente_150.png")); // NOI18N
+        jLabel5.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(JBtnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBtnsair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBtnacessar, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
-                    .addComponent(jTxtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(127, 127, 127))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTxtusuario)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTxtsenha, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblEsqueceuSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jBtnacessar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(JBtnRegistrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBtnsair, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jLabel4))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTxtsenha, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMostrarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnMostrarSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(7, 7, 7)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addGap(9, 9, 9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTxtusuario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTxtsenha, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMostrarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMostrarSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTxtsenha, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblEsqueceuSenha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBtnacessar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(JBtnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
                 .addComponent(jBtnsair, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(3, 17, 6, 16);
-        getContentPane().add(jPanel2, gridBagConstraints);
-
-        jLabel5.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Conexoo");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 72;
+        gridBagConstraints.ipadx = 13;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(12, 150, 0, 0);
-        getContentPane().add(jLabel5, gridBagConstraints);
-
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(169, 201, 232));
-        jLabel6.setText("Conectando talentos às oportunidades");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 93, 0, 0);
-        getContentPane().add(jLabel6, gridBagConstraints);
+        getContentPane().add(jPanel2, gridBagConstraints);
 
         pack();
         setLocationRelativeTo(null);
@@ -252,8 +273,6 @@ if (jTxtusuario.getText().length()==0)
             "E-mail ou senha incorretos!");
     return;
 }
-
-
 try (Connection conexao = DriverManager.getConnection(url, usuario, senha);
      PreparedStatement dec_sql = conexao.prepareStatement(sql)) {
 
@@ -263,14 +282,13 @@ try (Connection conexao = DriverManager.getConnection(url, usuario, senha);
     try (ResultSet rslogin = dec_sql.executeQuery()) {
 
         if (rslogin.next()){
-            // chama a tela principal
             Menu_Frame menu=new Menu_Frame();
             menu.setVisible(true);
             this.dispose();
         }
         else
             JOptionPane.showMessageDialog(null,
-                    "Usuário ou senha inválidos.");
+                    "E-mail ou senha inválidos.");
     }
 
 } catch (SQLException e) {
@@ -301,6 +319,17 @@ cadastro.setVisible(true);
 }    
 // TODO add your handling code here:
     }//GEN-LAST:event_btnMostrarSenhaActionPerformed
+
+    private void jBtnsairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnsairActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnsairActionPerformed
+
+    private void lblEsqueceuSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblEsqueceuSenhaMouseClicked
+        EsqueceuSenha_Frame recuperacao = new EsqueceuSenha_Frame();
+        recuperacao.setLocationRelativeTo(null);
+        recuperacao.setVisible(true);
+    this.dispose();
+    }//GEN-LAST:event_lblEsqueceuSenhaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -337,9 +366,9 @@ cadastro.setVisible(true);
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPasswordField jTxtsenha;
     private javax.swing.JTextField jTxtusuario;
+    private javax.swing.JLabel lblEsqueceuSenha;
     // End of variables declaration//GEN-END:variables
 }

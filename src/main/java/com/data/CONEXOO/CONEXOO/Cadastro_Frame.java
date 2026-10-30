@@ -77,7 +77,6 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         lblNomeEmpresa = new javax.swing.JLabel();
         txtNomeEmpresa = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         btnMostrarSenha = new javax.swing.JButton();
@@ -89,7 +88,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         pnlCadastro.setBackground(new java.awt.Color(11, 29, 56));
-        pnlCadastro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(19, 216, 245)));
+        pnlCadastro.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
         pnlCadastro.setForeground(new java.awt.Color(255, 255, 255));
         pnlCadastro.setPreferredSize(new java.awt.Dimension(490, 500));
 
@@ -117,7 +116,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         txtEmail.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(255, 255, 255));
-        txtEmail.setText("Endereço de e-mail:");
+        txtEmail.setText("Endereço de e-mail");
 
         jTxtendereco.setBackground(new java.awt.Color(20, 43, 73));
         jTxtendereco.setForeground(new java.awt.Color(255, 255, 255));
@@ -126,7 +125,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         txtSenha.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         txtSenha.setForeground(new java.awt.Color(255, 255, 255));
-        txtSenha.setText("Senha:");
+        txtSenha.setText("Senha");
 
         jPasswordField1.setBackground(new java.awt.Color(20, 43, 73));
         jPasswordField1.setForeground(new java.awt.Color(255, 255, 255));
@@ -135,7 +134,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         txtNome.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         txtNome.setForeground(new java.awt.Color(255, 255, 255));
-        txtNome.setText("Nome completo:");
+        txtNome.setText("Nome completo");
 
         jTxtNome.setBackground(new java.awt.Color(20, 43, 73));
         jTxtNome.setForeground(new java.awt.Color(255, 255, 255));
@@ -143,7 +142,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         txtConfirmarSenha.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         txtConfirmarSenha.setForeground(new java.awt.Color(255, 255, 255));
-        txtConfirmarSenha.setText("Confirmar senha:");
+        txtConfirmarSenha.setText("Confirmar senha");
 
         jTxtConfirmarsenha.setBackground(new java.awt.Color(20, 43, 73));
         jTxtConfirmarsenha.setForeground(new java.awt.Color(255, 255, 255));
@@ -151,7 +150,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         lblAreaAtuacao.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         lblAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
-        lblAreaAtuacao.setText("Área de atuação:");
+        lblAreaAtuacao.setText("Área de atuação");
 
         cmbAreaAtuacao.setBackground(new java.awt.Color(20, 43, 73));
         cmbAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
@@ -161,7 +160,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         lblNomeEmpresa.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
         lblNomeEmpresa.setForeground(new java.awt.Color(255, 255, 255));
-        lblNomeEmpresa.setText("Nome da empresa:");
+        lblNomeEmpresa.setText("Nome da empresa");
 
         txtNomeEmpresa.setBackground(new java.awt.Color(20, 43, 73));
         txtNomeEmpresa.setForeground(new java.awt.Color(255, 255, 255));
@@ -177,11 +176,6 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         jButton1.setFocusPainted(false);
         jButton1.setOpaque(true);
         jButton1.addActionListener(this::jButton1ActionPerformed);
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(169, 201, 232));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Conecte seu talento às melhores oportunidades.");
 
         jLabel5.setForeground(new java.awt.Color(169, 201, 232));
         jLabel5.setText("Já possui uma conta?");
@@ -216,6 +210,11 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         btnMostrarSenha1.setOpaque(true);
         btnMostrarSenha1.addActionListener(this::btnMostrarSenha1ActionPerformed);
 
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(169, 201, 232));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("CONEXOO");
+
         javax.swing.GroupLayout pnlCadastroLayout = new javax.swing.GroupLayout(pnlCadastro);
         pnlCadastro.setLayout(pnlCadastroLayout);
         pnlCadastroLayout.setHorizontalGroup(
@@ -223,29 +222,36 @@ public class Cadastro_Frame extends javax.swing.JFrame {
             .addGroup(pnlCadastroLayout.createSequentialGroup()
                 .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCadastroLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rbEmpresa)
+                            .addComponent(rbProfissional, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlCadastroLayout.createSequentialGroup()
+                                    .addGap(69, 69, 69)
+                                    .addComponent(jLabel3)))))
+                    .addGroup(pnlCadastroLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlCadastroLayout.createSequentialGroup()
-                                .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(pnlCadastroLayout.createSequentialGroup()
-                                        .addComponent(jLabel5)
+                            .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(pnlCadastroLayout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jButton2))
+                                .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTxtendereco, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTxtNome, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlCadastroLayout.createSequentialGroup()
+                                        .addComponent(jTxtConfirmarsenha, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton2)
-                                        .addGap(22, 22, 22))
-                                    .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtNome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jTxtendereco, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTxtNome, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                                        .addComponent(jTxtConfirmarsenha, javax.swing.GroupLayout.Alignment.LEADING)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnMostrarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnMostrarSenha1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(btnMostrarSenha1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(pnlCadastroLayout.createSequentialGroup()
                                 .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbAreaAtuacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -253,27 +259,23 @@ public class Cadastro_Frame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblNomeEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNomeEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(pnlCadastroLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rbEmpresa)
-                            .addComponent(rbProfissional, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtNomeEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(pnlCadastroLayout.createSequentialGroup()
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnMostrarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         pnlCadastroLayout.setVerticalGroup(
             pnlCadastroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCadastroLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addGap(53, 53, 53)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(33, 33, 33)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(rbProfissional)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbEmpresa)
@@ -316,25 +318,11 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = -145;
-        gridBagConstraints.ipady = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 20, 6, 20);
-        getContentPane().add(pnlCadastro, gridBagConstraints);
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(169, 201, 232));
-        jLabel3.setText("CONEXOO");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 21;
-        gridBagConstraints.ipady = -7;
+        gridBagConstraints.ipadx = -158;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 150, 0, 0);
-        getContentPane().add(jLabel3, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(6, 0, 0, 0);
+        getContentPane().add(pnlCadastro, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -433,7 +421,11 @@ public class Cadastro_Frame extends javax.swing.JFrame {
                 "Preencha o nome da empresa!");
         return;
     }
-
+if (senha.length() < 8) {
+    javax.swing.JOptionPane.showMessageDialog(this,
+            "A senha deve ter pelo menos 8 caracteres!");
+    return;
+}
     String nome = jTxtNome.getText().trim();
     String email = jTxtendereco.getText().trim();
 
@@ -445,10 +437,10 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
     String nomeEmpresa = rbEmpresa.isSelected()
             ? txtNomeEmpresa.getText().trim() : null;
-
+    String codigoRecuperacao = CodigoRecuperacao.gerarCodigo();
     String sql = "INSERT INTO usuarios "
-            + "(nome, email, senha, tipo_perfil, area_atuacao, nome_empresa) "
-            + "VALUES (?, ?, ?, ?, ?, ?)";
+            + "(nome, email, senha, tipo_perfil, area_atuacao, nome_empresa, codigo_recuperacao) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try (java.sql.Connection conexao = Conexao.conectar();
          java.sql.PreparedStatement stmt =
@@ -460,11 +452,15 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         stmt.setString(4, tipoPerfil);
         stmt.setString(5, areaAtuacao);
         stmt.setString(6, nomeEmpresa);
-
+        stmt.setString(7, codigoRecuperacao);
         stmt.executeUpdate();
 
         javax.swing.JOptionPane.showMessageDialog(this,
-                "Conta criada com sucesso!");
+        "Conta criada com sucesso!\n\n"
+        + "Seu código de recuperação é: "
+        + codigoRecuperacao
+        + "\n\nGuarde esse código em um lugar seguro!"
+        + "\nVocê precisará dele caso esqueça sua senha.");
 
         new Login_Frame().setVisible(true);
         this.dispose();
@@ -541,7 +537,6 @@ public class Cadastro_Frame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jTxtConfirmarsenha;
