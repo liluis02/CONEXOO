@@ -19,6 +19,7 @@ private int idUsuario;
 
 public RedefinirSenha_Frame(int idUsuario) {
     initComponents();
+    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
     this.idUsuario = idUsuario;
     setLocationRelativeTo(null);

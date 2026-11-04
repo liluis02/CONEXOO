@@ -32,11 +32,20 @@ CREATE TABLE `usuarios` (
   `tipo_perfil` enum('PROFISSIONAL','EMPRESA') NOT NULL,
   `area_atuacao` varchar(100) DEFAULT NULL,
   `nome_empresa` varchar(150) DEFAULT NULL,
-  `codigo_recuperacao` varchar(8) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+LOCK TABLES `usuarios` WRITE;
+/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
+INSERT INTO `usuarios` VALUES (1,'Maria Aparecida da Silva','meme@gmail.com','1234','PROFISSIONAL','Desenvolvimento',NULL),(2,'Luís Filipe Campos de Araújo','mimi@gmail.com','4321','PROFISSIONAL','Dados',NULL);
+/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -47,4 +56,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-10-30 16:36:44
+-- Dump completed on 2026-10-18 21:26:43

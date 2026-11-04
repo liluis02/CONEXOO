@@ -17,6 +17,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
      */
     public Cadastro_Frame() {    
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         rbProfissional.setFocusPainted(false);
         rbEmpresa.setFocusPainted(false);
         
@@ -105,6 +106,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         rbProfissional.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         rbProfissional.setForeground(new java.awt.Color(255, 255, 255));
         rbProfissional.setText("Profissional de TI");
+        rbProfissional.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rbProfissional.addActionListener(this::rbProfissionalActionPerformed);
 
         rbEmpresa.setBackground(new java.awt.Color(11, 29, 56));
@@ -112,6 +114,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         rbEmpresa.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         rbEmpresa.setForeground(new java.awt.Color(255, 255, 255));
         rbEmpresa.setText("Empresa contratante");
+        rbEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rbEmpresa.addActionListener(this::rbEmpresaActionPerformed);
 
         txtEmail.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
@@ -156,6 +159,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         cmbAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
         cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Desenvolvimento", "Dados", "Redes", "Segurança", "Suporte", "Outra" }));
         cmbAreaAtuacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(54, 87, 119)));
+        cmbAreaAtuacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbAreaAtuacao.addActionListener(this::cmbAreaAtuacaoActionPerformed);
 
         lblNomeEmpresa.setFont(new java.awt.Font("Arial Black", 1, 12)); // NOI18N
@@ -165,7 +169,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         txtNomeEmpresa.setBackground(new java.awt.Color(20, 43, 73));
         txtNomeEmpresa.setForeground(new java.awt.Color(255, 255, 255));
         txtNomeEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(54, 87, 119)));
-        txtNomeEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txtNomeEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtNomeEmpresa.addActionListener(this::txtNomeEmpresaActionPerformed);
 
         jButton1.setBackground(new java.awt.Color(8, 124, 245));
@@ -173,6 +177,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Criar minha conta");
         jButton1.setBorderPainted(false);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setFocusPainted(false);
         jButton1.setOpaque(true);
         jButton1.addActionListener(this::jButton1ActionPerformed);

@@ -18,6 +18,7 @@ public class EsqueceuSenha_Frame extends javax.swing.JFrame {
      */
     public EsqueceuSenha_Frame() {
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
          getContentPane().setBackground(new java.awt.Color(6, 21, 45));
 
     setLocationRelativeTo(null);
