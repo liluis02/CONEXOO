@@ -1180,7 +1180,7 @@ javax.swing.JOptionPane.showMessageDialog(
     this,
     "Perfil profissional salvo com sucesso!"
 );
-Menu_Frame menu = new Menu_Frame(idUsuario);
+Menu_Frame menu = new Menu_Frame(idUsuario, "PROFISSIONAL");
 menu.setVisible(true);
 this.dispose();
     }//GEN-LAST:event_btnSalvarPerfilActionPerformed

@@ -1,4 +1,3 @@
-
 -- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: conexoo
@@ -173,25 +172,5 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
-CREATE TABLE empresas (
-    id_empresa INT NOT NULL AUTO_INCREMENT,
-    id_usuario INT NOT NULL,
-    cnpj VARCHAR(18) UNIQUE,
-    telefone VARCHAR(20),
-    cidade VARCHAR(100),
-    estado CHAR(2),
-    descricao TEXT,
-    area_atuacao VARCHAR(100),
-    porte VARCHAR(50),
-    PRIMARY KEY (id_empresa),
-    UNIQUE KEY (id_usuario),
-    CONSTRAINT empresas_ibfk_1
-    FOREIGN KEY (id_usuario)
-    REFERENCES usuarios(id)
-    ON DELETE CASCADE
-) ENGINE=InnoDB
-DEFAULT CHARSET=utf8mb4
-COLLATE=utf8mb4_0900_ai_ci;
 
 -- Dump completed on 2026-11-04 21:10:00
