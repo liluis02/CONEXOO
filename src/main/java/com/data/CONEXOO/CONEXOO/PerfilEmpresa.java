@@ -11,41 +11,93 @@ package com.data.CONEXOO.CONEXOO;
 public class PerfilEmpresa extends javax.swing.JFrame {
 
     private int idUsuario;
-
+    private boolean perfilExistente = false;
     private static final java.util.logging.Logger logger =
         java.util.logging.Logger.getLogger(PerfilEmpresa.class.getName());
 
     public PerfilEmpresa(int idUsuario) {
         initComponents();
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         this.idUsuario = idUsuario;
+        
+        carregarDadosEmpresa();
     }
     
     public PerfilEmpresa() {
     initComponents();
+    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 }
-
-private boolean salvarDadosEmpresa() {
-
-    String sql = "INSERT INTO empresas "
-            + "(id_usuario, razao_social, nome_fantasia, cnpj, "
-            + "telefone, cidade, estado, descricao, area_atuacao, porte) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+private void carregarDadosEmpresa() {
+    String sql = "SELECT * FROM empresas WHERE id_usuario = ?";
 
     try (java.sql.Connection conexao = Conexao.conectar();
          java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
         stmt.setInt(1, idUsuario);
-        stmt.setString(2, txtRazaoSocial1.getText().trim());
-        stmt.setString(3, txtNomeFantasia.getText().trim());
-        stmt.setString(4, txtCNPJ.getText().replaceAll("\\D", ""));
-        stmt.setString(5, txtTelefoneComercial.getText().replaceAll("\\D", ""));
-        stmt.setString(6, txtCidadeEmpresa.getText().trim());
-        stmt.setString(7, cmbEstadoEmpresa.getSelectedItem().toString());
-        stmt.setString(8, txtDescricaoEmpresa.getText().trim());
-        stmt.setString(9, cmbAreaAtuacaoEmpresa.getSelectedItem().toString());
-        stmt.setString(10, cmbPortedaEmpresa.getSelectedItem().toString());
 
-        stmt.executeUpdate();
+        try (java.sql.ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                perfilExistente = true;
+                txtRazaoSocial1.setText(rs.getString("razao_social"));
+                txtNomeFantasia.setText(rs.getString("nome_fantasia"));
+                txtCNPJ.setText(rs.getString("cnpj"));
+                txtTelefoneComercial.setText(rs.getString("telefone"));
+                txtCidadeEmpresa.setText(rs.getString("cidade"));
+                txtDescricaoEmpresa.setText(rs.getString("descricao"));
+
+                cmbEstadoEmpresa.setSelectedItem(rs.getString("estado"));
+                cmbAreaAtuacaoEmpresa.setSelectedItem(rs.getString("area_atuacao"));
+                cmbPortedaEmpresa.setSelectedItem(rs.getString("porte"));
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar dados da empresa: " + e.getMessage()
+        );
+    }
+}
+private boolean salvarDadosEmpresa() {
+
+String sql;
+
+if (perfilExistente) {
+    sql = "UPDATE empresas SET "
+        + "razao_social = ?, nome_fantasia = ?, cnpj = ?, "
+        + "telefone = ?, cidade = ?, estado = ?, "
+        + "descricao = ?, area_atuacao = ?, porte = ? "
+        + "WHERE id_usuario = ?";
+} else {
+    sql = "INSERT INTO empresas "
+        + "(id_usuario, razao_social, nome_fantasia, cnpj, "
+        + "telefone, cidade, estado, descricao, area_atuacao, porte) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+}
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+int i = 1;
+
+if (!perfilExistente) {
+    stmt.setInt(i++, idUsuario);
+}
+
+stmt.setString(i++, txtRazaoSocial1.getText().trim());
+stmt.setString(i++, txtNomeFantasia.getText().trim());
+stmt.setString(i++, txtCNPJ.getText().replaceAll("\\D", ""));
+stmt.setString(i++, txtTelefoneComercial.getText().replaceAll("\\D", ""));
+stmt.setString(i++, txtCidadeEmpresa.getText().trim());
+stmt.setString(i++, cmbEstadoEmpresa.getSelectedItem().toString());
+stmt.setString(i++, txtDescricaoEmpresa.getText().trim());
+stmt.setString(i++, cmbAreaAtuacaoEmpresa.getSelectedItem().toString());
+stmt.setString(i++, cmbPortedaEmpresa.getSelectedItem().toString());
+
+if (perfilExistente) {
+    stmt.setInt(i, idUsuario);
+}
+stmt.executeUpdate();
 
         return true;
 
@@ -95,11 +147,12 @@ private boolean salvarDadosEmpresa() {
         txtDescricaoEmpresa = new javax.swing.JTextArea();
         cmbPortedaEmpresa = new javax.swing.JComboBox<>();
         btnSalvarPerfilEmpresa = new javax.swing.JButton();
+        btnVoltarInicio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlPrincipalEmpresa.setBackground(new java.awt.Color(7, 21, 45));
-        pnlPrincipalEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        pnlPrincipalEmpresa.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
         pnlPrincipalEmpresa.setPreferredSize(new java.awt.Dimension(1080, 680));
 
         lblTituloPerfilEmpresa.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
@@ -284,7 +337,7 @@ private boolean salvarDadosEmpresa() {
         jScrollDescricaoEmpresa.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         txtDescricaoEmpresa.setBackground(new java.awt.Color(7, 21, 45));
-        txtDescricaoEmpresa.setColumns(20);
+        txtDescricaoEmpresa.setColumns(30);
         txtDescricaoEmpresa.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         txtDescricaoEmpresa.setForeground(new java.awt.Color(255, 255, 255));
         txtDescricaoEmpresa.setLineWrap(true);
@@ -339,8 +392,8 @@ private boolean salvarDadosEmpresa() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollDescricaoEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
+                .addComponent(jScrollDescricaoEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnSalvarPerfilEmpresa.setBackground(new java.awt.Color(8, 184, 213));
@@ -350,57 +403,66 @@ private boolean salvarDadosEmpresa() {
         btnSalvarPerfilEmpresa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSalvarPerfilEmpresa.addActionListener(this::btnSalvarPerfilEmpresaActionPerformed);
 
+        btnVoltarInicio.setBackground(new java.awt.Color(7, 21, 45));
+        btnVoltarInicio.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnVoltarInicio.setForeground(new java.awt.Color(255, 255, 255));
+        btnVoltarInicio.setText("← Voltar ao início");
+        btnVoltarInicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        btnVoltarInicio.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVoltarInicio.addActionListener(this::btnVoltarInicioActionPerformed);
+
         javax.swing.GroupLayout pnlPrincipalEmpresaLayout = new javax.swing.GroupLayout(pnlPrincipalEmpresa);
         pnlPrincipalEmpresa.setLayout(pnlPrincipalEmpresaLayout);
         pnlPrincipalEmpresaLayout.setHorizontalGroup(
             pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPrincipalEmpresaLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSubtituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlInformacoesInstitucionaisEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
-                    .addComponent(lblTituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalEmpresaLayout.createSequentialGroup()
-                        .addComponent(btnSalvarPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(16, 16, 16)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(230, 230, 230)
+                .addGroup(pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlPrincipalEmpresaLayout.createSequentialGroup()
+                        .addComponent(btnVoltarInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvarPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblSubtituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlInformacoesInstitucionaisEmpresa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.DEFAULT_SIZE, 1070, Short.MAX_VALUE)
+                        .addComponent(lblTituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 231, Short.MAX_VALUE))
         );
         pnlPrincipalEmpresaLayout.setVerticalGroup(
             pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlPrincipalEmpresaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblTituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblSubtituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlInformacoesInstitucionaisEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSalvarPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addGroup(pnlPrincipalEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnVoltarInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlPrincipalEmpresaLayout.createSequentialGroup()
+                        .addComponent(lblTituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSubtituloPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlInformacoesInstitucionaisEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvarPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1092, Short.MAX_VALUE)
+            .addGap(0, 1535, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlPrincipalEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createSequentialGroup()
+                    .addComponent(pnlPrincipalEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 1535, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1520, Short.MAX_VALUE)
+            .addGap(0, 885, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlPrincipalEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(834, Short.MAX_VALUE)))
+                .addComponent(pnlPrincipalEmpresa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 885, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -520,6 +582,23 @@ private boolean salvarDadosEmpresa() {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbPortedaEmpresaActionPerformed
 
+    private void btnVoltarInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicioActionPerformed
+for (java.awt.Window janela : java.awt.Window.getWindows()) {
+
+    if (janela instanceof Menu_Frame) {
+
+        Menu_Frame menu = (Menu_Frame) janela;
+
+        menu.setVisible(true);
+        menu.toFront();
+        menu.requestFocus();
+
+        this.dispose();
+        return;
+    }
+}
+    }//GEN-LAST:event_btnVoltarInicioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -547,6 +626,7 @@ private boolean salvarDadosEmpresa() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalvarPerfilEmpresa;
+    private javax.swing.JButton btnVoltarInicio;
     private javax.swing.JComboBox<String> cmbAreaAtuacaoEmpresa;
     private javax.swing.JComboBox<String> cmbEstadoEmpresa;
     private javax.swing.JComboBox<String> cmbPortedaEmpresa;

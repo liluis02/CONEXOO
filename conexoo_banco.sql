@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `conexoo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `conexoo`;
 -- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: conexoo
@@ -39,14 +41,30 @@ CREATE TABLE `candidatos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `candidatos`
+-- Table structure for table `empresas`
 --
 
-LOCK TABLES `candidatos` WRITE;
-/*!40000 ALTER TABLE `candidatos` DISABLE KEYS */;
-INSERT INTO `candidatos` VALUES (1,11,'09876543211','31999184138','Martinho campos','BA','Perfeito em td, sou foda','Programador','Júnior'),(3,12,'91927197917','32999617612','Belo Horizonte','RJ','Sou foda em limpar o chão','Faxineiro','Sênior');
-/*!40000 ALTER TABLE `candidatos` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `empresas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `empresas` (
+  `id_empresa` int NOT NULL AUTO_INCREMENT,
+  `id_usuario` int NOT NULL,
+  `cnpj` varchar(18) DEFAULT NULL,
+  `telefone` varchar(20) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `estado` char(2) DEFAULT NULL,
+  `descricao` text,
+  `area_atuacao` varchar(100) DEFAULT NULL,
+  `porte` varchar(50) DEFAULT NULL,
+  `razao_social` varchar(150) DEFAULT NULL,
+  `nome_fantasia` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id_empresa`),
+  UNIQUE KEY `id_usuario` (`id_usuario`),
+  UNIQUE KEY `cnpj` (`cnpj`),
+  CONSTRAINT `empresas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `experiencias`
@@ -66,18 +84,8 @@ CREATE TABLE `experiencias` (
   PRIMARY KEY (`id_experiencia`),
   KEY `id_candidato` (`id_candidato`),
   CONSTRAINT `experiencias_ibfk_1` FOREIGN KEY (`id_candidato`) REFERENCES `candidatos` (`id_candidato`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `experiencias`
---
-
-LOCK TABLES `experiencias` WRITE;
-/*!40000 ALTER TABLE `experiencias` DISABLE KEYS */;
-INSERT INTO `experiencias` VALUES (4,3,'Apple','Faxineiro premium da apple','Mt legal e foda, muitos chãos limpos','2000-01-01','2010-02-02'),(5,1,'Apple','Desenvolvedor','Fui tão foda que me demitiram para que eu pudesse mostrar minhas habilidades superiores em outra empresa','2018-04-02','2026-02-04');
-/*!40000 ALTER TABLE `experiencias` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `habilidades`
@@ -94,16 +102,6 @@ CREATE TABLE `habilidades` (
   UNIQUE KEY `nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `habilidades`
---
-
-LOCK TABLES `habilidades` WRITE;
-/*!40000 ALTER TABLE `habilidades` DISABLE KEYS */;
-INSERT INTO `habilidades` VALUES (1,'Java','Linguagem de Programação'),(2,'Python','Linguagem de Programação'),(3,'JavaScript','Linguagem de Programação'),(4,'C++','Linguagem de Programação'),(5,'C#','Linguagem de Programação'),(6,'SQL','Banco de Dados'),(7,'MySQL','Banco de Dados'),(8,'HTML','Desenvolvimento Web'),(9,'CSS','Desenvolvimento Web'),(10,'React','Framework/Biblioteca'),(11,'Spring Boot','Framework/Biblioteca'),(12,'Git','Controle de Versão'),(13,'Docker','DevOps'),(14,'AWS','Computação em Nuvem');
-/*!40000 ALTER TABLE `habilidades` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `habilidades_candidato`
@@ -124,16 +122,6 @@ CREATE TABLE `habilidades_candidato` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `habilidades_candidato`
---
-
-LOCK TABLES `habilidades_candidato` WRITE;
-/*!40000 ALTER TABLE `habilidades_candidato` DISABLE KEYS */;
-INSERT INTO `habilidades_candidato` VALUES (1,1,'Básico'),(1,4,'Avançado'),(1,7,'Avançado'),(3,2,'Básico'),(3,3,'Intermediário'),(3,4,'Avançado');
-/*!40000 ALTER TABLE `habilidades_candidato` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `usuarios`
 --
 
@@ -151,18 +139,33 @@ CREATE TABLE `usuarios` (
   `codigo_recuperacao` varchar(8) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `usuarios`
+-- Table structure for table `vagas`
 --
 
-LOCK TABLES `usuarios` WRITE;
-/*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (7,'Luis','g@gmail.com','123456789','EMPRESA',NULL,'catatal','AFJ4Y85W'),(8,'hhhh','hhh','hhhhjjjjjjjjj','PROFISSIONAL','Segurança',NULL,'3LVIXE4L'),(9,'sssdd','g@mail.com','12345678','EMPRESA',NULL,'asass','UAZ7HFBR'),(10,'Luis Araujo','f@gmail.com','12345678','PROFISSIONAL','Dados',NULL,'8HUTOUYE'),(11,'Maria da Conceição','p@gmail.com','12345678','PROFISSIONAL','Segurança',NULL,'9DL2W36Z'),(12,'Luis Filipe','a@gmail.com','qwertyui','PROFISSIONAL','Segurança',NULL,'7JDMUYII');
-/*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `vagas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `vagas` (
+  `id_vaga` int NOT NULL AUTO_INCREMENT,
+  `id_empresa` int NOT NULL,
+  `titulo` varchar(150) NOT NULL,
+  `descricao` text NOT NULL,
+  `localizacao` varchar(150) DEFAULT NULL,
+  `modelo_trabalho` varchar(50) DEFAULT NULL,
+  `tipo_contrato` varchar(50) DEFAULT NULL,
+  `salario_min` decimal(10,2) DEFAULT NULL,
+  `salario_max` decimal(10,2) DEFAULT NULL,
+  `data_publicacao` datetime DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(30) DEFAULT 'ATIVA',
+  PRIMARY KEY (`id_vaga`),
+  KEY `id_empresa` (`id_empresa`),
+  CONSTRAINT `vagas_ibfk_1` FOREIGN KEY (`id_empresa`) REFERENCES `empresas` (`id_empresa`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -173,4 +176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-04 21:10:00
+-- Dump completed on 2026-11-11 15:32:15

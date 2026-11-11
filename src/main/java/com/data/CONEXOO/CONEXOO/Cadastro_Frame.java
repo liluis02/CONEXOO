@@ -23,23 +23,11 @@ public class Cadastro_Frame extends javax.swing.JFrame {
         
         lblAreaAtuacao.setVisible(false);
         cmbAreaAtuacao.setVisible(false);
-
+        txtNome.setVisible(true);
+        jTxtNome.setVisible(true);
         lblNomeEmpresa.setVisible(false);
         txtNomeEmpresa.setVisible(false);
-        rbProfissional.addActionListener(e -> {
-        lblAreaAtuacao.setVisible(true);
-        cmbAreaAtuacao.setVisible(true);
-
-        lblNomeEmpresa.setVisible(false);
-        txtNomeEmpresa.setVisible(false);
-});
-        rbEmpresa.addActionListener(e -> {
-        lblAreaAtuacao.setVisible(false);
-        cmbAreaAtuacao.setVisible(false);
-
-        lblNomeEmpresa.setVisible(true);
-        txtNomeEmpresa.setVisible(true);
-});
+        
         jTxtNome.setCaretColor(java.awt.Color.WHITE);
         jTxtendereco.setCaretColor(java.awt.Color.WHITE);
         jPasswordField1.setCaretColor(java.awt.Color.WHITE);
@@ -157,7 +145,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         cmbAreaAtuacao.setBackground(new java.awt.Color(20, 43, 73));
         cmbAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
-        cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Desenvolvimento", "Dados", "Redes", "Segurança", "Suporte", "Outra" }));
+        cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione sua área de atuação", "Desenvolvimento Front-end", "Desenvolvimento Back-end", "Desenvolvimento Full Stack", "Desenvolvimento Mobile", "Desenvolvimento Desktop", "Desenvolvimento de Jogos", "Engenharia de Software", "Arquitetura de Software", "Qualidade de Software (QA)", "Automação de Testes", "Banco de Dados", "Administração de Banco de Dados (DBA)", "Análise de Dados", "Ciência de Dados", "Engenharia de Dados", "Business Intelligence (BI)", "Inteligência Artificial", "Machine Learning", "Redes de Computadores", "Administração de Sistemas", "Infraestrutura de TI", "Suporte Técnico", "Segurança da Informação", "Cibersegurança", "Segurança Ofensiva (Pentest)", "Computação em Nuvem (Cloud)", "DevOps", "Engenharia de Confiabilidade (SRE)", "Análise de Sistemas", "Gestão de Projetos de TI", "Gestão de Produtos Digitais", "Governança de TI", "Consultoria de TI", "Análise de Negócios", "Sistemas ERP", "Scrum Master", "UX/UI Design", "Internet das Coisas (IoT)", "Robótica e Automação", "Blockchain" }));
         cmbAreaAtuacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(54, 87, 119)));
         cmbAreaAtuacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbAreaAtuacao.addActionListener(this::cmbAreaAtuacaoActionPerformed);
@@ -338,7 +326,14 @@ public class Cadastro_Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jTxtenderecoActionPerformed
 
     private void rbProfissionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbProfissionalActionPerformed
-        // TODO add your handling code here:
+        txtNome.setVisible(true);
+jTxtNome.setVisible(true);
+
+lblNomeEmpresa.setVisible(false);
+txtNomeEmpresa.setVisible(false);
+
+lblAreaAtuacao.setVisible(true);
+cmbAreaAtuacao.setVisible(true);
     }//GEN-LAST:event_rbProfissionalActionPerformed
 
     private void cmbAreaAtuacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAreaAtuacaoActionPerformed
@@ -350,7 +345,14 @@ public class Cadastro_Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNomeEmpresaActionPerformed
 
     private void rbEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEmpresaActionPerformed
-        // TODO add your handling code here:
+        txtNome.setVisible(false);
+jTxtNome.setVisible(false);
+
+lblNomeEmpresa.setVisible(true);
+txtNomeEmpresa.setVisible(true);
+
+lblAreaAtuacao.setVisible(false);
+cmbAreaAtuacao.setVisible(false);
     }//GEN-LAST:event_rbEmpresaActionPerformed
 
     private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
@@ -360,7 +362,8 @@ public class Cadastro_Frame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
     int camposVazios = 0;
 
-    boolean nomeVazio = jTxtNome.getText().trim().isEmpty();
+    boolean nomeVazio = rbProfissional.isSelected()
+        && jTxtNome.getText().trim().isEmpty();
     boolean emailVazio = jTxtendereco.getText().trim().isEmpty();
     boolean senhaVazia = jPasswordField1.getPassword().length == 0;
     boolean confirmacaoVazia = jTxtConfirmarsenha.getPassword().length == 0;
@@ -432,7 +435,9 @@ if (senha.length() < 8) {
             "A senha deve ter pelo menos 8 caracteres!");
     return;
 }
-    String nome = jTxtNome.getText().trim();
+    String nome = rbEmpresa.isSelected()
+        ? txtNomeEmpresa.getText().trim()
+        : jTxtNome.getText().trim();
     String email = jTxtendereco.getText().trim();
 
     String tipoPerfil = rbProfissional.isSelected()

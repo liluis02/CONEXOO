@@ -45,12 +45,12 @@ public class PerfilProfissional_Frame extends javax.swing.JFrame {
 
     painelExterno.add(painelCentral, java.awt.BorderLayout.NORTH);
 
-    // Coloca o conteúdo dentro do JScrollPane
+  
     jScrollPane2.setViewportView(painelExterno);
 
     jScrollPane2.getVerticalScrollBar().setUnitIncrement(20);
 
-    // Faz o JScrollPane ocupar toda a janela
+ 
     getContentPane().setLayout(new java.awt.BorderLayout());
     getContentPane().add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -76,6 +76,7 @@ public PerfilProfissional_Frame(int idUsuario, boolean modoEdicao) {
         carregarExperienciasParaEdicao();
     }
 }
+
 private void carregarExperienciasParaEdicao() {
 
     String sql = """
@@ -334,6 +335,7 @@ private void carregarPerfilParaEdicao() {
         jScrollPane6 = new javax.swing.JScrollPane();
         txtDescricaoExperiencia = new javax.swing.JTextArea();
         btnSalvarPerfil = new javax.swing.JButton();
+        btnVoltarInicio4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("CONEXOO | Meu Perfil");
@@ -848,6 +850,14 @@ private void carregarPerfilParaEdicao() {
         btnSalvarPerfil.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSalvarPerfil.addActionListener(this::btnSalvarPerfilActionPerformed);
 
+        btnVoltarInicio4.setBackground(new java.awt.Color(7, 21, 45));
+        btnVoltarInicio4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnVoltarInicio4.setForeground(new java.awt.Color(255, 255, 255));
+        btnVoltarInicio4.setText("← Voltar ao início");
+        btnVoltarInicio4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        btnVoltarInicio4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVoltarInicio4.addActionListener(this::btnVoltarInicio4ActionPerformed);
+
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
         pnlPrincipal.setLayout(pnlPrincipalLayout);
         pnlPrincipalLayout.setHorizontalGroup(
@@ -855,7 +865,10 @@ private void carregarPerfilParaEdicao() {
             .addGroup(pnlPrincipalLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addComponent(btnVoltarInicio4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(pnlExperienciasProfissionais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblTituloPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -863,7 +876,7 @@ private void carregarPerfilParaEdicao() {
                         .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlInformacoesProfissionais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)))
-                .addGap(0, 10, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -881,7 +894,9 @@ private void carregarPerfilParaEdicao() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlExperienciasProfissionais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoltarInicio4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -900,7 +915,7 @@ private void carregarPerfilParaEdicao() {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1508, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addContainerGap())
         );
 
@@ -1188,6 +1203,22 @@ this.dispose();
     private void cmbHabilidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHabilidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbHabilidadeActionPerformed
+
+    private void btnVoltarInicio4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicio4ActionPerformed
+for (java.awt.Window janela : java.awt.Window.getWindows()) {
+
+    if (janela instanceof Menu_Frame) {
+        Menu_Frame menu = (Menu_Frame) janela;
+
+        menu.setVisible(true);
+        menu.toFront();
+        menu.requestFocus();
+
+        this.dispose();
+        return;
+    }
+}
+    }//GEN-LAST:event_btnVoltarInicio4ActionPerformed
 private int atualizarDadosCandidato() {
 
     String sql = """
@@ -1486,6 +1517,7 @@ return true;
     private javax.swing.JButton btnRemoverExperiencia;
     private javax.swing.JButton btnRemoverHabilidade;
     private javax.swing.JButton btnSalvarPerfil;
+    private javax.swing.JButton btnVoltarInicio4;
     private javax.swing.JCheckBox chkTrabalhoAtual;
     private javax.swing.JComboBox<String> cmbEstado1;
     private javax.swing.JComboBox<String> cmbHabilidade;

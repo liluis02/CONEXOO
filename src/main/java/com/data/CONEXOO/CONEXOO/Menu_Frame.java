@@ -5,33 +5,116 @@
 package com.data.CONEXOO.CONEXOO;
 
 public class Menu_Frame extends javax.swing.JFrame {
+    
+    private void carregarQuantidadeVagas() {
+    String sql = "SELECT COUNT(*) FROM vagas WHERE status = 'ATIVA'";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql);
+         java.sql.ResultSet rs = pst.executeQuery()) {
+
+        if (rs.next()) {
+            int quantidade = rs.getInt(1);
+            lblQuantidadeVagas1.setText(String.valueOf(quantidade));
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao contar vagas: " + e.getMessage()
+        );
+    }
+}
 
     private VisualizarPerfil_Panel painelPerfil;
     private javax.swing.JScrollPane scrollPerfil;
     private VisualizarPerfilEmpresa painelPerfilEmpresa;
     private javax.swing.JScrollPane scrollPerfilEmpresa;
+    private Vagas_Perfilprofissional1 painelVagas;
+    private javax.swing.JScrollPane scrollVagas;
+    private Vagas_PerfilEmpresa painelVagasEmpresa;
+    private javax.swing.JScrollPane scrollVagasEmpresa;
     private int idUsuario;
     private String tipoUsuario;
 
     private void mostrarPainelPerfilEmpresa() {
+        if (scrollVagas != null) {
+    scrollVagas.setVisible(false);
+}
 
     if (painelPerfilEmpresa == null) {
         painelPerfilEmpresa = new VisualizarPerfilEmpresa(idUsuario);
 
         scrollPerfilEmpresa = new javax.swing.JScrollPane(painelPerfilEmpresa);
+        scrollPerfilEmpresa.setHorizontalScrollBarPolicy(
+    javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+);
         scrollPerfilEmpresa.getVerticalScrollBar().setUnitIncrement(20);
 
         pnlPrincipal.add(scrollPerfilEmpresa);
     }
 
-    scrollPerfilEmpresa.setBounds(
-        pnlMenuLateral.getX() + pnlMenuLateral.getWidth() + 20,
+int inicioConteudo = pnlMenuLateral.getX()
+        + pnlMenuLateral.getWidth();
+
+scrollPerfilEmpresa.setBounds(
+    inicioConteudo,
+    0,
+    pnlPrincipal.getWidth() - inicioConteudo,
+    pnlPrincipal.getHeight()
+);
+
+    scrollPerfilEmpresa.setVisible(true);
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
+}
+    private void mostrarPainelVagas() {
+if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+    mostrarPainelVagasEmpresa();
+    return;
+}
+
+if (!"PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
+    return;
+}
+        
+        if (scrollPerfil != null) {
+    scrollPerfil.setVisible(false);
+}
+
+if (scrollPerfilEmpresa != null) {
+    scrollPerfilEmpresa.setVisible(false);
+}
+
+if (painelVagas == null) {
+    painelVagas = new Vagas_Perfilprofissional1();
+    painelVagas.setAcaoVerDetalhes(idVaga -> {
+    mostrarDetalhesVaga(idVaga);
+});
+
+    scrollVagas = new javax.swing.JScrollPane(painelVagas);
+
+    scrollVagas.setHorizontalScrollBarPolicy(
+        javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+    );
+
+    scrollVagas.getVerticalScrollBar().setUnitIncrement(20);
+    pnlPrincipal.add(scrollVagas);
+}
+
+    int inicioConteudo = pnlMenuLateral.getX()
+            + pnlMenuLateral.getWidth();
+
+    scrollVagas.setBounds(
+        inicioConteudo,
         0,
-        pnlPrincipal.getWidth() - pnlMenuLateral.getWidth() - 40,
+        pnlPrincipal.getWidth() - inicioConteudo,
         pnlPrincipal.getHeight()
     );
 
-    scrollPerfilEmpresa.setVisible(true);
+scrollVagas.setVisible(true);
+pnlPrincipal.setComponentZOrder(scrollVagas, 0);
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
@@ -44,27 +127,608 @@ public class Menu_Frame extends javax.swing.JFrame {
 
     public Menu_Frame(int idUsuario, String tipoUsuario) {
         initComponents();
+jScrollPane1.setOpaque(false);
+jScrollPane1.getViewport().setOpaque(false);
 
+txtDescricaoBanner.setOpaque(false);
+txtDescricaoBanner.setForeground(new java.awt.Color(168, 201, 235));
+       
         getContentPane().setBackground(new java.awt.Color(5, 20, 43));
         setLocationRelativeTo(null);
         setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 
         this.idUsuario = idUsuario;
         this.tipoUsuario = tipoUsuario;
+        
+if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+    lblEmpresasPlataforma.setText("Sobre a empresa");
+    carregarDescricaoEmpresa();
+} else {
+    lblEmpresasPlataforma.setText("Empresas na plataforma");
+    txtDescricaoBanner.setText(
+        "Descubra oportunidades de trabalho na área de TI"
+    );
+}
 
         carregarNomeUsuario();
+        carregarQuantidadeVagas();
+if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
+
+    carregarEmpresasPlataforma();
+    carregarResumoProfissional();
+
+} else if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+
+    // Primeiro quadrado
+    lblvagasdisponiveis3.setText("Vagas publicadas");
+
+    // Segundo quadrado
+    lblDescricaoVagas3.setText("Vagas ativas");
+
+    // Terceiro quadrado
+    lblDescricaoVagas2.setText("Candidaturas recebidas");
+
+    // Valores temporários
+    lblQuantidadeVagas1.setText("0");
+    lblQuantidadeVagas3.setText("0");
+    lblQuantidadeVagas2.setText("0");
+    carregarQuantidadeVagasEmpresa();
+    lblEmpresasPlataforma.setText("Minhas vagas");
+    lblAtividadesRecentes.setText("Resumo da empresa");
+    carregarMinhasVagasInicio();
+    carregarResumoEmpresa();
+}
     }
+    
+private void carregarResumoProfissional() {
+
+    pnlListaAtividades.removeAll();
+
+    pnlListaAtividades.setLayout(
+        new javax.swing.BoxLayout(
+            pnlListaAtividades,
+            javax.swing.BoxLayout.Y_AXIS
+        )
+    );
+
+    String sobreMim = "Nenhuma descrição cadastrada.";
+    String habilidades = "Nenhuma habilidade cadastrada.";
+    String experiencias = "Nenhuma experiência cadastrada.";
+
+    try (java.sql.Connection conexao = Conexao.conectar()) {
+
+        // SOBRE MIM
+        String sqlSobre = "SELECT descricao FROM candidatos "
+                + "WHERE id_usuario = ?";
+
+        try (java.sql.PreparedStatement pst =
+                conexao.prepareStatement(sqlSobre)) {
+
+            pst.setInt(1, idUsuario);
+
+            try (java.sql.ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    String descricao = rs.getString("descricao");
+
+                    if (descricao != null && !descricao.trim().isEmpty()) {
+                        sobreMim = descricao.trim();
+                    }
+                }
+            }
+        }
+
+        
+        String sqlHabilidades = """
+            SELECT h.nome, hc.nivel
+            FROM habilidades_candidato hc
+            INNER JOIN habilidades h
+                ON hc.id_habilidade = h.id_habilidade
+            INNER JOIN candidatos c
+                ON hc.id_candidato = c.id_candidato
+            WHERE c.id_usuario = ?
+            ORDER BY h.nome
+            LIMIT 3
+            """;
+
+        try (java.sql.PreparedStatement pst =
+                conexao.prepareStatement(sqlHabilidades)) {
+
+            pst.setInt(1, idUsuario);
+
+            try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+                StringBuilder lista = new StringBuilder();
+
+                while (rs.next()) {
+                    if (lista.length() > 0) {
+                        lista.append(", ");
+                    }
+
+                    lista.append(rs.getString("nome"))
+                         .append(" — ")
+                         .append(rs.getString("nivel"));
+                }
+
+                if (lista.length() > 0) {
+                    habilidades = lista.toString();
+                }
+            }
+        }
+        String sqlExperiencias = """
+            SELECT cargo, nome_empresa
+            FROM experiencias
+            WHERE id_candidato = (
+                SELECT id_candidato
+                FROM candidatos
+                WHERE id_usuario = ?
+            )
+            ORDER BY data_contratacao DESC
+            LIMIT 2
+            """;
+
+        try (java.sql.PreparedStatement pst =
+                conexao.prepareStatement(sqlExperiencias)) {
+
+            pst.setInt(1, idUsuario);
+
+            try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+                StringBuilder lista = new StringBuilder();
+
+                while (rs.next()) {
+                    if (lista.length() > 0) {
+                        lista.append(" | ");
+                    }
+
+                    lista.append(rs.getString("cargo"))
+                         .append(" - ")
+                         .append(rs.getString("nome_empresa"));
+                }
+
+                if (lista.length() > 0) {
+                    experiencias = lista.toString();
+                }
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar resumo profissional: " + e.getMessage()
+        );
+    }
+
+    adicionarCampoResumo("Sobre mim", sobreMim);
+    adicionarCampoResumo("Habilidades profissionais", habilidades);
+    adicionarCampoResumo("Experiências profissionais", experiencias);
+
+    pnlListaAtividades.revalidate();
+    pnlListaAtividades.repaint();
+}
+
+private void adicionarCampoResumo(String titulo, String conteudo) {
+
+    javax.swing.JPanel card = new javax.swing.JPanel(
+        new java.awt.BorderLayout(0, 5)
+    );
+
+    card.setBackground(new java.awt.Color(20, 55, 90));
+
+    card.setBorder(
+        javax.swing.BorderFactory.createEmptyBorder(12, 15, 12, 15)
+    );
+
+    javax.swing.JLabel lblTitulo = new javax.swing.JLabel(titulo);
+
+    lblTitulo.setForeground(new java.awt.Color(22, 217, 244));
+    lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 15));
+
+    String texto = conteudo.replace("\n", " ").replace("\r", " ");
+
+    if (texto.length() > 130) {
+        texto = texto.substring(0, 127) + "...";
+    }
+
+    javax.swing.JTextArea txtConteudo =
+        new javax.swing.JTextArea(texto);
+
+    txtConteudo.setEditable(false);
+    txtConteudo.setFocusable(false);
+    txtConteudo.setLineWrap(true);
+    txtConteudo.setWrapStyleWord(true);
+    txtConteudo.setOpaque(true);
+txtConteudo.setBackground(new java.awt.Color(20, 55, 90));
+txtConteudo.setBorder(null);
+
+    txtConteudo.setForeground(java.awt.Color.WHITE);
+    txtConteudo.setFont(new java.awt.Font("Segoe UI", 0, 13));
+
+    card.add(lblTitulo, java.awt.BorderLayout.NORTH);
+    card.add(txtConteudo, java.awt.BorderLayout.CENTER);
+
+    card.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+
+    card.setMaximumSize(
+        new java.awt.Dimension(Integer.MAX_VALUE, 100)
+    );
+
+    card.setPreferredSize(
+        new java.awt.Dimension(400, 100)
+    );
+
+    pnlListaAtividades.add(card);
+
+    pnlListaAtividades.add(
+        javax.swing.Box.createVerticalStrut(10)
+    );
+}
+
+    
+private void carregarEmpresasPlataforma() {
+
+    pnlListaEmpresas.removeAll();
+
+    pnlListaEmpresas.setLayout(
+        new javax.swing.BoxLayout(
+            pnlListaEmpresas,
+            javax.swing.BoxLayout.Y_AXIS
+        )
+    );
+
+    String sql = "SELECT e.nome_fantasia, e.area_atuacao, "
+            + "e.cidade, e.estado, "
+            + "COUNT(v.id_vaga) AS total_vagas "
+            + "FROM empresas e "
+            + "LEFT JOIN vagas v ON e.id_empresa = v.id_empresa "
+            + "AND v.status = 'ATIVA' "
+            + "GROUP BY e.id_empresa, e.nome_fantasia, "
+            + "e.area_atuacao, e.cidade, e.estado "
+            + "ORDER BY total_vagas DESC "
+            + "LIMIT 3";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql);
+         java.sql.ResultSet rs = pst.executeQuery()) {
+
+        while (rs.next()) {
+
+            String nome = rs.getString("nome_fantasia");
+            String area = rs.getString("area_atuacao");
+            String cidade = rs.getString("cidade");
+            String estado = rs.getString("estado");
+            int vagas = rs.getInt("total_vagas");
+
+            if (nome == null || nome.trim().isEmpty()) {
+                nome = "Empresa sem nome";
+            }
+
+            if (area == null || area.trim().isEmpty()) {
+                area = "Área não informada";
+            }
+
+            String localizacao = "";
+
+            if (cidade != null && !cidade.trim().isEmpty()) {
+                localizacao = cidade.trim();
+            }
+
+            if (estado != null && !estado.trim().isEmpty()) {
+                if (!localizacao.isEmpty()) {
+                    localizacao += " - ";
+                }
+                localizacao += estado.trim();
+            }
+
+            if (localizacao.isEmpty()) {
+                localizacao = "Localização não informada";
+            }
+
+            // Card principal
+            javax.swing.JPanel cardEmpresa = new javax.swing.JPanel(
+                new java.awt.BorderLayout(15, 0)
+            );
+
+            cardEmpresa.setBackground(
+                new java.awt.Color(20, 55, 90)
+            );
+
+            cardEmpresa.setBorder(
+                javax.swing.BorderFactory.createEmptyBorder(
+                    12, 15, 12, 15
+                )
+            );
+
+            // Nome e área
+            javax.swing.JLabel lblEmpresa = new javax.swing.JLabel(
+                nome + "  |  " + area
+            );
+
+            lblEmpresa.setForeground(java.awt.Color.WHITE);
+            lblEmpresa.setFont(
+                new java.awt.Font("Segoe UI", 1, 14)
+            );
+
+            // Localização
+            javax.swing.JLabel lblLocalizacao =
+                new javax.swing.JLabel(localizacao);
+
+            lblLocalizacao.setForeground(
+                new java.awt.Color(168, 201, 235)
+            );
+
+            lblLocalizacao.setFont(
+                new java.awt.Font("Segoe UI", 0, 12)
+            );
+
+            // Informações à esquerda
+            javax.swing.JPanel pnlInfoEmpresa =
+                new javax.swing.JPanel();
+
+            pnlInfoEmpresa.setLayout(
+                new javax.swing.BoxLayout(
+                    pnlInfoEmpresa,
+                    javax.swing.BoxLayout.Y_AXIS
+                )
+            );
+
+            pnlInfoEmpresa.setOpaque(false);
+
+            lblEmpresa.setAlignmentX(
+                java.awt.Component.LEFT_ALIGNMENT
+            );
+
+            lblLocalizacao.setAlignmentX(
+                java.awt.Component.LEFT_ALIGNMENT
+            );
+
+            pnlInfoEmpresa.add(lblEmpresa);
+
+            pnlInfoEmpresa.add(
+                javax.swing.Box.createVerticalStrut(5)
+            );
+
+            pnlInfoEmpresa.add(lblLocalizacao);
+
+            // Quantidade de vagas à direita
+            javax.swing.JLabel lblVagasEmpresa =
+                new javax.swing.JLabel(
+                    vagas + (vagas == 1
+                        ? " vaga ativa"
+                        : " vagas ativas")
+                );
+
+            lblVagasEmpresa.setForeground(
+                new java.awt.Color(22, 217, 244)
+            );
+
+            lblVagasEmpresa.setFont(
+                new java.awt.Font("Segoe UI", 1, 13)
+            );
+
+            // Montagem do card
+            cardEmpresa.add(
+                pnlInfoEmpresa,
+                java.awt.BorderLayout.CENTER
+            );
+
+            cardEmpresa.add(
+                lblVagasEmpresa,
+                java.awt.BorderLayout.EAST
+            );
+
+            cardEmpresa.setAlignmentX(
+                java.awt.Component.LEFT_ALIGNMENT
+            );
+
+            cardEmpresa.setMaximumSize(
+                new java.awt.Dimension(Integer.MAX_VALUE, 75)
+            );
+
+            cardEmpresa.setPreferredSize(
+                new java.awt.Dimension(600, 75)
+            );
+
+            cardEmpresa.setMinimumSize(
+                new java.awt.Dimension(100, 75)
+            );
+
+            pnlListaEmpresas.add(cardEmpresa);
+
+            pnlListaEmpresas.add(
+                javax.swing.Box.createVerticalStrut(10)
+            );
+        }
+
+    } catch (java.sql.SQLException e) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar empresas: " + e.getMessage()
+        );
+    }
+
+    pnlListaEmpresas.revalidate();
+    pnlListaEmpresas.repaint();
+}
+private void carregarMinhasVagasInicio() {
+
+    pnlListaEmpresas.removeAll();
+
+    pnlListaEmpresas.setLayout(
+        new javax.swing.BoxLayout(
+            pnlListaEmpresas,
+            javax.swing.BoxLayout.Y_AXIS
+        )
+    );
+
+    String sql = """
+        SELECT v.titulo, v.localizacao, v.status
+        FROM vagas v
+        INNER JOIN empresas e ON v.id_empresa = e.id_empresa
+        WHERE e.id_usuario = ?
+        ORDER BY v.data_publicacao DESC
+        LIMIT 3
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+
+                String titulo = rs.getString("titulo");
+                String localizacao = rs.getString("localizacao");
+                String status = rs.getString("status");
+
+                javax.swing.JPanel card = new javax.swing.JPanel(
+                    new java.awt.BorderLayout(15, 0)
+                );
+
+                card.setBackground(new java.awt.Color(20, 55, 90));
+
+                card.setBorder(
+                    javax.swing.BorderFactory.createEmptyBorder(
+                        12, 15, 12, 15
+                    )
+                );
+
+                javax.swing.JLabel lblTitulo = new javax.swing.JLabel(
+                    titulo == null ? "Vaga sem título" : titulo
+                );
+
+                lblTitulo.setForeground(java.awt.Color.WHITE);
+                lblTitulo.setFont(
+                    new java.awt.Font("Segoe UI", 1, 14)
+                );
+
+                javax.swing.JLabel lblLocalizacao = new javax.swing.JLabel(
+                    localizacao == null ? "Não informada" : localizacao
+                );
+
+                lblLocalizacao.setForeground(
+                    new java.awt.Color(168, 201, 235)
+                );
+
+                javax.swing.JPanel pnlInfo = new javax.swing.JPanel();
+
+                pnlInfo.setLayout(
+                    new javax.swing.BoxLayout(
+                        pnlInfo,
+                        javax.swing.BoxLayout.Y_AXIS
+                    )
+                );
+
+                pnlInfo.setOpaque(false);
+
+                pnlInfo.add(lblTitulo);
+                pnlInfo.add(
+                    javax.swing.Box.createVerticalStrut(5)
+                );
+                pnlInfo.add(lblLocalizacao);
+
+                javax.swing.JLabel lblStatus = new javax.swing.JLabel(
+                    status == null ? "Sem status" : status
+                );
+
+                lblStatus.setForeground(
+                    new java.awt.Color(22, 217, 244)
+                );
+
+                lblStatus.setFont(
+                    new java.awt.Font("Segoe UI", 1, 13)
+                );
+
+                card.add(pnlInfo, java.awt.BorderLayout.CENTER);
+                card.add(lblStatus, java.awt.BorderLayout.EAST);
+
+                card.setAlignmentX(
+                    java.awt.Component.LEFT_ALIGNMENT
+                );
+
+                card.setMaximumSize(
+                    new java.awt.Dimension(Integer.MAX_VALUE, 75)
+                );
+
+                card.setPreferredSize(
+                    new java.awt.Dimension(600, 75)
+                );
+
+                pnlListaEmpresas.add(card);
+
+                pnlListaEmpresas.add(
+                    javax.swing.Box.createVerticalStrut(10)
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar vagas da empresa: " + e.getMessage()
+        );
+    }
+
+    pnlListaEmpresas.revalidate();
+    pnlListaEmpresas.repaint();
+}
+
+    private void carregarDescricaoEmpresa() {
+
+    String sql = "SELECT descricao FROM empresas WHERE id_usuario = ?";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                String descricao = rs.getString("descricao");
+                System.out.println("Descrição encontrada: " + descricao);
+
+                if (descricao != null && !descricao.trim().isEmpty()) {
+                    txtDescricaoBanner.setText(descricao);
+                    txtDescricaoBanner.setCaretPosition(0);
+                } else {
+                    txtDescricaoBanner.setText(
+    "Sua empresa ainda não possui uma descrição."
+);
+                }
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar descrição da empresa: " + e.getMessage()
+        );
+    }
+}
 private void ocultarPainelPerfil() {
     if (scrollPerfil != null) {
         scrollPerfil.setVisible(false);
     }
-} 
+}
     private void mostrarPainelPerfil() {
+        if (scrollVagas != null) {
+    scrollVagas.setVisible(false);
+}
+        if (scrollDetalhesVaga != null) {
+    scrollDetalhesVaga.setVisible(false);
+}
 
     if (painelPerfil == null) {
         painelPerfil = new VisualizarPerfil_Panel(idUsuario);
 
 scrollPerfil = new javax.swing.JScrollPane(painelPerfil);
+scrollPerfil.setHorizontalScrollBarPolicy(
+    javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+);
 scrollPerfil.getVerticalScrollBar().setUnitIncrement(20);
 
 pnlPrincipal.add(scrollPerfil);
@@ -82,30 +746,74 @@ pnlPrincipal.add(scrollPerfil);
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
-    private void carregarNomeUsuario() {
+private void carregarNomeUsuario() {
 
-    String sql = "SELECT nome, area_atuacao FROM usuarios WHERE id = ?";
+    String sql;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            );
-         java.sql.PreparedStatement stmt =
-                 conexao.prepareStatement(sql)) {
+    if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+        sql = """
+            SELECT u.nome, u.nome_empresa, e.nome_fantasia, e.razao_social,
+                   e.area_atuacao, e.cidade, e.estado
+            FROM usuarios u
+            LEFT JOIN empresas e ON e.id_usuario = u.id
+            WHERE u.id = ?
+            """;
+    } else {
+        sql = "SELECT nome, area_atuacao FROM usuarios WHERE id = ?";
+    }
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
         stmt.setInt(1, idUsuario);
+        System.out.println("Buscando descrição para o usuário ID: " + idUsuario);
 
         try (java.sql.ResultSet rs = stmt.executeQuery()) {
-        if (rs.next()) {
 
-    String nome = rs.getString("nome");
-    String areaAtuacao = rs.getString("area_atuacao");
+            if (rs.next()) {
 
-    lblBoasVindas.setText("Olá, " + nome + "!");
-    lblAreaatuacao.setText("Área de atuação: " + areaAtuacao);
-          }
+                if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+
+String nomeEmpresa = rs.getString("nome_empresa");
+
+if (nomeEmpresa == null || nomeEmpresa.isBlank()) {
+    nomeEmpresa = rs.getString("nome_fantasia");
+}
+
+if (nomeEmpresa == null || nomeEmpresa.isBlank()) {
+    nomeEmpresa = rs.getString("razao_social");
+}
+
+                    lblBoasVindas.setText("Olá, " + nomeEmpresa + "!");
+                    String cidade = rs.getString("cidade");
+String estado = rs.getString("estado");
+
+if (cidade != null && !cidade.isBlank()
+        && estado != null && !estado.isBlank()) {
+
+    lblAreaatuacao.setText(
+        "Empresa localizada em " + cidade + " - " + estado
+    );
+
+} else {
+    lblAreaatuacao.setText("Localização não informada");
+}
+
+                    
+
+                } else {
+
+                    String nome = rs.getString("nome");
+                    String area = rs.getString("area_atuacao");
+
+                    lblBoasVindas.setText("Olá, " + nome + "!");
+                    lblAreaatuacao.setText(
+                        "Área de atuação: " +
+                        (area == null || area.isBlank()
+                            ? "Não informada" : area)
+                    );
+                }
+            }
         }
 
     } catch (java.sql.SQLException e) {
@@ -153,31 +861,329 @@ pnlPrincipal.add(scrollPerfil);
     private void ocultarPaginaInicial() {
     pnlBoasVindas.setVisible(false);
     pnlBanner.setVisible(false);
-    pnlInteressesEnviados.setVisible(false);
     pnlVagasRecomendadas1.setVisible(false);
     pnlMatchesRealizados.setVisible(false);
     pnlCompatibilidadeMedia.setVisible(false);
-    lblVagasRecomendadas.setVisible(false);
-    lblVerTodasVagas.setVisible(false);
-    pnlVaga1.setVisible(false);
-    pnlVaga2.setVisible(false);
-    pnlVaga3.setVisible(false);
+    lblvagasdisponiveis3.setVisible(false);
+    Jvertodasvagas1.setVisible(false);
+    pnlEmpresasPlataforma.setVisible(false);
+    pnlAtividadesRecentes.setVisible(false);
+ 
 }
     private void mostrarPaginaInicial() {
 
     pnlBoasVindas.setVisible(true);
     pnlBanner.setVisible(true);
-    pnlInteressesEnviados.setVisible(true);
     pnlVagasRecomendadas1.setVisible(true);
     pnlMatchesRealizados.setVisible(true);
     pnlCompatibilidadeMedia.setVisible(true);
-    lblVagasRecomendadas.setVisible(true);
-    lblVerTodasVagas.setVisible(true);
+    lblvagasdisponiveis3.setVisible(true);
+    Jvertodasvagas1.setVisible(true);
+    pnlEmpresasPlataforma.setVisible(true);
+    pnlAtividadesRecentes.setVisible(true);
 
-    pnlVaga1.setVisible(true);
-    pnlVaga2.setVisible(true);
-    pnlVaga3.setVisible(true);
+    
 }
+    
+
+private void mostrarPainelVagasEmpresa() {
+
+    if (scrollPerfil != null) {
+        scrollPerfil.setVisible(false);
+    }
+
+    if (scrollPerfilEmpresa != null) {
+        scrollPerfilEmpresa.setVisible(false);
+    }
+
+    if (scrollVagas != null) {
+        scrollVagas.setVisible(false);
+    }
+
+    if (scrollVagasEmpresa == null) {
+
+        painelVagasEmpresa = new Vagas_PerfilEmpresa(idUsuario);
+        painelVagasEmpresa.setAcaoPublicarVaga(
+        () -> mostrarPainelPublicarVaga()
+);
+        painelVagasEmpresa.setAcaoEditarVaga(idVaga -> {
+    mostrarPainelEditarVaga(idVaga);
+});
+
+        scrollVagasEmpresa =
+                new javax.swing.JScrollPane(painelVagasEmpresa);
+
+        scrollVagasEmpresa.setHorizontalScrollBarPolicy(
+                javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        scrollVagasEmpresa.getVerticalScrollBar()
+                .setUnitIncrement(20);
+
+        pnlPrincipal.add(scrollVagasEmpresa);
+    }
+
+    int inicioConteudo = pnlMenuLateral.getX()
+            + pnlMenuLateral.getWidth();
+
+    scrollVagasEmpresa.setBounds(
+            inicioConteudo,
+            0,
+            pnlPrincipal.getWidth() - inicioConteudo,
+            pnlPrincipal.getHeight()
+    );
+
+    scrollVagasEmpresa.setVisible(true);
+    pnlPrincipal.setComponentZOrder(scrollVagasEmpresa, 0);
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
+}
+private void mostrarPainelEditarVaga(int idVaga) {
+    mostrarPainelPublicarVaga();
+
+    PublicarVaga_Panel painel =
+        (PublicarVaga_Panel) scrollPublicarVaga.getViewport().getView();
+
+    painel.configurarEdicao(idVaga);
+}
+
+private javax.swing.JScrollPane scrollPublicarVaga;
+
+private void mostrarPainelPublicarVaga() {
+
+    // Esconde a tela de gerenciamento de vagas
+    if (scrollVagasEmpresa != null) {
+        scrollVagasEmpresa.setVisible(false);
+    }
+
+    // Esconde as outras telas
+    if (scrollPerfil != null) {
+        scrollPerfil.setVisible(false);
+    }
+
+    if (scrollPerfilEmpresa != null) {
+        scrollPerfilEmpresa.setVisible(false);
+    }
+
+    if (scrollVagas != null) {
+        scrollVagas.setVisible(false);
+    }
+
+    // Cria o formulário somente uma vez
+    if (scrollPublicarVaga == null) {
+
+        PublicarVaga_Panel painelPublicar =
+        new PublicarVaga_Panel(idUsuario);
+painelPublicar.setAcaoPublicacaoConcluida(() -> {
+    scrollPublicarVaga.setVisible(false);
+
+    painelVagasEmpresa.atualizarVagasEmpresa();
+
+    mostrarPainelVagasEmpresa();
+});
+painelPublicar.setAcaoCancelar(() -> {
+    scrollPublicarVaga.setVisible(false);
+    mostrarPainelVagasEmpresa();
+});
+        scrollPublicarVaga =
+                new javax.swing.JScrollPane(painelPublicar);
+
+        scrollPublicarVaga.setHorizontalScrollBarPolicy(
+                javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        scrollPublicarVaga.getVerticalScrollBar()
+                .setUnitIncrement(20);
+
+        pnlPrincipal.add(scrollPublicarVaga);
+    }
+
+    // Posiciona o formulário ao lado do menu lateral
+    int inicioConteudo = pnlMenuLateral.getX()
+            + pnlMenuLateral.getWidth();
+
+    scrollPublicarVaga.setBounds(
+            inicioConteudo,
+            0,
+            pnlPrincipal.getWidth() - inicioConteudo,
+            pnlPrincipal.getHeight()
+    );
+
+    scrollPublicarVaga.setVisible(true);
+    PublicarVaga_Panel painel =
+    (PublicarVaga_Panel) scrollPublicarVaga.getViewport().getView();
+
+painel.configurarNovaVaga();
+    pnlPrincipal.setComponentZOrder(scrollPublicarVaga, 0);
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
+}
+
+private javax.swing.JScrollPane scrollDetalhesVaga;
+
+private void mostrarDetalhesVaga(int idVaga) {
+
+    if (scrollVagas != null) scrollVagas.setVisible(false);
+    if (scrollVagasEmpresa != null) scrollVagasEmpresa.setVisible(false);
+    if (scrollPerfil != null) scrollPerfil.setVisible(false);
+    if (scrollPerfilEmpresa != null) scrollPerfilEmpresa.setVisible(false);
+    if (scrollPublicarVaga != null) scrollPublicarVaga.setVisible(false);
+
+    if (scrollDetalhesVaga != null) {
+        pnlPrincipal.remove(scrollDetalhesVaga);
+    }
+
+    DetalhesVaga_Panel painelDetalhes =
+            new DetalhesVaga_Panel(idVaga);
+    
+painelDetalhes.setAcaoVoltarVagas(() -> {
+    scrollDetalhesVaga.setVisible(false);
+    mostrarPainelVagas();
+});
+    scrollDetalhesVaga =
+            new javax.swing.JScrollPane(painelDetalhes);
+
+    scrollDetalhesVaga.setHorizontalScrollBarPolicy(
+            javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+    );
+
+    scrollDetalhesVaga.getVerticalScrollBar().setUnitIncrement(20);
+
+    pnlPrincipal.add(scrollDetalhesVaga);
+
+    int inicioConteudo =
+            pnlMenuLateral.getX() + pnlMenuLateral.getWidth();
+
+    scrollDetalhesVaga.setBounds(
+            inicioConteudo,
+            0,
+            pnlPrincipal.getWidth() - inicioConteudo,
+            pnlPrincipal.getHeight()
+    );
+
+    scrollDetalhesVaga.setVisible(true);
+    pnlPrincipal.setComponentZOrder(scrollDetalhesVaga, 0);
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
+}
+private void carregarQuantidadeVagasEmpresa() {
+
+    String sql = """
+        SELECT
+            COUNT(*) AS total_publicadas,
+            COUNT(CASE WHEN v.status = 'ATIVA' THEN 1 END) AS total_ativas
+        FROM vagas v
+        INNER JOIN empresas e ON v.id_empresa = e.id_empresa
+        WHERE e.id_usuario = ?
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lblQuantidadeVagas1.setText(
+                    String.valueOf(rs.getInt("total_publicadas"))
+                );
+
+                lblQuantidadeVagas3.setText(
+                    String.valueOf(rs.getInt("total_ativas"))
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar vagas da empresa: " + e.getMessage()
+        );
+    }
+}
+
+private void carregarResumoEmpresa() {
+
+    pnlListaAtividades.removeAll();
+
+    pnlListaAtividades.setLayout(
+        new javax.swing.BoxLayout(
+            pnlListaAtividades,
+            javax.swing.BoxLayout.Y_AXIS
+        )
+    );
+
+    String area = "Não informada";
+    String localizacao = "Não informada";
+    String descricao = "Nenhuma descrição cadastrada.";
+
+    String sql = """
+        SELECT area_atuacao, cidade, estado, descricao
+        FROM empresas
+        WHERE id_usuario = ?
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+
+                String areaBanco = rs.getString("area_atuacao");
+                String cidade = rs.getString("cidade");
+                String estado = rs.getString("estado");
+                String descricaoBanco = rs.getString("descricao");
+
+                if (areaBanco != null && !areaBanco.isBlank()) {
+                    area = areaBanco.trim();
+                }
+
+                if (cidade != null && !cidade.isBlank()) {
+                    localizacao = cidade.trim();
+
+                    if (estado != null && !estado.isBlank()) {
+                        localizacao += " - " + estado.trim();
+                    }
+                } else if (estado != null && !estado.isBlank()) {
+                    localizacao = estado.trim();
+                }
+
+                if (descricaoBanco != null && !descricaoBanco.isBlank()) {
+                    descricao = descricaoBanco.trim();
+                }
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao carregar resumo da empresa: " + e.getMessage()
+        );
+    }
+
+    adicionarCampoResumo("Área de atuação", area);
+    adicionarCampoResumo("Localização", localizacao);
+    adicionarCampoResumo("Descrição da empresa", descricao);
+
+    pnlListaAtividades.revalidate();
+    pnlListaAtividades.repaint();
+}
+
+
+
+
+
+
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -196,55 +1202,38 @@ pnlPrincipal.add(scrollPerfil);
         lblBoasVindas = new javax.swing.JLabel();
         lblAreaatuacao = new javax.swing.JLabel();
         pnlBanner = new javax.swing.JPanel();
-        lblTituloBanner = new javax.swing.JLabel();
-        lblSubtituloBanner = new javax.swing.JLabel();
-        pnlInteressesEnviados = new javax.swing.JPanel();
-        lblQuantidadeVagas = new javax.swing.JLabel();
-        lblDescricaoVagas = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtDescricaoBanner = new javax.swing.JTextArea();
+        lblTituloBanner1 = new javax.swing.JLabel();
         pnlVagasRecomendadas1 = new javax.swing.JPanel();
         lblQuantidadeVagas1 = new javax.swing.JLabel();
-        lblDescricaoVagas1 = new javax.swing.JLabel();
+        lblvagasdisponiveis3 = new javax.swing.JLabel();
         pnlCompatibilidadeMedia = new javax.swing.JPanel();
         lblQuantidadeVagas3 = new javax.swing.JLabel();
         lblDescricaoVagas3 = new javax.swing.JLabel();
-        lblVagasRecomendadas = new javax.swing.JLabel();
-        lblVerTodasVagas = new javax.swing.JLabel();
-        pnlVaga1 = new javax.swing.JPanel();
-        lblEmpresaVaga1 = new javax.swing.JLabel();
-        lblCargoVaga1 = new javax.swing.JLabel();
-        lblLocalVaga1 = new javax.swing.JLabel();
-        lblHabilidadesVaga1 = new javax.swing.JLabel();
-        lblCompatibilidadeVaga1 = new javax.swing.JLabel();
-        btnInteresseVaga1 = new javax.swing.JButton();
-        pnlVaga2 = new javax.swing.JPanel();
-        lblEmpresaVaga2 = new javax.swing.JLabel();
-        lblCargoVaga2 = new javax.swing.JLabel();
-        lblLocalVaga2 = new javax.swing.JLabel();
-        lblHabilidadesVaga2 = new javax.swing.JLabel();
-        lblCompatibilidadeVaga2 = new javax.swing.JLabel();
-        btnInteresseVaga2 = new javax.swing.JButton();
-        pnlVaga3 = new javax.swing.JPanel();
-        lblEmpresaVaga3 = new javax.swing.JLabel();
-        lblCargoVaga3 = new javax.swing.JLabel();
-        lblLocalVaga3 = new javax.swing.JLabel();
-        lblHabilidadesVaga3 = new javax.swing.JLabel();
-        lblCompatibilidadeVaga3 = new javax.swing.JLabel();
-        btnInteresseVaga3 = new javax.swing.JButton();
         pnlMatchesRealizados = new javax.swing.JPanel();
         lblQuantidadeVagas2 = new javax.swing.JLabel();
         lblDescricaoVagas2 = new javax.swing.JLabel();
+        pnlEmpresasPlataforma = new javax.swing.JPanel();
+        lblEmpresasPlataforma = new javax.swing.JLabel();
+        pnlListaEmpresas = new javax.swing.JPanel();
+        Jvertodasvagas1 = new javax.swing.JLabel();
+        pnlAtividadesRecentes = new javax.swing.JPanel();
+        lblAtividadesRecentes = new javax.swing.JLabel();
+        pnlListaAtividades = new javax.swing.JPanel();
+        btnVerPerfilCompleto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CONEXOO | Início");
         setBackground(new java.awt.Color(7, 21, 45));
         setMinimumSize(new java.awt.Dimension(1000, 650));
-        setPreferredSize(new java.awt.Dimension(1200, 750));
 
-        pnlPrincipal.setBackground(new java.awt.Color(7, 21, 45));
+        pnlPrincipal.setBackground(new java.awt.Color(5, 20, 43));
         pnlPrincipal.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
-        pnlPrincipal.setPreferredSize(new java.awt.Dimension(1535, 885));
+        pnlPrincipal.setPreferredSize(new java.awt.Dimension(1200, 750));
 
         pnlMenuLateral.setBackground(new java.awt.Color(11, 29, 56));
+        pnlMenuLateral.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
         pnlMenuLateral.setPreferredSize(new java.awt.Dimension(250, 750));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
@@ -326,32 +1315,34 @@ pnlPrincipal.add(scrollPerfil);
             .addGroup(pnlMenuLateralLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(pnlMenuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnInicio1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMatches, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnMatches1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnVagas2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnMeuPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInteresses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMenuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnInicio1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnMatches1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnInteresses, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnMatches, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         pnlMenuLateralLayout.setVerticalGroup(
             pnlMenuLateralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMenuLateralLayout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnInicio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnVagas2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMeuPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnVagas2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnInteresses, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMatches1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMatches, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlBoasVindas.setBackground(new java.awt.Color(11, 29, 56));
@@ -366,7 +1357,7 @@ pnlPrincipal.add(scrollPerfil);
         lblAreaatuacao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lblAreaatuacao.setForeground(new java.awt.Color(168, 201, 235));
         lblAreaatuacao.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblAreaatuacao.setText("Área de atuação: Não informada");
+        lblAreaatuacao.setText("Área de atuação atual: Não informada");
         lblAreaatuacao.setPreferredSize(new java.awt.Dimension(250, 25));
 
         javax.swing.GroupLayout pnlBoasVindasLayout = new javax.swing.GroupLayout(pnlBoasVindas);
@@ -375,10 +1366,10 @@ pnlPrincipal.add(scrollPerfil);
             pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBoasVindasLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, 1128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblAreaatuacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGroup(pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblAreaatuacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblBoasVindas, javax.swing.GroupLayout.DEFAULT_SIZE, 991, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlBoasVindasLayout.setVerticalGroup(
             pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,74 +1385,48 @@ pnlPrincipal.add(scrollPerfil);
         pnlBanner.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22, 137, 244)));
         pnlBanner.setPreferredSize(new java.awt.Dimension(1050, 180));
 
-        lblTituloBanner.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
-        lblTituloBanner.setForeground(new java.awt.Color(255, 255, 255));
-        lblTituloBanner.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTituloBanner.setText("Encontre vagas que combinam com você!");
-        lblTituloBanner.setPreferredSize(new java.awt.Dimension(650, 40));
+        jScrollPane1.setBackground(new java.awt.Color(7, 56, 120));
+        jScrollPane1.setBorder(null);
 
-        lblSubtituloBanner.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        lblSubtituloBanner.setForeground(new java.awt.Color(168, 201, 235));
-        lblSubtituloBanner.setText("Descubra oportunidades de trabalho na área de TI");
-        lblSubtituloBanner.setPreferredSize(new java.awt.Dimension(650, 30));
+        txtDescricaoBanner.setEditable(false);
+        txtDescricaoBanner.setBackground(new java.awt.Color(7, 56, 120));
+        txtDescricaoBanner.setColumns(20);
+        txtDescricaoBanner.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtDescricaoBanner.setForeground(new java.awt.Color(168, 201, 235));
+        txtDescricaoBanner.setLineWrap(true);
+        txtDescricaoBanner.setRows(5);
+        txtDescricaoBanner.setWrapStyleWord(true);
+        txtDescricaoBanner.setBorder(null);
+        txtDescricaoBanner.setOpaque(false);
+        jScrollPane1.setViewportView(txtDescricaoBanner);
+
+        lblTituloBanner1.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
+        lblTituloBanner1.setForeground(new java.awt.Color(255, 255, 255));
+        lblTituloBanner1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblTituloBanner1.setText("Encontre vagas que combinam com você!");
+        lblTituloBanner1.setPreferredSize(new java.awt.Dimension(650, 40));
 
         javax.swing.GroupLayout pnlBannerLayout = new javax.swing.GroupLayout(pnlBanner);
         pnlBanner.setLayout(pnlBannerLayout);
         pnlBannerLayout.setHorizontalGroup(
             pnlBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBannerLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(16, 16, 16)
                 .addGroup(pnlBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTituloBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSubtituloBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(553, Short.MAX_VALUE))
+                    .addGroup(pnlBannerLayout.createSequentialGroup()
+                        .addComponent(lblTituloBanner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         pnlBannerLayout.setVerticalGroup(
             pnlBannerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBannerLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(lblTituloBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(lblSubtituloBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
-        );
-
-        pnlInteressesEnviados.setBackground(new java.awt.Color(11, 37, 69));
-        pnlInteressesEnviados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
-        pnlInteressesEnviados.setPreferredSize(new java.awt.Dimension(209, 110));
-
-        lblQuantidadeVagas.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
-        lblQuantidadeVagas.setForeground(new java.awt.Color(255, 255, 255));
-        lblQuantidadeVagas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblQuantidadeVagas.setText("7");
-
-        lblDescricaoVagas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblDescricaoVagas.setForeground(new java.awt.Color(168, 201, 235));
-        lblDescricaoVagas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDescricaoVagas.setText("Interesses enviados");
-
-        javax.swing.GroupLayout pnlInteressesEnviadosLayout = new javax.swing.GroupLayout(pnlInteressesEnviados);
-        pnlInteressesEnviados.setLayout(pnlInteressesEnviadosLayout);
-        pnlInteressesEnviadosLayout.setHorizontalGroup(
-            pnlInteressesEnviadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInteressesEnviadosLayout.createSequentialGroup()
-                .addGroup(pnlInteressesEnviadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlInteressesEnviadosLayout.createSequentialGroup()
-                        .addGap(84, 84, 84)
-                        .addComponent(lblDescricaoVagas))
-                    .addGroup(pnlInteressesEnviadosLayout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(lblQuantidadeVagas)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        pnlInteressesEnviadosLayout.setVerticalGroup(
-            pnlInteressesEnviadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInteressesEnviadosLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(lblQuantidadeVagas)
+                .addGap(13, 13, 13)
+                .addComponent(lblTituloBanner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDescricaoVagas)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pnlVagasRecomendadas1.setBackground(new java.awt.Color(11, 37, 69));
@@ -473,23 +1438,24 @@ pnlPrincipal.add(scrollPerfil);
         lblQuantidadeVagas1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblQuantidadeVagas1.setText("24");
 
-        lblDescricaoVagas1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblDescricaoVagas1.setForeground(new java.awt.Color(168, 201, 235));
-        lblDescricaoVagas1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDescricaoVagas1.setText("Vagas recomendadas");
+        lblvagasdisponiveis3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblvagasdisponiveis3.setForeground(new java.awt.Color(168, 201, 235));
+        lblvagasdisponiveis3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblvagasdisponiveis3.setText("Vagas disponíveis");
 
         javax.swing.GroupLayout pnlVagasRecomendadas1Layout = new javax.swing.GroupLayout(pnlVagasRecomendadas1);
         pnlVagasRecomendadas1.setLayout(pnlVagasRecomendadas1Layout);
         pnlVagasRecomendadas1Layout.setHorizontalGroup(
             pnlVagasRecomendadas1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlVagasRecomendadas1Layout.createSequentialGroup()
-                .addGap(126, 126, 126)
-                .addComponent(lblQuantidadeVagas1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasRecomendadas1Layout.createSequentialGroup()
-                .addContainerGap(94, Short.MAX_VALUE)
-                .addComponent(lblDescricaoVagas1)
-                .addGap(64, 64, 64))
+                .addContainerGap(165, Short.MAX_VALUE)
+                .addGroup(pnlVagasRecomendadas1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasRecomendadas1Layout.createSequentialGroup()
+                        .addComponent(lblvagasdisponiveis3)
+                        .addGap(145, 145, 145))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasRecomendadas1Layout.createSequentialGroup()
+                        .addComponent(lblQuantidadeVagas1)
+                        .addGap(187, 187, 187))))
         );
         pnlVagasRecomendadas1Layout.setVerticalGroup(
             pnlVagasRecomendadas1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -497,7 +1463,7 @@ pnlPrincipal.add(scrollPerfil);
                 .addGap(18, 18, 18)
                 .addComponent(lblQuantidadeVagas1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblDescricaoVagas1)
+                .addComponent(lblvagasdisponiveis3)
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -513,21 +1479,21 @@ pnlPrincipal.add(scrollPerfil);
         lblDescricaoVagas3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblDescricaoVagas3.setForeground(new java.awt.Color(168, 201, 235));
         lblDescricaoVagas3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblDescricaoVagas3.setText("Compatibilidade média");
+        lblDescricaoVagas3.setText("Candidaturas enviadas");
 
         javax.swing.GroupLayout pnlCompatibilidadeMediaLayout = new javax.swing.GroupLayout(pnlCompatibilidadeMedia);
         pnlCompatibilidadeMedia.setLayout(pnlCompatibilidadeMediaLayout);
         pnlCompatibilidadeMediaLayout.setHorizontalGroup(
             pnlCompatibilidadeMediaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCompatibilidadeMediaLayout.createSequentialGroup()
-                .addContainerGap(86, Short.MAX_VALUE)
+                .addContainerGap(217, Short.MAX_VALUE)
                 .addGroup(pnlCompatibilidadeMediaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCompatibilidadeMediaLayout.createSequentialGroup()
                         .addComponent(lblDescricaoVagas3)
-                        .addGap(62, 62, 62))
+                        .addGap(157, 157, 157))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCompatibilidadeMediaLayout.createSequentialGroup()
                         .addComponent(lblQuantidadeVagas3)
-                        .addGap(94, 94, 94))))
+                        .addGap(188, 188, 188))))
         );
         pnlCompatibilidadeMediaLayout.setVerticalGroup(
             pnlCompatibilidadeMediaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,241 +1502,7 @@ pnlPrincipal.add(scrollPerfil);
                 .addComponent(lblQuantidadeVagas3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoVagas3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        lblVagasRecomendadas.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
-        lblVagasRecomendadas.setForeground(new java.awt.Color(255, 255, 255));
-        lblVagasRecomendadas.setText("Vagas recomendadas para você");
-        lblVagasRecomendadas.setPreferredSize(new java.awt.Dimension(450, 40));
-
-        lblVerTodasVagas.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        lblVerTodasVagas.setForeground(new java.awt.Color(19, 216, 245));
-        lblVerTodasVagas.setText("Ver todas →");
-
-        pnlVaga1.setBackground(new java.awt.Color(11, 37, 69));
-        pnlVaga1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
-        pnlVaga1.setPreferredSize(new java.awt.Dimension(330, 240));
-
-        lblEmpresaVaga1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        lblEmpresaVaga1.setForeground(new java.awt.Color(168, 201, 235));
-        lblEmpresaVaga1.setText("TechSolutions");
-
-        lblCargoVaga1.setFont(new java.awt.Font("Segoe UI", 1, 19)); // NOI18N
-        lblCargoVaga1.setForeground(new java.awt.Color(255, 255, 255));
-        lblCargoVaga1.setText("Desenvolvedor Java");
-
-        lblLocalVaga1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblLocalVaga1.setForeground(new java.awt.Color(168, 201, 235));
-        lblLocalVaga1.setText("Bom Despacho/MG - Remoto");
-
-        lblHabilidadesVaga1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblHabilidadesVaga1.setForeground(new java.awt.Color(19, 216, 245));
-        lblHabilidadesVaga1.setText("\tJava  •  Spring Boot  •  MySQL");
-
-        lblCompatibilidadeVaga1.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblCompatibilidadeVaga1.setForeground(new java.awt.Color(49, 234, 162));
-        lblCompatibilidadeVaga1.setText("92%");
-
-        btnInteresseVaga1.setBackground(new java.awt.Color(8, 185, 216));
-        btnInteresseVaga1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnInteresseVaga1.setForeground(new java.awt.Color(255, 255, 255));
-        btnInteresseVaga1.setText("Tenho interesse");
-        btnInteresseVaga1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnInteresseVaga1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInteresseVaga1.setFocusPainted(false);
-        btnInteresseVaga1.setPreferredSize(new java.awt.Dimension(110, 22));
-        btnInteresseVaga1.addActionListener(this::btnInteresseVaga1ActionPerformed);
-
-        javax.swing.GroupLayout pnlVaga1Layout = new javax.swing.GroupLayout(pnlVaga1);
-        pnlVaga1.setLayout(pnlVaga1Layout);
-        pnlVaga1Layout.setHorizontalGroup(
-            pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlVaga1Layout.createSequentialGroup()
-                        .addGroup(pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCargoVaga1)
-                            .addGroup(pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblHabilidadesVaga1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblLocalVaga1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(202, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVaga1Layout.createSequentialGroup()
-                        .addGroup(pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnInteresseVaga1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlVaga1Layout.createSequentialGroup()
-                                .addComponent(lblEmpresaVaga1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblCompatibilidadeVaga1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(15, 15, 15))))
-        );
-        pnlVaga1Layout.setVerticalGroup(
-            pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmpresaVaga1)
-                    .addComponent(lblCompatibilidadeVaga1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCargoVaga1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblLocalVaga1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHabilidadesVaga1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnInteresseVaga1, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        pnlVaga2.setBackground(new java.awt.Color(11, 37, 69));
-        pnlVaga2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
-        pnlVaga2.setPreferredSize(new java.awt.Dimension(330, 240));
-
-        lblEmpresaVaga2.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        lblEmpresaVaga2.setForeground(new java.awt.Color(168, 201, 235));
-        lblEmpresaVaga2.setText("NextCode");
-
-        lblCargoVaga2.setFont(new java.awt.Font("Segoe UI", 1, 19)); // NOI18N
-        lblCargoVaga2.setForeground(new java.awt.Color(255, 255, 255));
-        lblCargoVaga2.setText("Analista de Dados");
-
-        lblLocalVaga2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblLocalVaga2.setForeground(new java.awt.Color(168, 201, 235));
-        lblLocalVaga2.setText("Bom Despacho/MG - Híbrido");
-
-        lblHabilidadesVaga2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblHabilidadesVaga2.setForeground(new java.awt.Color(19, 216, 245));
-        lblHabilidadesVaga2.setText("SQL • Python • Power BI");
-
-        lblCompatibilidadeVaga2.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblCompatibilidadeVaga2.setForeground(new java.awt.Color(49, 234, 162));
-        lblCompatibilidadeVaga2.setText("88%");
-
-        btnInteresseVaga2.setBackground(new java.awt.Color(8, 185, 216));
-        btnInteresseVaga2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnInteresseVaga2.setForeground(new java.awt.Color(255, 255, 255));
-        btnInteresseVaga2.setText("Tenho interesse");
-        btnInteresseVaga2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnInteresseVaga2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInteresseVaga2.setFocusPainted(false);
-        btnInteresseVaga2.setPreferredSize(new java.awt.Dimension(110, 22));
-        btnInteresseVaga2.addActionListener(this::btnInteresseVaga2ActionPerformed);
-
-        javax.swing.GroupLayout pnlVaga2Layout = new javax.swing.GroupLayout(pnlVaga2);
-        pnlVaga2.setLayout(pnlVaga2Layout);
-        pnlVaga2Layout.setHorizontalGroup(
-            pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlVaga2Layout.createSequentialGroup()
-                        .addGroup(pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCargoVaga2)
-                            .addGroup(pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblHabilidadesVaga2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblLocalVaga2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVaga2Layout.createSequentialGroup()
-                        .addGroup(pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnInteresseVaga2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlVaga2Layout.createSequentialGroup()
-                                .addComponent(lblEmpresaVaga2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblCompatibilidadeVaga2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(15, 15, 15))))
-        );
-        pnlVaga2Layout.setVerticalGroup(
-            pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmpresaVaga2)
-                    .addComponent(lblCompatibilidadeVaga2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCargoVaga2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblLocalVaga2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHabilidadesVaga2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnInteresseVaga2, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        pnlVaga3.setBackground(new java.awt.Color(11, 37, 69));
-        pnlVaga3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
-        pnlVaga3.setPreferredSize(new java.awt.Dimension(330, 240));
-
-        lblEmpresaVaga3.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        lblEmpresaVaga3.setForeground(new java.awt.Color(168, 201, 235));
-        lblEmpresaVaga3.setText("InovaTech");
-
-        lblCargoVaga3.setFont(new java.awt.Font("Segoe UI", 1, 19)); // NOI18N
-        lblCargoVaga3.setForeground(new java.awt.Color(255, 255, 255));
-        lblCargoVaga3.setText("Desenvolvedor Front-end");
-
-        lblLocalVaga3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblLocalVaga3.setForeground(new java.awt.Color(168, 201, 235));
-        lblLocalVaga3.setText("Bom Despacho/MG - Presencial");
-
-        lblHabilidadesVaga3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblHabilidadesVaga3.setForeground(new java.awt.Color(19, 216, 245));
-        lblHabilidadesVaga3.setText("\tReact • HTML • CSS");
-
-        lblCompatibilidadeVaga3.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
-        lblCompatibilidadeVaga3.setForeground(new java.awt.Color(49, 234, 162));
-        lblCompatibilidadeVaga3.setText("\t80%");
-
-        btnInteresseVaga3.setBackground(new java.awt.Color(8, 185, 216));
-        btnInteresseVaga3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnInteresseVaga3.setForeground(new java.awt.Color(255, 255, 255));
-        btnInteresseVaga3.setText("Tenho interesse");
-        btnInteresseVaga3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnInteresseVaga3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnInteresseVaga3.setFocusPainted(false);
-        btnInteresseVaga3.setPreferredSize(new java.awt.Dimension(110, 22));
-        btnInteresseVaga3.addActionListener(this::btnInteresseVaga3ActionPerformed);
-
-        javax.swing.GroupLayout pnlVaga3Layout = new javax.swing.GroupLayout(pnlVaga3);
-        pnlVaga3.setLayout(pnlVaga3Layout);
-        pnlVaga3Layout.setHorizontalGroup(
-            pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlVaga3Layout.createSequentialGroup()
-                        .addGroup(pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCargoVaga3)
-                            .addGroup(pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(lblHabilidadesVaga3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblLocalVaga3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(144, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVaga3Layout.createSequentialGroup()
-                        .addGroup(pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnInteresseVaga3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlVaga3Layout.createSequentialGroup()
-                                .addComponent(lblEmpresaVaga3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblCompatibilidadeVaga3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(15, 15, 15))))
-        );
-        pnlVaga3Layout.setVerticalGroup(
-            pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVaga3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(pnlVaga3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEmpresaVaga3)
-                    .addComponent(lblCompatibilidadeVaga3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblCargoVaga3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblLocalVaga3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblHabilidadesVaga3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnInteresseVaga3, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pnlMatchesRealizados.setBackground(new java.awt.Color(11, 37, 69));
@@ -792,23 +1524,119 @@ pnlPrincipal.add(scrollPerfil);
         pnlMatchesRealizadosLayout.setHorizontalGroup(
             pnlMatchesRealizadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMatchesRealizadosLayout.createSequentialGroup()
-                .addContainerGap(93, Short.MAX_VALUE)
+                .addContainerGap(176, Short.MAX_VALUE)
                 .addGroup(pnlMatchesRealizadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMatchesRealizadosLayout.createSequentialGroup()
-                        .addComponent(lblDescricaoVagas2)
-                        .addGap(79, 79, 79))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMatchesRealizadosLayout.createSequentialGroup()
                         .addComponent(lblQuantidadeVagas2)
-                        .addGap(134, 134, 134))))
+                        .addGap(189, 189, 189))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMatchesRealizadosLayout.createSequentialGroup()
+                        .addComponent(lblDescricaoVagas2)
+                        .addGap(132, 132, 132))))
         );
         pnlMatchesRealizadosLayout.setVerticalGroup(
             pnlMatchesRealizadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMatchesRealizadosLayout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblQuantidadeVagas2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoVagas2)
                 .addGap(25, 25, 25))
+        );
+
+        pnlEmpresasPlataforma.setBackground(new java.awt.Color(11, 37, 69));
+        pnlEmpresasPlataforma.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+
+        lblEmpresasPlataforma.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
+        lblEmpresasPlataforma.setForeground(new java.awt.Color(255, 255, 255));
+        lblEmpresasPlataforma.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblEmpresasPlataforma.setText("Empresas na plataforma");
+        lblEmpresasPlataforma.setPreferredSize(new java.awt.Dimension(650, 40));
+
+        pnlListaEmpresas.setBackground(new java.awt.Color(11, 37, 69));
+        pnlListaEmpresas.setLayout(new javax.swing.BoxLayout(pnlListaEmpresas, javax.swing.BoxLayout.LINE_AXIS));
+
+        Jvertodasvagas1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Jvertodasvagas1.setForeground(new java.awt.Color(22, 217, 244));
+        Jvertodasvagas1.setText("Ver todas →");
+        Jvertodasvagas1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        Jvertodasvagas1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Jvertodasvagas1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlEmpresasPlataformaLayout = new javax.swing.GroupLayout(pnlEmpresasPlataforma);
+        pnlEmpresasPlataforma.setLayout(pnlEmpresasPlataformaLayout);
+        pnlEmpresasPlataformaLayout.setHorizontalGroup(
+            pnlEmpresasPlataformaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEmpresasPlataformaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlEmpresasPlataformaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlEmpresasPlataformaLayout.createSequentialGroup()
+                        .addComponent(lblEmpresasPlataforma, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Jvertodasvagas1))
+                    .addGroup(pnlEmpresasPlataformaLayout.createSequentialGroup()
+                        .addComponent(pnlListaEmpresas, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 47, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlEmpresasPlataformaLayout.setVerticalGroup(
+            pnlEmpresasPlataformaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEmpresasPlataformaLayout.createSequentialGroup()
+                .addGroup(pnlEmpresasPlataformaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblEmpresasPlataforma, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlEmpresasPlataformaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(Jvertodasvagas1)))
+                .addGap(15, 15, 15)
+                .addComponent(pnlListaEmpresas, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pnlAtividadesRecentes.setBackground(new java.awt.Color(11, 37, 69));
+        pnlAtividadesRecentes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+
+        lblAtividadesRecentes.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblAtividadesRecentes.setForeground(new java.awt.Color(255, 255, 255));
+        lblAtividadesRecentes.setText("Resumo profissional");
+
+        pnlListaAtividades.setBackground(new java.awt.Color(11, 37, 69));
+        pnlListaAtividades.setLayout(new javax.swing.BoxLayout(pnlListaAtividades, javax.swing.BoxLayout.LINE_AXIS));
+
+        btnVerPerfilCompleto.setBackground(new java.awt.Color(13, 39, 70));
+        btnVerPerfilCompleto.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnVerPerfilCompleto.setForeground(new java.awt.Color(22, 217, 244));
+        btnVerPerfilCompleto.setText("Ver perfil completo →");
+        btnVerPerfilCompleto.setBorder(null);
+        btnVerPerfilCompleto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVerPerfilCompleto.addActionListener(this::btnVerPerfilCompletoActionPerformed);
+
+        javax.swing.GroupLayout pnlAtividadesRecentesLayout = new javax.swing.GroupLayout(pnlAtividadesRecentes);
+        pnlAtividadesRecentes.setLayout(pnlAtividadesRecentesLayout);
+        pnlAtividadesRecentesLayout.setHorizontalGroup(
+            pnlAtividadesRecentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlAtividadesRecentesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlAtividadesRecentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlListaAtividades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlAtividadesRecentesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnVerPerfilCompleto))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlAtividadesRecentesLayout.createSequentialGroup()
+                        .addComponent(lblAtividadesRecentes, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        pnlAtividadesRecentesLayout.setVerticalGroup(
+            pnlAtividadesRecentesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAtividadesRecentesLayout.createSequentialGroup()
+                .addComponent(lblAtividadesRecentes, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(pnlListaAtividades, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnVerPerfilCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
@@ -818,65 +1646,43 @@ pnlPrincipal.add(scrollPerfil);
             .addGroup(pnlPrincipalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlMenuLateral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(pnlBanner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(pnlBoasVindas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 1220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlPrincipalLayout.createSequentialGroup()
-                                .addComponent(lblVagasRecomendadas, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                                .addComponent(pnlVagasRecomendadas1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(pnlInteressesEnviados, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(pnlCompatibilidadeMedia, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlMatchesRealizados, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblVerTodasVagas, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlPrincipalLayout.createSequentialGroup()
-                        .addComponent(pnlVaga1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnlVaga2, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(pnlVaga3, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(30, Short.MAX_VALUE))
+                        .addComponent(pnlVagasRecomendadas1, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlCompatibilidadeMedia, javax.swing.GroupLayout.DEFAULT_SIZE, 518, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMatchesRealizados, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addComponent(pnlEmpresasPlataforma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlAtividadesRecentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlBanner, javax.swing.GroupLayout.DEFAULT_SIZE, 1386, Short.MAX_VALUE)
+                    .addComponent(pnlBoasVindas, javax.swing.GroupLayout.DEFAULT_SIZE, 1386, Short.MAX_VALUE))
+                .addContainerGap())
         );
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(pnlBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(pnlBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(pnlVagasRecomendadas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(pnlCompatibilidadeMedia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(pnlMatchesRealizados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(pnlInteressesEnviados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createSequentialGroup()
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblVagasRecomendadas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblVerTodasVagas))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlVaga2, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlVaga1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlVaga3, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 208, Short.MAX_VALUE))
-            .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlMenuLateral, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pnlMenuLateral, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE))
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(pnlBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlVagasRecomendadas1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlCompatibilidadeMedia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlMatchesRealizados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlAtividadesRecentes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlEmpresasPlataforma, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -884,15 +1690,11 @@ pnlPrincipal.add(scrollPerfil);
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1658, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 885, Short.MAX_VALUE)
         );
 
         pack();
@@ -910,45 +1712,76 @@ pnlPrincipal.add(scrollPerfil);
 
         } else if (tipoUsuario.equalsIgnoreCase("EMPRESA")) {
 
-            mostrarPainelPerfilEmpresa();
+    if (scrollVagasEmpresa != null) {
+        scrollVagasEmpresa.setVisible(false);
+    }
+
+    mostrarPainelPerfilEmpresa();
 
         }
 
     } else {
 
-        if (tipoUsuario.equalsIgnoreCase("PROFISSIONAL")) {
+if (tipoUsuario.equalsIgnoreCase("PROFISSIONAL")) {
 
-            PerfilProfissional_Frame perfil =
-                    new PerfilProfissional_Frame(idUsuario);
+PerfilProfissional_Frame perfil =
+        new PerfilProfissional_Frame(idUsuario);
 
-            perfil.setVisible(true);
+perfil.setVisible(true);
+this.setVisible(false);
 
         } else if (tipoUsuario.equalsIgnoreCase("EMPRESA")) {
 
             PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
             perfil.setVisible(true);
+            this.setVisible(false);
         }
 
-        this.dispose();
+        //this.dispose();
     }
     }//GEN-LAST:event_btnMeuPerfilActionPerformed
 
     private void btnInicio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicio1ActionPerformed
-        ocultarPainelPerfil();
+
+    ocultarPainelPerfil();
 
     if (scrollPerfilEmpresa != null) {
         scrollPerfilEmpresa.setVisible(false);
     }
 
+    if (scrollVagas != null) {
+        scrollVagas.setVisible(false);
+    }
+
+    if (scrollVagasEmpresa != null) {
+        scrollVagasEmpresa.setVisible(false);
+    }
+
+    if (scrollDetalhesVaga != null) {
+        scrollDetalhesVaga.setVisible(false);
+    }
+
+    if (scrollPublicarVaga != null) {
+        scrollPublicarVaga.setVisible(false);
+    }
+
     mostrarPaginaInicial();
+    carregarQuantidadeVagas();
+
+
     }//GEN-LAST:event_btnInicio1ActionPerformed
 
     private void btnMatchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatchesActionPerformed
-        // TODO add your handling code here:
+        Login_Frame login = new Login_Frame();
+login.setLocationRelativeTo(null);
+login.setVisible(true);
+
+this.dispose();
     }//GEN-LAST:event_btnMatchesActionPerformed
 
     private void btnVagas2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVagas2ActionPerformed
-        // TODO add your handling code here:
+        mostrarPainelVagas();
+        ocultarPaginaInicial();
     }//GEN-LAST:event_btnVagas2ActionPerformed
 
     private void btnInteressesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInteressesActionPerformed
@@ -959,17 +1792,30 @@ pnlPrincipal.add(scrollPerfil);
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMatches1ActionPerformed
 
-    private void btnInteresseVaga1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInteresseVaga1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInteresseVaga1ActionPerformed
+    private void btnVerPerfilCompletoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerPerfilCompletoActionPerformed
+    ocultarPaginaInicial();
+        ocultarPaginaInicial();
 
-    private void btnInteresseVaga2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInteresseVaga2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInteresseVaga2ActionPerformed
+    if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
 
-    private void btnInteresseVaga3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInteresseVaga3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInteresseVaga3ActionPerformed
+        mostrarPainelPerfilEmpresa();
+
+    } else if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
+
+        mostrarPainelPerfil();
+
+    }
+    }//GEN-LAST:event_btnVerPerfilCompletoActionPerformed
+
+    private void Jvertodasvagas1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Jvertodasvagas1MouseClicked
+        if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+    mostrarPainelVagasEmpresa();
+} else {
+    mostrarPainelVagas();
+}
+
+ocultarPaginaInicial();
+    }//GEN-LAST:event_Jvertodasvagas1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -994,55 +1840,38 @@ pnlPrincipal.add(scrollPerfil);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Jvertodasvagas1;
     private javax.swing.JButton btnInicio1;
-    private javax.swing.JButton btnInteresseVaga1;
-    private javax.swing.JButton btnInteresseVaga2;
-    private javax.swing.JButton btnInteresseVaga3;
     private javax.swing.JButton btnInteresses;
     private javax.swing.JButton btnMatches;
     private javax.swing.JButton btnMatches1;
     private javax.swing.JButton btnMeuPerfil;
     private javax.swing.JButton btnVagas2;
+    private javax.swing.JButton btnVerPerfilCompleto;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAreaatuacao;
+    private javax.swing.JLabel lblAtividadesRecentes;
     private javax.swing.JLabel lblBoasVindas;
-    private javax.swing.JLabel lblCargoVaga1;
-    private javax.swing.JLabel lblCargoVaga2;
-    private javax.swing.JLabel lblCargoVaga3;
-    private javax.swing.JLabel lblCompatibilidadeVaga1;
-    private javax.swing.JLabel lblCompatibilidadeVaga2;
-    private javax.swing.JLabel lblCompatibilidadeVaga3;
-    private javax.swing.JLabel lblDescricaoVagas;
-    private javax.swing.JLabel lblDescricaoVagas1;
     private javax.swing.JLabel lblDescricaoVagas2;
     private javax.swing.JLabel lblDescricaoVagas3;
-    private javax.swing.JLabel lblEmpresaVaga1;
-    private javax.swing.JLabel lblEmpresaVaga2;
-    private javax.swing.JLabel lblEmpresaVaga3;
-    private javax.swing.JLabel lblHabilidadesVaga1;
-    private javax.swing.JLabel lblHabilidadesVaga2;
-    private javax.swing.JLabel lblHabilidadesVaga3;
-    private javax.swing.JLabel lblLocalVaga1;
-    private javax.swing.JLabel lblLocalVaga2;
-    private javax.swing.JLabel lblLocalVaga3;
-    private javax.swing.JLabel lblQuantidadeVagas;
+    private javax.swing.JLabel lblEmpresasPlataforma;
     private javax.swing.JLabel lblQuantidadeVagas1;
     private javax.swing.JLabel lblQuantidadeVagas2;
     private javax.swing.JLabel lblQuantidadeVagas3;
-    private javax.swing.JLabel lblSubtituloBanner;
-    private javax.swing.JLabel lblTituloBanner;
-    private javax.swing.JLabel lblVagasRecomendadas;
-    private javax.swing.JLabel lblVerTodasVagas;
+    private javax.swing.JLabel lblTituloBanner1;
+    private javax.swing.JLabel lblvagasdisponiveis3;
+    private javax.swing.JPanel pnlAtividadesRecentes;
     private javax.swing.JPanel pnlBanner;
     private javax.swing.JPanel pnlBoasVindas;
     private javax.swing.JPanel pnlCompatibilidadeMedia;
-    private javax.swing.JPanel pnlInteressesEnviados;
+    private javax.swing.JPanel pnlEmpresasPlataforma;
+    private javax.swing.JPanel pnlListaAtividades;
+    private javax.swing.JPanel pnlListaEmpresas;
     private javax.swing.JPanel pnlMatchesRealizados;
     private javax.swing.JPanel pnlMenuLateral;
     private javax.swing.JPanel pnlPrincipal;
-    private javax.swing.JPanel pnlVaga1;
-    private javax.swing.JPanel pnlVaga2;
-    private javax.swing.JPanel pnlVaga3;
     private javax.swing.JPanel pnlVagasRecomendadas1;
+    private javax.swing.JTextArea txtDescricaoBanner;
     // End of variables declaration//GEN-END:variables
 }

@@ -23,7 +23,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="3"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,47,0,0,1,63"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-12,0,0,1,63"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
@@ -386,13 +386,48 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="6">
-                <StringItem index="0" value="Desenvolvimento"/>
-                <StringItem index="1" value="Dados"/>
-                <StringItem index="2" value="Redes"/>
-                <StringItem index="3" value="Seguran&#xe7;a"/>
-                <StringItem index="4" value="Suporte"/>
-                <StringItem index="5" value="Outra"/>
+              <StringArray count="41">
+                <StringItem index="0" value="Selecione sua &#xe1;rea de atua&#xe7;&#xe3;o"/>
+                <StringItem index="1" value="Desenvolvimento Front-end"/>
+                <StringItem index="2" value="Desenvolvimento Back-end"/>
+                <StringItem index="3" value="Desenvolvimento Full Stack"/>
+                <StringItem index="4" value="Desenvolvimento Mobile"/>
+                <StringItem index="5" value="Desenvolvimento Desktop"/>
+                <StringItem index="6" value="Desenvolvimento de Jogos"/>
+                <StringItem index="7" value="Engenharia de Software"/>
+                <StringItem index="8" value="Arquitetura de Software"/>
+                <StringItem index="9" value="Qualidade de Software (QA)"/>
+                <StringItem index="10" value="Automa&#xe7;&#xe3;o de Testes"/>
+                <StringItem index="11" value="Banco de Dados"/>
+                <StringItem index="12" value="Administra&#xe7;&#xe3;o de Banco de Dados (DBA)"/>
+                <StringItem index="13" value="An&#xe1;lise de Dados"/>
+                <StringItem index="14" value="Ci&#xea;ncia de Dados"/>
+                <StringItem index="15" value="Engenharia de Dados"/>
+                <StringItem index="16" value="Business Intelligence (BI)"/>
+                <StringItem index="17" value="Intelig&#xea;ncia Artificial"/>
+                <StringItem index="18" value="Machine Learning"/>
+                <StringItem index="19" value="Redes de Computadores"/>
+                <StringItem index="20" value="Administra&#xe7;&#xe3;o de Sistemas"/>
+                <StringItem index="21" value="Infraestrutura de TI"/>
+                <StringItem index="22" value="Suporte T&#xe9;cnico"/>
+                <StringItem index="23" value="Seguran&#xe7;a da Informa&#xe7;&#xe3;o"/>
+                <StringItem index="24" value="Ciberseguran&#xe7;a"/>
+                <StringItem index="25" value="Seguran&#xe7;a Ofensiva (Pentest)"/>
+                <StringItem index="26" value="Computa&#xe7;&#xe3;o em Nuvem (Cloud)"/>
+                <StringItem index="27" value="DevOps"/>
+                <StringItem index="28" value="Engenharia de Confiabilidade (SRE)"/>
+                <StringItem index="29" value="An&#xe1;lise de Sistemas"/>
+                <StringItem index="30" value="Gest&#xe3;o de Projetos de TI"/>
+                <StringItem index="31" value="Gest&#xe3;o de Produtos Digitais"/>
+                <StringItem index="32" value="Governan&#xe7;a de TI"/>
+                <StringItem index="33" value="Consultoria de TI"/>
+                <StringItem index="34" value="An&#xe1;lise de Neg&#xf3;cios"/>
+                <StringItem index="35" value="Sistemas ERP"/>
+                <StringItem index="36" value="Scrum Master"/>
+                <StringItem index="37" value="UX/UI Design"/>
+                <StringItem index="38" value="Internet das Coisas (IoT)"/>
+                <StringItem index="39" value="Rob&#xf3;tica e Automa&#xe7;&#xe3;o"/>
+                <StringItem index="40" value="Blockchain"/>
               </StringArray>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

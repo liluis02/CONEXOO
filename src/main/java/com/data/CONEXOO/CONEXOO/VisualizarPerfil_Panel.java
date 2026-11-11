@@ -58,7 +58,20 @@ private void carregarDadosPerfil() {
 
                 lblCidadePerfil.setText(rs.getString("cidade"));
                 lblEstadoPerfil.setText(rs.getString("estado"));
-                lblTelefonePerfil.setText(rs.getString("telefone"));
+                String telefone = rs.getString("telefone");
+
+if (telefone != null && !telefone.isEmpty()) {
+    String numeros = telefone.replaceAll("\\D", "");
+
+    if (numeros.length() >= 4) {
+        String ultimos4 = numeros.substring(numeros.length() - 4);
+        lblTelefonePerfil.setText("(**) *****-" + ultimos4);
+    } else {
+        lblTelefonePerfil.setText("****");
+    }
+} else {
+    lblTelefonePerfil.setText("Não informado");
+}
                 lblNivelProfissional.setText(rs.getString("nivel_profissional"));
 
                 txtDescricaoPerfil.setText(rs.getString("descricao"));
@@ -215,6 +228,7 @@ private void carregarDadosPerfil() {
         lblCargoDesejado = new javax.swing.JLabel();
         lblAreaAtuacaoPerfil = new javax.swing.JLabel();
         lblCargodesejado2 = new javax.swing.JLabel();
+        lblareaatuacaoatual = new javax.swing.JLabel();
         pnlInformacoesPessoais = new javax.swing.JPanel();
         lblTituloInformacoesPessoais = new javax.swing.JLabel();
         lblTituloCidade = new javax.swing.JLabel();
@@ -240,7 +254,8 @@ private void carregarDadosPerfil() {
         btnEditarPerfil = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(7, 27, 51));
-        setPreferredSize(new java.awt.Dimension(730, 1000));
+        setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(19, 216, 245)));
+        setPreferredSize(new java.awt.Dimension(1535, 1000));
 
         lblTituloPerfil.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         lblTituloPerfil.setForeground(new java.awt.Color(255, 255, 255));
@@ -263,13 +278,17 @@ private void carregarDadosPerfil() {
         lblCargoDesejado.setForeground(new java.awt.Color(255, 255, 255));
         lblCargoDesejado.setText("Cargo desejado");
 
-        lblAreaAtuacaoPerfil.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        lblAreaAtuacaoPerfil.setForeground(new java.awt.Color(19, 220, 233));
+        lblAreaAtuacaoPerfil.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblAreaAtuacaoPerfil.setForeground(new java.awt.Color(255, 255, 255));
         lblAreaAtuacaoPerfil.setText("Área de atuação");
 
         lblCargodesejado2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         lblCargodesejado2.setForeground(new java.awt.Color(145, 180, 201));
         lblCargodesejado2.setText("Cargo desejado");
+
+        lblareaatuacaoatual.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblareaatuacaoatual.setForeground(new java.awt.Color(145, 180, 201));
+        lblareaatuacaoatual.setText("Área de atuação atual");
 
         javax.swing.GroupLayout pnlIdentificacaoLayout = new javax.swing.GroupLayout(pnlIdentificacao);
         pnlIdentificacao.setLayout(pnlIdentificacaoLayout);
@@ -279,11 +298,13 @@ private void carregarDadosPerfil() {
                 .addContainerGap()
                 .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNomeProfissional, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
-                    .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
-                        .addComponent(lblCargodesejado2)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(lblCargoDesejado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblAreaAtuacaoPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE))
+                    .addComponent(lblAreaAtuacaoPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
+                        .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCargodesejado2)
+                            .addComponent(lblareaatuacaoatual))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlIdentificacaoLayout.setVerticalGroup(
@@ -296,8 +317,10 @@ private void carregarDadosPerfil() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblCargoDesejado)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblareaatuacaoatual)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblAreaAtuacaoPerfil)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pnlInformacoesPessoais.setBackground(new java.awt.Color(16, 45, 75));
@@ -522,20 +545,18 @@ private void carregarDadosPerfil() {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblSubtituloPerfil)
-                    .addComponent(lblTituloPerfil)
-                    .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlSobreMim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlExperiencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEditarPerfil)
-                .addContainerGap())
+                .addGap(250, 250, 250)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnEditarPerfil)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblSubtituloPerfil)
+                        .addComponent(lblTituloPerfil)
+                        .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlSobreMim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlExperiencias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(567, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -593,6 +614,7 @@ javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
     private javax.swing.JLabel lblTituloPerfil;
     private javax.swing.JLabel lblTituloSobreMim;
     private javax.swing.JLabel lblTituloTelefone;
+    private javax.swing.JLabel lblareaatuacaoatual;
     private javax.swing.JList<String> lstExperienciasPerfil;
     private javax.swing.JList<String> lstHabilidadesPerfil;
     private javax.swing.JPanel pnlExperiencias;

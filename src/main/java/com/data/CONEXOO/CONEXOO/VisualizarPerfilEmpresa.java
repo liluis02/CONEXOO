@@ -63,9 +63,35 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                         rs.getString("area_atuacao")
                 );
 
-                lblCNPJEmpresa1.setText(rs.getString("cnpj"));
+                String cnpj = rs.getString("cnpj");
 
-                lblTelefonePerfil.setText(rs.getString("telefone"));
+if (cnpj != null && !cnpj.isEmpty()) {
+    String numeros = cnpj.replaceAll("\\D", "");
+
+    if (numeros.length() >= 2) {
+        String ultimos2 = numeros.substring(numeros.length() - 2);
+        lblCNPJEmpresa1.setText("**.***.***/****-" + ultimos2);
+    } else {
+        lblCNPJEmpresa1.setText("**************");
+    }
+} else {
+    lblCNPJEmpresa1.setText("Não informado");
+}
+
+                String telefone = rs.getString("telefone");
+
+if (telefone != null && !telefone.isEmpty()) {
+    String numeros = telefone.replaceAll("\\D", "");
+
+    if (numeros.length() >= 4) {
+        String ultimos4 = numeros.substring(numeros.length() - 4);
+        lblTelefonePerfil.setText("(**) *****-" + ultimos4);
+    } else {
+        lblTelefonePerfil.setText("****");
+    }
+} else {
+    lblTelefonePerfil.setText("Não informado");
+}
 
                 lblEstadoPerfil.setText(rs.getString("estado"));
 
@@ -110,6 +136,9 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         lblPorte01 = new javax.swing.JLabel();
         lblRazaoSocial1 = new javax.swing.JLabel();
         lblAreaAtuacaoEmpresa1 = new javax.swing.JLabel();
+        lblporteempresa2 = new javax.swing.JLabel();
+        lblrazaosocial2 = new javax.swing.JLabel();
+        lblareaatuacaoempresa2 = new javax.swing.JLabel();
         pnlInformacoesPessoais = new javax.swing.JPanel();
         lblTituloInformacoesEmpresa1 = new javax.swing.JLabel();
         lblcnpj1 = new javax.swing.JLabel();
@@ -126,8 +155,10 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         lstSobreaEmpresaDescricao = new javax.swing.JList<>();
         btnEditarPerfil = new javax.swing.JButton();
 
+        setPreferredSize(new java.awt.Dimension(1535, 885));
+
         jPanelPerfilEmpresa.setBackground(new java.awt.Color(7, 27, 51));
-        jPanelPerfilEmpresa.setPreferredSize(new java.awt.Dimension(730, 630));
+        jPanelPerfilEmpresa.setPreferredSize(new java.awt.Dimension(1535, 885));
 
         lblTituloPerfilEmpresa.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         lblTituloPerfilEmpresa.setForeground(new java.awt.Color(255, 255, 255));
@@ -151,12 +182,24 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         lblPorte01.setText("Porte da Empresa");
 
         lblRazaoSocial1.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-        lblRazaoSocial1.setForeground(new java.awt.Color(145, 180, 201));
+        lblRazaoSocial1.setForeground(new java.awt.Color(19, 220, 233));
         lblRazaoSocial1.setText("Razão social da sua empresa");
 
         lblAreaAtuacaoEmpresa1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblAreaAtuacaoEmpresa1.setForeground(new java.awt.Color(19, 220, 233));
         lblAreaAtuacaoEmpresa1.setText("Área de atuação");
+
+        lblporteempresa2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblporteempresa2.setForeground(new java.awt.Color(145, 180, 201));
+        lblporteempresa2.setText("Porte da empresa");
+
+        lblrazaosocial2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblrazaosocial2.setForeground(new java.awt.Color(145, 180, 201));
+        lblrazaosocial2.setText("Razão social");
+
+        lblareaatuacaoempresa2.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblareaatuacaoempresa2.setForeground(new java.awt.Color(145, 180, 201));
+        lblareaatuacaoempresa2.setText("Área de atuação da empresa");
 
         javax.swing.GroupLayout pnlIdentificacaoLayout = new javax.swing.GroupLayout(pnlIdentificacao);
         pnlIdentificacao.setLayout(pnlIdentificacaoLayout);
@@ -168,11 +211,12 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                     .addComponent(lblNomeFantasiaEmpresa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
                         .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblAreaAtuacaoEmpresa1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblrazaosocial2)
                             .addComponent(lblRazaoSocial1)
-                            .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
-                                .addComponent(lblPorte01, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(47, 47, 47)
-                                .addComponent(lblAreaAtuacaoEmpresa1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblporteempresa2)
+                            .addComponent(lblPorte01)
+                            .addComponent(lblareaatuacaoempresa2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -182,12 +226,18 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(lblNomeFantasiaEmpresa1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblrazaosocial2)
+                .addGap(1, 1, 1)
                 .addComponent(lblRazaoSocial1)
-                .addGap(18, 18, 18)
-                .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPorte01)
-                    .addComponent(lblAreaAtuacaoEmpresa1))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblporteempresa2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPorte01)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblareaatuacaoempresa2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblAreaAtuacaoEmpresa1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pnlInformacoesPessoais.setBackground(new java.awt.Color(16, 45, 75));
@@ -249,7 +299,7 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                             .addComponent(lblTituloCidadeEmpresa)
                             .addComponent(lblEstadoPerfil)
                             .addComponent(lblTituloEstado))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(852, Short.MAX_VALUE))
         );
         pnlInformacoesPessoaisLayout.setVerticalGroup(
             pnlInformacoesPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -283,7 +333,10 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         lblSobreaEmpresa.setForeground(new java.awt.Color(19, 220, 233));
         lblSobreaEmpresa.setText("Sobre a empresa");
 
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+
         lstSobreaEmpresaDescricao.setBackground(new java.awt.Color(16, 45, 75));
+        lstSobreaEmpresaDescricao.setBorder(null);
         lstSobreaEmpresaDescricao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lstSobreaEmpresaDescricao.setForeground(new java.awt.Color(255, 255, 255));
         lstSobreaEmpresaDescricao.setModel(new javax.swing.AbstractListModel<String>() {
@@ -303,9 +356,11 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
             .addGroup(pnlHabilidadesLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(pnlHabilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblSobreaEmpresa)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addGroup(pnlHabilidadesLayout.createSequentialGroup()
+                        .addComponent(lblSobreaEmpresa)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addGap(20, 20, 20))
         );
         pnlHabilidadesLayout.setVerticalGroup(
             pnlHabilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,8 +368,8 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(lblSobreaEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnEditarPerfil.setBackground(new java.awt.Color(19, 220, 233));
@@ -331,20 +386,16 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         jPanelPerfilEmpresaLayout.setHorizontalGroup(
             jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelPerfilEmpresaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelPerfilEmpresaLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnEditarPerfil))
-                    .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanelPerfilEmpresaLayout.createSequentialGroup()
-                        .addGroup(jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSubtituloPerfilEmpresa)
-                            .addComponent(lblTituloPerfilEmpresa))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(30, 30, 30)
+                .addGroup(jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnEditarPerfil)
+                    .addGroup(jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(lblSubtituloPerfilEmpresa)
+                        .addComponent(lblTituloPerfilEmpresa)
+                        .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
         jPanelPerfilEmpresaLayout.setVerticalGroup(
             jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,20 +406,20 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
                 .addComponent(lblSubtituloPerfilEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlIdentificacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlHabilidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnEditarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEditarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 730, Short.MAX_VALUE)
+            .addGap(0, 1535, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -376,12 +427,9 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1012, Short.MAX_VALUE)
+            .addGap(0, 909, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(376, Short.MAX_VALUE)))
+                .addComponent(jPanelPerfilEmpresa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -413,7 +461,10 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
     private javax.swing.JLabel lblTituloInformacoesEmpresa1;
     private javax.swing.JLabel lblTituloPerfilEmpresa;
     private javax.swing.JLabel lblTituloTelefone;
+    private javax.swing.JLabel lblareaatuacaoempresa2;
     private javax.swing.JLabel lblcnpj1;
+    private javax.swing.JLabel lblporteempresa2;
+    private javax.swing.JLabel lblrazaosocial2;
     private javax.swing.JList<String> lstSobreaEmpresaDescricao;
     private javax.swing.JPanel pnlHabilidades;
     private javax.swing.JPanel pnlIdentificacao;
