@@ -342,7 +342,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                 .addGroup(pnlCardVagaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalarioVaga)
                     .addComponent(btnVerDetalhesVaga))
-                .addContainerGap(247, Short.MAX_VALUE))
+                .addContainerGap(604, Short.MAX_VALUE))
         );
 
         pnlListaVagas.add(pnlCardVaga);
@@ -398,8 +398,8 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                     .addComponent(txtPesquisarVagas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPesquisarVagas))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(598, Short.MAX_VALUE))
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
