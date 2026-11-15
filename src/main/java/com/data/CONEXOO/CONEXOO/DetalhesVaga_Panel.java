@@ -9,7 +9,104 @@ package com.data.CONEXOO.CONEXOO;
  * @author liluis
  */
 public class DetalhesVaga_Panel extends javax.swing.JPanel {
+    private void curtirVaga() {
+
+    String sql = "INSERT INTO interesses "
+               + "(id_candidato, id_vaga, origem) "
+               + "SELECT id_candidato, ?, 'candidato' "
+               + "FROM candidatos WHERE id_usuario = ?";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt =
+                 conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, idVaga);
+        stmt.setInt(2, idUsuario);
+
+        int linhas = stmt.executeUpdate();
+
+        if (linhas > 0) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, "Vaga curtida com sucesso!"
+            );
+            btnCandidatar.setText("♡ Vaga curtida");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, "Perfil de candidato não encontrado."
+            );
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Erro ao curtir vaga: " + e.getMessage()
+        );
+    }
+}
+    private void verificarCurtida() {
+
+    String sql = "SELECT 1 FROM interesses i "
+               + "INNER JOIN candidatos c "
+               + "ON i.id_candidato = c.id_candidato "
+               + "WHERE c.id_usuario = ? "
+               + "AND i.id_vaga = ? "
+               + "AND i.origem = 'candidato'";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt =
+                 conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, idUsuario);
+        stmt.setInt(2, idVaga);
+
+        try (java.sql.ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                btnCandidatar.setText("♡ Vaga curtida");
+            } else {
+                btnCandidatar.setText("♡ Curtir vaga");
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Erro ao verificar curtida: " + e.getMessage()
+        );
+    }
+}
+    private void descurtirVaga() {
+
+    String sql = "DELETE i FROM interesses i "
+               + "INNER JOIN candidatos c "
+               + "ON i.id_candidato = c.id_candidato "
+               + "WHERE c.id_usuario = ? "
+               + "AND i.id_vaga = ? "
+               + "AND i.origem = 'candidato'";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement stmt =
+                 conexao.prepareStatement(sql)) {
+
+        stmt.setInt(1, idUsuario);
+        stmt.setInt(2, idVaga);
+
+        int linhas = stmt.executeUpdate();
+
+        if (linhas > 0) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this, "Curtida removida com sucesso!"
+            );
+
+            btnCandidatar.setText("♡ Curtir vaga");
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Erro ao remover curtida: " + e.getMessage()
+        );
+    }
+}
     private int idVaga;
+    private int idUsuario;
     private Runnable acaoVoltarVagas;
 
 public void setAcaoVoltarVagas(Runnable acao) {
@@ -22,10 +119,12 @@ public void setAcaoVoltarVagas(Runnable acao) {
     public DetalhesVaga_Panel() {
         initComponents();
     }
-    public DetalhesVaga_Panel(int idVaga) {
+public DetalhesVaga_Panel(int idVaga, int idUsuario) {
     initComponents();
     this.idVaga = idVaga;
+    this.idUsuario = idUsuario;
     carregarDetalhesVaga();
+    verificarCurtida();
 }
     
 private void carregarDetalhesVaga() {
@@ -172,7 +271,7 @@ private void carregarDetalhesVaga() {
         jScrollPane1.setViewportView(txtDescricaoDetalhes);
 
         btnVoltarVagas.setBackground(new java.awt.Color(25, 55, 85));
-        btnVoltarVagas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnVoltarVagas.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnVoltarVagas.setForeground(new java.awt.Color(255, 255, 255));
         btnVoltarVagas.setText("Voltar para Vagas");
         btnVoltarVagas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
@@ -180,8 +279,10 @@ private void carregarDetalhesVaga() {
         btnVoltarVagas.addActionListener(this::btnVoltarVagasActionPerformed);
 
         btnCandidatar.setBackground(new java.awt.Color(6, 182, 212));
-        btnCandidatar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnCandidatar.setText("Candidatar-se");
+        btnCandidatar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnCandidatar.setText("♡ Curtir vaga");
+        btnCandidatar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCandidatar.addActionListener(this::btnCandidatarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -243,6 +344,22 @@ private void carregarDetalhesVaga() {
     acaoVoltarVagas.run();
 }
     }//GEN-LAST:event_btnVoltarVagasActionPerformed
+
+    private void btnCandidatarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCandidatarActionPerformed
+            if (btnCandidatar.getText().contains("Vaga curtida")) {
+        descurtirVaga();
+    } else {
+        curtirVaga();
+    }
+    }//GEN-LAST:event_btnCandidatarActionPerformed
+public void definirTextoVoltar(boolean veioDeInteresses) {
+
+    if (veioDeInteresses) {
+        btnVoltarVagas.setText("← Voltar para Interesses");
+    } else {
+        btnVoltarVagas.setText("← Voltar para Vagas");
+    }
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

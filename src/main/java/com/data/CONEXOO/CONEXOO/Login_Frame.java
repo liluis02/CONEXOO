@@ -162,7 +162,7 @@ public class Login_Frame extends javax.swing.JFrame {
         });
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\gemar\\Downloads\\conexoo_logo_transparente_150.png")); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/data/CONEXOO/CONEXOO/conexoo_logo_transparente_150.png"))); // NOI18N
         jLabel5.setText("jLabel2");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

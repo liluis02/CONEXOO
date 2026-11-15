@@ -5,6 +5,7 @@
 package com.data.CONEXOO.CONEXOO;
 
 public class Menu_Frame extends javax.swing.JFrame {
+    private boolean detalhesVeioDeInteresses = false;
     
     private void carregarQuantidadeVagas() {
     String sql = "SELECT COUNT(*) FROM vagas WHERE status = 'ATIVA'";
@@ -69,7 +70,13 @@ scrollPerfilEmpresa.setBounds(
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
+    private InteresseProfissional1 painelInteresses;
+    private javax.swing.JScrollPane scrollInteresses;
+    
     private void mostrarPainelVagas() {
+        if (scrollInteresses != null) {
+    scrollInteresses.setVisible(false);
+}
 if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
     mostrarPainelVagasEmpresa();
     return;
@@ -89,7 +96,8 @@ if (scrollPerfilEmpresa != null) {
 
 if (painelVagas == null) {
     painelVagas = new Vagas_Perfilprofissional1();
-    painelVagas.setAcaoVerDetalhes(idVaga -> {
+painelVagas.setAcaoVerDetalhes(idVaga -> {
+    detalhesVeioDeInteresses = false;
     mostrarDetalhesVaga(idVaga);
 });
 
@@ -119,11 +127,159 @@ pnlPrincipal.setComponentZOrder(scrollVagas, 0);
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
+    private void mostrarPainelInteresses() {
+
+    if (scrollVagas != null) {
+        scrollVagas.setVisible(false);
+    }
+
+    if (scrollDetalhesVaga != null) {
+        scrollDetalhesVaga.setVisible(false);
+    }
+
+    if (scrollPerfil != null) {
+        scrollPerfil.setVisible(false);
+    }
+
+    if (scrollPerfilEmpresa != null) {
+        scrollPerfilEmpresa.setVisible(false);
+    }
+
+    if (scrollPublicarVaga != null) {
+        scrollPublicarVaga.setVisible(false);
+    }
+
+    if (painelInteresses == null) {
+
+        painelInteresses = new InteresseProfissional1(idUsuario);
+painelInteresses.setAcaoVerDetalhes(idVaga -> {
+    detalhesVeioDeInteresses = true;
+    mostrarDetalhesVaga(idVaga);
+});
+
+        scrollInteresses =
+                new javax.swing.JScrollPane(painelInteresses);
+
+        scrollInteresses.setHorizontalScrollBarPolicy(
+                javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+
+        scrollInteresses.getVerticalScrollBar().setUnitIncrement(20);
+
+        pnlPrincipal.add(scrollInteresses);
+    }
+    painelInteresses.atualizarVagasCurtidas();
+    
+
+    int inicioConteudo = pnlMenuLateral.getX()
+            + pnlMenuLateral.getWidth();
+
+    scrollInteresses.setBounds(
+            inicioConteudo,
+            0,
+            pnlPrincipal.getWidth() - inicioConteudo,
+            pnlPrincipal.getHeight()
+    );
+
+    scrollInteresses.setVisible(true);
+    pnlPrincipal.setComponentZOrder(scrollInteresses, 0);
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
+}
     
     public Menu_Frame() {
         initComponents();
         setLocationRelativeTo(null);
     }
+    private void carregarFotoInicio() {
+
+    String sql = "SELECT foto_perfil FROM usuarios WHERE id = ?";
+
+    try (java.sql.Connection conexao =
+            java.sql.DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/conexoo",
+                    "root",
+                    "123456"
+            );
+
+         java.sql.PreparedStatement pst =
+                 conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+
+                byte[] foto = rs.getBytes("foto_perfil");
+                if (foto == null || foto.length == 0) {
+    lblFotoInicio.setIcon(
+        new javax.swing.ImageIcon(
+            getClass().getResource( "/com/data/CONEXOO/CONEXOO/perfil_padrao.png")
+        )
+    );
+    lblFotoInicio.setText("");
+    return;
+}
+
+if (foto == null || foto.length == 0) {
+
+    java.net.URL caminho = getClass().getResource(
+        "/com/data/CONEXOO/CONEXOO/perfil_padrao.png"
+    );
+
+    if (caminho != null) {
+
+        javax.swing.ImageIcon imagem =
+                new javax.swing.ImageIcon(caminho);
+
+        java.awt.Image imagemRedimensionada =
+                imagem.getImage().getScaledInstance(
+                    70, 70,
+                    java.awt.Image.SCALE_SMOOTH
+                );
+
+        lblFotoInicio.setIcon(
+            new javax.swing.ImageIcon(imagemRedimensionada)
+        );
+
+        lblFotoInicio.setText("");
+
+    } else {
+        System.out.println("ERRO: perfil_padrao.png não encontrado!");
+    }
+
+    return;
+} else {
+
+    javax.swing.ImageIcon imagem =
+            new javax.swing.ImageIcon(foto);
+
+    java.awt.Image imagemRedimensionada =
+            imagem.getImage().getScaledInstance(
+                    70, 70,
+                    java.awt.Image.SCALE_SMOOTH
+            );
+
+    lblFotoInicio.setIcon(
+            new javax.swing.ImageIcon(imagemRedimensionada)
+    );
+
+    lblFotoInicio.setText("");
+}
+            }
+        }
+
+    } catch (java.sql.SQLException ex) {
+
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Erro ao carregar foto da página inicial: "
+                        + ex.getMessage()
+        );
+    }
+}
 
     public Menu_Frame(int idUsuario, String tipoUsuario) {
         initComponents();
@@ -152,6 +308,7 @@ if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
 
         carregarNomeUsuario();
         carregarQuantidadeVagas();
+        carregarFotoInicio();
 if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
 
     carregarEmpresasPlataforma();
@@ -715,6 +872,9 @@ private void ocultarPainelPerfil() {
     }
 }
     private void mostrarPainelPerfil() {
+        if (scrollInteresses != null) {
+    scrollInteresses.setVisible(false);
+}
         if (scrollVagas != null) {
     scrollVagas.setVisible(false);
 }
@@ -871,6 +1031,9 @@ if (cidade != null && !cidade.isBlank()
  
 }
     private void mostrarPaginaInicial() {
+        if (scrollInteresses != null) {
+    scrollInteresses.setVisible(false);
+}
 
     pnlBoasVindas.setVisible(true);
     pnlBanner.setVisible(true);
@@ -883,6 +1046,21 @@ if (cidade != null && !cidade.isBlank()
     pnlAtividadesRecentes.setVisible(true);
 
     
+}
+    public void voltarParaInicio() {
+
+    if (scrollVagas != null) scrollVagas.setVisible(false);
+    if (scrollVagasEmpresa != null) scrollVagasEmpresa.setVisible(false);
+    if (scrollPerfil != null) scrollPerfil.setVisible(false);
+    if (scrollPerfilEmpresa != null) scrollPerfilEmpresa.setVisible(false);
+    if (scrollPublicarVaga != null) scrollPublicarVaga.setVisible(false);
+    if (scrollInteresses != null) scrollInteresses.setVisible(false);
+    if (scrollDetalhesVaga != null) scrollDetalhesVaga.setVisible(false);
+
+    mostrarPaginaInicial();
+
+    pnlPrincipal.revalidate();
+    pnlPrincipal.repaint();
 }
     
 
@@ -1024,23 +1202,31 @@ painel.configurarNovaVaga();
 private javax.swing.JScrollPane scrollDetalhesVaga;
 
 private void mostrarDetalhesVaga(int idVaga) {
-
+    
     if (scrollVagas != null) scrollVagas.setVisible(false);
     if (scrollVagasEmpresa != null) scrollVagasEmpresa.setVisible(false);
     if (scrollPerfil != null) scrollPerfil.setVisible(false);
     if (scrollPerfilEmpresa != null) scrollPerfilEmpresa.setVisible(false);
     if (scrollPublicarVaga != null) scrollPublicarVaga.setVisible(false);
-
+    if (scrollInteresses != null) {
+    scrollInteresses.setVisible(false);
+}
     if (scrollDetalhesVaga != null) {
         pnlPrincipal.remove(scrollDetalhesVaga);
     }
 
     DetalhesVaga_Panel painelDetalhes =
-            new DetalhesVaga_Panel(idVaga);
+            new DetalhesVaga_Panel(idVaga, idUsuario);
+    painelDetalhes.definirTextoVoltar(detalhesVeioDeInteresses);
     
 painelDetalhes.setAcaoVoltarVagas(() -> {
     scrollDetalhesVaga.setVisible(false);
-    mostrarPainelVagas();
+
+    if (detalhesVeioDeInteresses) {
+        mostrarPainelInteresses();
+    } else {
+        mostrarPainelVagas();
+    }
 });
     scrollDetalhesVaga =
             new javax.swing.JScrollPane(painelDetalhes);
@@ -1069,6 +1255,7 @@ painelDetalhes.setAcaoVoltarVagas(() -> {
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
+
 private void carregarQuantidadeVagasEmpresa() {
 
     String sql = """
@@ -1201,6 +1388,7 @@ private void carregarResumoEmpresa() {
         pnlBoasVindas = new javax.swing.JPanel();
         lblBoasVindas = new javax.swing.JLabel();
         lblAreaatuacao = new javax.swing.JLabel();
+        lblFotoInicio = new javax.swing.JLabel();
         pnlBanner = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtDescricaoBanner = new javax.swing.JTextArea();
@@ -1344,7 +1532,7 @@ private void carregarResumoEmpresa() {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlBoasVindas.setBackground(new java.awt.Color(11, 29, 56));
+        pnlBoasVindas.setBackground(new java.awt.Color(11, 37, 69));
         pnlBoasVindas.setPreferredSize(new java.awt.Dimension(1050, 95));
 
         lblBoasVindas.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -1364,20 +1552,22 @@ private void carregarResumoEmpresa() {
         pnlBoasVindasLayout.setHorizontalGroup(
             pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBoasVindasLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblAreaatuacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblBoasVindas, javax.swing.GroupLayout.DEFAULT_SIZE, 991, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(lblFotoInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblAreaatuacao, javax.swing.GroupLayout.PREFERRED_SIZE, 754, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlBoasVindasLayout.setVerticalGroup(
             pnlBoasVindasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBoasVindasLayout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(lblBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
+                .addComponent(lblBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblAreaatuacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
+            .addComponent(lblFotoInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pnlBanner.setBackground(new java.awt.Color(7, 56, 120));
@@ -1669,14 +1859,12 @@ private void carregarResumoEmpresa() {
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlPrincipalLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlMenuLateral, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE)
                     .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(pnlMenuLateral, javax.swing.GroupLayout.DEFAULT_SIZE, 869, Short.MAX_VALUE))
-                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(pnlBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
+                        .addComponent(pnlBoasVindas, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlBanner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1731,6 +1919,8 @@ if (tipoUsuario.equalsIgnoreCase("PROFISSIONAL")) {
 
 PerfilProfissional_Frame perfil =
         new PerfilProfissional_Frame(idUsuario);
+
+perfil.setMenuOrigem(this);
 
 perfil.setVisible(true);
 this.setVisible(false);
@@ -1796,7 +1986,8 @@ this.dispose();
     }//GEN-LAST:event_btnVagas2ActionPerformed
 
     private void btnInteressesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInteressesActionPerformed
-        // TODO add your handling code here:
+    mostrarPainelInteresses();
+    ocultarPaginaInicial();
     }//GEN-LAST:event_btnInteressesActionPerformed
 
     private void btnMatches1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatches1ActionPerformed
@@ -1867,6 +2058,7 @@ ocultarPaginaInicial();
     private javax.swing.JLabel lblDescricaoVagas2;
     private javax.swing.JLabel lblDescricaoVagas3;
     private javax.swing.JLabel lblEmpresasPlataforma;
+    private javax.swing.JLabel lblFotoInicio;
     private javax.swing.JLabel lblQuantidadeVagas1;
     private javax.swing.JLabel lblQuantidadeVagas2;
     private javax.swing.JLabel lblQuantidadeVagas3;
