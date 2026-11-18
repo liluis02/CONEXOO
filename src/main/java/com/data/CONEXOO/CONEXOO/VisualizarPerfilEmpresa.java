@@ -13,18 +13,34 @@ import javax.swing.JOptionPane;
 public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
 
     private int idUsuario;
+    
+    private Runnable acaoVoltarMatches;
+    private Integer idEmpresaVisualizada = null;
+
+public void setAcaoVoltarMatches(Runnable acao) {
+    this.acaoVoltarMatches = acao;
+}
 
     public VisualizarPerfilEmpresa() {
         initComponents();
     }
+    
+public void visualizarOutraEmpresa(int idEmpresa) {
 
-    public VisualizarPerfilEmpresa(int idUsuario) {
-        initComponents();
-        this.idUsuario = idUsuario;
+    this.idEmpresaVisualizada = idEmpresa;
 
-        carregarDadosEmpresa();
-        carregarFotoPerfil();
-    }
+    lblTituloPerfilEmpresa.setText("Perfil da Empresa");
+
+    btnEditarPerfil.setText("← Voltar para Matches");
+
+    carregarDadosEmpresa();
+    carregarFotoPerfil();
+}
+
+public VisualizarPerfilEmpresa(int idUsuario) {
+    initComponents();
+    this.idUsuario = idUsuario;
+}
 
     private void carregarDadosEmpresa() {
 
@@ -39,12 +55,16 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
             + "cidade, "
             + "descricao "
             + "FROM empresas "
-            + "WHERE id_usuario = ?";
+            + "WHERE " + (idEmpresaVisualizada == null
+        ? "id_usuario = ?"
+        : "id_empresa = ?");
 
     try (Connection conexao = Conexao.conectar();
          PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-        stmt.setInt(1, idUsuario);
+        stmt.setInt(1, idEmpresaVisualizada == null
+        ? idUsuario
+        : idEmpresaVisualizada);
 
         try (ResultSet rs = stmt.executeQuery()) {
 
@@ -100,11 +120,9 @@ if (telefone != null && !telefone.isEmpty()) {
 
                 String descricao = rs.getString("descricao");
 
-                lstSobreaEmpresaDescricao.setListData(
-                        new String[]{
-                            descricao == null ? "" : descricao
-                        }
-                );
+                lstSobreaEmpresaDescricao.setText(
+    descricao == null ? "" : descricao
+);
 
             } else {
                 JOptionPane.showMessageDialog(
@@ -122,6 +140,12 @@ if (telefone != null && !telefone.isEmpty()) {
             );
         }
     }
+    public void carregarPerfilProprio() {
+    idEmpresaVisualizada = null;
+    carregarDadosEmpresa();
+    carregarFotoPerfil();
+}
+    
 
     // A partir daqui continua o seu initComponents()
     
@@ -153,8 +177,8 @@ if (telefone != null && !telefone.isEmpty()) {
         lblCidadeEmpresa1 = new javax.swing.JLabel();
         pnlHabilidades = new javax.swing.JPanel();
         lblSobreaEmpresa = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lstSobreaEmpresaDescricao = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        lstSobreaEmpresaDescricao = new javax.swing.JTextArea();
         btnEditarPerfil = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1535, 885));
@@ -337,21 +361,13 @@ if (telefone != null && !telefone.isEmpty()) {
         lblSobreaEmpresa.setForeground(new java.awt.Color(19, 220, 233));
         lblSobreaEmpresa.setText("Sobre a empresa");
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lstSobreaEmpresaDescricao.setBackground(new java.awt.Color(16, 45, 75));
-        lstSobreaEmpresaDescricao.setBorder(null);
+        lstSobreaEmpresaDescricao.setColumns(20);
         lstSobreaEmpresaDescricao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        lstSobreaEmpresaDescricao.setForeground(new java.awt.Color(255, 255, 255));
-        lstSobreaEmpresaDescricao.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { " " };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        lstSobreaEmpresaDescricao.setSelectionBackground(new java.awt.Color(23, 97, 122));
-        lstSobreaEmpresaDescricao.setSelectionForeground(new java.awt.Color(255, 255, 255));
-        lstSobreaEmpresaDescricao.setVisibleRowCount(4);
-        jScrollPane2.setViewportView(lstSobreaEmpresaDescricao);
+        lstSobreaEmpresaDescricao.setRows(5);
+        jScrollPane1.setViewportView(lstSobreaEmpresaDescricao);
 
         javax.swing.GroupLayout pnlHabilidadesLayout = new javax.swing.GroupLayout(pnlHabilidades);
         pnlHabilidades.setLayout(pnlHabilidadesLayout);
@@ -363,8 +379,8 @@ if (telefone != null && !telefone.isEmpty()) {
                     .addGroup(pnlHabilidadesLayout.createSequentialGroup()
                         .addComponent(lblSobreaEmpresa)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2))
-                .addGap(20, 20, 20))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         pnlHabilidadesLayout.setVerticalGroup(
             pnlHabilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,7 +388,7 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap()
                 .addComponent(lblSobreaEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -440,7 +456,15 @@ if (telefone != null && !telefone.isEmpty()) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPerfilActionPerformed
-     PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
+     
+if (idEmpresaVisualizada != null) {
+    if (acaoVoltarMatches != null) {
+        acaoVoltarMatches.run();
+    }
+    return;
+}
+        
+        PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
 
     perfil.setVisible(true);
 
@@ -448,13 +472,23 @@ if (telefone != null && !telefone.isEmpty()) {
     }//GEN-LAST:event_btnEditarPerfilActionPerformed
 private void carregarFotoPerfil() {
 
-    String sql = "SELECT foto_perfil FROM usuarios WHERE id = ?";
+    
+String sql = idEmpresaVisualizada == null
+        ? "SELECT foto_perfil FROM usuarios WHERE id = ?"
+        : """
+          SELECT u.foto_perfil
+          FROM usuarios u
+          INNER JOIN empresas e ON e.id_usuario = u.id
+          WHERE e.id_empresa = ?
+          """;
 
     try (java.sql.Connection conexao = Conexao.conectar();
          java.sql.PreparedStatement pst =
                  conexao.prepareStatement(sql)) {
 
-        pst.setInt(1, idUsuario);
+        pst.setInt(1, idEmpresaVisualizada == null
+        ? idUsuario
+        : idEmpresaVisualizada);
 
         try (java.sql.ResultSet rs = pst.executeQuery()) {
 
@@ -519,7 +553,7 @@ private void carregarFotoPerfil() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditarPerfil;
     private javax.swing.JPanel jPanelPerfilEmpresa;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAreaAtuacaoEmpresa1;
     private javax.swing.JLabel lblCNPJEmpresa1;
     private javax.swing.JLabel lblCidadeEmpresa1;
@@ -540,7 +574,7 @@ private void carregarFotoPerfil() {
     private javax.swing.JLabel lblcnpj1;
     private javax.swing.JLabel lblporteempresa2;
     private javax.swing.JLabel lblrazaosocial2;
-    private javax.swing.JList<String> lstSobreaEmpresaDescricao;
+    private javax.swing.JTextArea lstSobreaEmpresaDescricao;
     private javax.swing.JPanel pnlHabilidades;
     private javax.swing.JPanel pnlIdentificacao;
     private javax.swing.JPanel pnlInformacoesPessoais;

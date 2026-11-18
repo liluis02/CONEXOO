@@ -609,20 +609,12 @@ stmt.executeUpdate();
     }//GEN-LAST:event_cmbPortedaEmpresaActionPerformed
 
     private void btnVoltarInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicioActionPerformed
-for (java.awt.Window janela : java.awt.Window.getWindows()) {
+    Menu_Frame menu = new Menu_Frame(idUsuario, "EMPRESA");
 
-    if (janela instanceof Menu_Frame) {
+    menu.setVisible(true);
+    menu.toFront();
 
-        Menu_Frame menu = (Menu_Frame) janela;
-
-        menu.setVisible(true);
-        menu.toFront();
-        menu.requestFocus();
-
-        this.dispose();
-        return;
-    }
-}
+    this.dispose();
     }//GEN-LAST:event_btnVoltarInicioActionPerformed
 
     private void btnEscolherFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscolherFotoActionPerformed

@@ -93,17 +93,15 @@ criarCardVaga(
             "Erro ao carregar vagas curtidas: " + e.getMessage()
         );
     }
-    if (pnlListaVagas.getComponentCount() == 0) {
+if (pnlListaVagas.getComponentCount() == 0) {
 
-    javax.swing.JLabel lblVazio = new javax.swing.JLabel(
-        "Você ainda não curtiu nenhuma vaga."
+    mostrarMensagemVazia(
+        pnlListaVagas,
+        "&#9825; Suas oportunidades favoritas começam aqui!",
+        "Explore as vagas disponíveis e curta aquelas que combinam com você."
+        + "<br>Suas favoritas aparecerão aqui!"
     );
 
-    lblVazio.setForeground(new java.awt.Color(182, 197, 216));
-    lblVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    lblVazio.setAlignmentX(javax.swing.JComponent.LEFT_ALIGNMENT);
-
-    pnlListaVagas.add(lblVazio);
 }
     pnlListaVagas.revalidate();
     pnlListaVagas.repaint();
@@ -464,15 +462,13 @@ vagasRecomendadas.add(new Object[]{
     }
 if (pnlListaRecomendadas.getComponentCount() == 0) {
 
-    javax.swing.JLabel lblVazio = new javax.swing.JLabel(
-        "Nenhuma recomendação disponível no momento. Curta vagas para receber sugestões compatíveis."
+    mostrarMensagemVazia(
+        pnlListaRecomendadas,
+        "&#10024; A oportunidade ideal pode estar te esperando!",
+        "Curta vagas do seu interesse e descubra novas oportunidades"
+        + "<br>que combinam com seu perfil profissional."
     );
 
-    lblVazio.setForeground(new java.awt.Color(182, 197, 216));
-    lblVazio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
-    lblVazio.setAlignmentX(javax.swing.JComponent.LEFT_ALIGNMENT);
-
-    pnlListaRecomendadas.add(lblVazio);
 }
     pnlListaRecomendadas.revalidate();
     pnlListaRecomendadas.repaint();
@@ -578,6 +574,51 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
     public InteresseProfissional1() {
         initComponents();
     }
+    
+    private void mostrarMensagemVazia(
+        javax.swing.JPanel painel,
+        String titulo,
+        String descricao) {
+
+    javax.swing.JPanel card = new javax.swing.JPanel();
+    card.setLayout(new java.awt.GridBagLayout());
+    card.setBackground(new java.awt.Color(16, 39, 71));
+
+    card.setBorder(
+        javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(
+                new java.awt.Color(0, 207, 232), 2
+            ),
+            javax.swing.BorderFactory.createEmptyBorder(25, 20, 25, 20)
+        )
+    );
+
+    javax.swing.JLabel lblMensagem = new javax.swing.JLabel(
+        "<html><div style='text-align:center;'>"
+        + "<span style='font-size:20px; color:#00CFE8;'>"
+        + titulo
+        + "</span><br><br>"
+        + "<span style='font-size:13px; color:#B6C5D8;'>"
+        + descricao
+        + "</span>"
+        + "</div></html>"
+    );
+
+    lblMensagem.setHorizontalAlignment(
+        javax.swing.SwingConstants.CENTER
+    );
+
+    card.add(lblMensagem);
+
+    card.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
+
+    card.setPreferredSize(new java.awt.Dimension(750, 180));
+    card.setMaximumSize(
+        new java.awt.Dimension(Integer.MAX_VALUE, 180)
+    );
+
+    painel.add(card);
+}
 
 
     /**
@@ -665,7 +706,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                 .addGroup(pnlCardVagaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalarioVaga)
                     .addComponent(btnVerDetalhesVaga))
-                .addContainerGap(604, Short.MAX_VALUE))
+                .addContainerGap(616, Short.MAX_VALUE))
         );
 
         pnlListaVagas.add(pnlCardVaga);
@@ -689,11 +730,11 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
         pnlListaRecomendadas.setLayout(pnlListaRecomendadasLayout);
         pnlListaRecomendadasLayout.setHorizontalGroup(
             pnlListaRecomendadasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 806, Short.MAX_VALUE)
+            .addGap(0, 1409, Short.MAX_VALUE)
         );
         pnlListaRecomendadasLayout.setVerticalGroup(
             pnlListaRecomendadasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
+            .addGap(0, 373, Short.MAX_VALUE)
         );
 
         jScrollPane2.setViewportView(pnlListaRecomendadas);
@@ -713,8 +754,8 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasLayout.createSequentialGroup()
                         .addGroup(pnlVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 796, Short.MAX_VALUE))
                         .addGap(629, 629, 629))))
         );
         pnlVagasLayout.setVerticalGroup(
@@ -723,12 +764,12 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                 .addGap(26, 26, 26)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

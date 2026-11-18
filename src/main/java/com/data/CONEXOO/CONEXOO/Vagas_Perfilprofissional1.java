@@ -159,6 +159,18 @@ pnlListaVagas.repaint();
         java.math.BigDecimal salarioMax) {
 
     javax.swing.JPanel card = new javax.swing.JPanel();
+    
+    card.setPreferredSize(new java.awt.Dimension(800, 130));
+
+card.setMaximumSize(
+    new java.awt.Dimension(Integer.MAX_VALUE, 130)
+);
+
+card.setMinimumSize(
+    new java.awt.Dimension(0, 130)
+);
+
+card.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
 
     card.setBackground(new java.awt.Color(16, 39, 71));
     card.setBorder(
@@ -233,6 +245,10 @@ card.add(lblEmpresa, java.awt.BorderLayout.CENTER);
 card.add(painelInferior, java.awt.BorderLayout.SOUTH);
 
     pnlListaVagas.add(card);
+    
+    pnlListaVagas.add(
+    javax.swing.Box.createVerticalStrut(12)
+);
 }
     private void mostrarMensagemSemVagas() {
 
@@ -342,7 +358,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                 .addGroup(pnlCardVagaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalarioVaga)
                     .addComponent(btnVerDetalhesVaga))
-                .addContainerGap(604, Short.MAX_VALUE))
+                .addContainerGap(634, Short.MAX_VALUE))
         );
 
         pnlListaVagas.add(pnlCardVaga);
@@ -372,7 +388,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
         pnlVagasLayout.setHorizontalGroup(
             pnlVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasLayout.createSequentialGroup()
-                .addGap(250, 250, 250)
+                .addGap(235, 235, 235)
                 .addGroup(pnlVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlVagasLayout.createSequentialGroup()

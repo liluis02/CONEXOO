@@ -1324,16 +1324,17 @@ private void carregarFotoPerfil() {
     }//GEN-LAST:event_cmbHabilidadeActionPerformed
 
     private void btnVoltarInicio4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicio4ActionPerformed
-if (menuOrigem != null) {
-
-    menuOrigem.voltarParaInicio();
-
-    menuOrigem.setVisible(true);
-    menuOrigem.toFront();
-    menuOrigem.requestFocus();
+    if (menuOrigem != null) {
+        menuOrigem.voltarParaInicio();
+        menuOrigem.setVisible(true);
+        menuOrigem.toFront();
+        menuOrigem.requestFocus();
+    } else {
+        Menu_Frame menu = new Menu_Frame(idUsuario, "PROFISSIONAL");
+        menu.setVisible(true);
+    }
 
     this.dispose();
-}
     }//GEN-LAST:event_btnVoltarInicio4ActionPerformed
 
     private void btnEscolherFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscolherFotoActionPerformed
