@@ -37,7 +37,7 @@ CREATE TABLE `candidatos` (
   PRIMARY KEY (`id_candidato`),
   UNIQUE KEY `id_usuario` (`id_usuario`),
   CONSTRAINT `candidatos_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `candidatos` (
 
 LOCK TABLES `candidatos` WRITE;
 /*!40000 ALTER TABLE `candidatos` DISABLE KEYS */;
-INSERT INTO `candidatos` VALUES (8,31,'21212222222','11212121212','ssssss','AM','ssssssssss','ssssssssss','Júnior'),(9,32,'22222222222','22222222222','sasasa','AL','sssssssssssss','2wwwwwww','Júnior'),(10,33,'11111111111','12222222222','sssssssss','AL','ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss','11111111111','Estagiário'),(11,34,'11111111111','11111111111','ssssss','AL','11111111','111111111','Júnior'),(12,35,'11111111111','11111111111','sssss','AL','11111111111111111111111','1111111111111','Júnior');
 /*!40000 ALTER TABLE `candidatos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,7 +81,6 @@ CREATE TABLE `empresas` (
 
 LOCK TABLES `empresas` WRITE;
 /*!40000 ALTER TABLE `empresas` DISABLE KEYS */;
-INSERT INTO `empresas` VALUES (8,30,'21212121212121','12121212121','Belo Horizonte','MG','SOMOS MUITO BOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS','Desenvolvimento Web','Pequeno','Perifericos LTDA','Logitech');
 /*!40000 ALTER TABLE `empresas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -113,7 +111,6 @@ CREATE TABLE `experiencias` (
 
 LOCK TABLES `experiencias` WRITE;
 /*!40000 ALTER TABLE `experiencias` DISABLE KEYS */;
-INSERT INTO `experiencias` VALUES (13,8,'ss','ssssss','ss','1212-12-12','1400-12-12'),(16,9,'sssss','sssss','sssssss','1111-11-11','2222-11-11'),(17,10,'asas','asas','asasa','1111-11-11','1112-11-11');
 /*!40000 ALTER TABLE `experiencias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +164,6 @@ CREATE TABLE `habilidades_candidato` (
 
 LOCK TABLES `habilidades_candidato` WRITE;
 /*!40000 ALTER TABLE `habilidades_candidato` DISABLE KEYS */;
-INSERT INTO `habilidades_candidato` VALUES (8,4,'Básico'),(9,6,'Básico'),(10,1,'Intermediário'),(11,2,'Básico'),(12,13,'Intermediário');
 /*!40000 ALTER TABLE `habilidades_candidato` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +185,7 @@ CREATE TABLE `interesses` (
   KEY `fk_interesse_vaga` (`id_vaga`),
   CONSTRAINT `fk_interesse_candidato` FOREIGN KEY (`id_candidato`) REFERENCES `candidatos` (`id_candidato`) ON DELETE CASCADE,
   CONSTRAINT `fk_interesse_vaga` FOREIGN KEY (`id_vaga`) REFERENCES `vagas` (`id_vaga`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,7 +194,6 @@ CREATE TABLE `interesses` (
 
 LOCK TABLES `interesses` WRITE;
 /*!40000 ALTER TABLE `interesses` DISABLE KEYS */;
-INSERT INTO `interesses` VALUES (48,9,23,'candidato','2026-11-17 15:15:33'),(54,11,23,'candidato','2026-11-18 13:05:13'),(57,12,23,'candidato','2026-11-18 13:19:09'),(78,12,23,'empresa','2026-11-18 15:03:53'),(79,10,23,'empresa','2026-11-18 15:33:27'),(82,10,23,'candidato','2026-11-18 15:44:13');
 /*!40000 ALTER TABLE `interesses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +216,7 @@ CREATE TABLE `usuarios` (
   `foto_perfil` longblob,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -230,7 +225,6 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (30,'lilo','1','12345678','EMPRESA',NULL,'lilo','XE8QOAHR',NULL),(31,'ssss','s','12345678','PROFISSIONAL','Suporte Técnico',NULL,'8A2E64ER',NULL),(32,'lilous','a','12345678','PROFISSIONAL','Análise de Negócios',NULL,'YABJS72A',NULL),(33,'ssssssssss','12','12345678','PROFISSIONAL','Análise de Negócios',NULL,'5CWWQYZV',NULL),(34,'lilo','d','12345678','PROFISSIONAL','Sistemas ERP',NULL,'UZC8XSUY',NULL),(35,'va','v','12345678','PROFISSIONAL','Blockchain',NULL,'GZUVE25P',NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +259,6 @@ CREATE TABLE `vagas` (
 
 LOCK TABLES `vagas` WRITE;
 /*!40000 ALTER TABLE `vagas` DISABLE KEYS */;
-INSERT INTO `vagas` VALUES (23,8,'Programador','aaaaaa','aaaaa','Remoto','CLT',1.00,3000.00,'2026-11-17 14:01:14','ATIVA');
 /*!40000 ALTER TABLE `vagas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -278,4 +271,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-18 16:20:30
+-- Dump completed on 2026-11-18 21:42:23

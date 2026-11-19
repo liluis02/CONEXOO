@@ -26,13 +26,17 @@ public class CurtirProfissional_Panel extends javax.swing.JPanel {
     
     
     
-    public void carregarVagas(java.util.Map<String, Integer> vagas) {
+public void carregarVagas(java.util.Map<String, Integer> vagas) {
     vagasDisponiveis = vagas;
     cmbVagasEmpresa.removeAllItems();
 
     cmbVagasEmpresa.addItem("Selecione uma vaga");
 
-    for (String titulo : vagas.keySet()) {
+    java.util.List<String> titulos = new java.util.ArrayList<>(vagas.keySet());
+
+    titulos.sort(String.CASE_INSENSITIVE_ORDER);
+
+    for (String titulo : titulos) {
         cmbVagasEmpresa.addItem(titulo);
     }
 
