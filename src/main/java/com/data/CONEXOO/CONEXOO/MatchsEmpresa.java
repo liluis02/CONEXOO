@@ -433,7 +433,12 @@ Jpnlcurtidasprof.repaint();
 private void carregarMatchesEmpresa() {
 
     Jpnlmatcheempresa.removeAll();
-
+    Jpnlmatcheempresa.setLayout(
+    new javax.swing.BoxLayout(
+        Jpnlmatcheempresa,
+        javax.swing.BoxLayout.Y_AXIS
+    )
+);
     String sql = """
         SELECT
             i.id_candidato,
@@ -654,17 +659,7 @@ if (quantidade == 0) {
         java.awt.BorderLayout.CENTER
     );
 
-} else {
-
-    Jpnlmatcheempresa.setLayout(
-        new javax.swing.BoxLayout(
-            Jpnlmatcheempresa,
-            javax.swing.BoxLayout.Y_AXIS
-        )
-    );
-}
-
-    
+}  
     lblQuantidadematchesprof1.setText(
         String.valueOf(quantidade)
     );
@@ -687,6 +682,7 @@ public void atualizarDados() {
 }
 
 
+
 private void tirarCurtida(int idCandidato, int idVaga) {
 
     int resposta = javax.swing.JOptionPane.showConfirmDialog(
@@ -701,44 +697,86 @@ private void tirarCurtida(int idCandidato, int idVaga) {
         return;
     }
 
-    String sql = """
-        DELETE i
-        FROM interesses i
-        INNER JOIN vagas v
-            ON i.id_vaga = v.id_vaga
-        INNER JOIN empresas e
-            ON v.id_empresa = e.id_empresa
-        WHERE i.id_candidato = ?
+    String sqlRemoverMatch = """
+        DELETE FROM matches
+        WHERE id_candidato = ?
+          AND id_vaga = ?
+          AND EXISTS (
+              SELECT 1
+              FROM vagas v
+              INNER JOIN empresas e
+                  ON v.id_empresa = e.id_empresa
+              WHERE v.id_vaga = matches.id_vaga
+                AND e.id_usuario = ?
+          )
+        """;
+
+    String sqlRemoverCurtida = """
+        DELETE FROM interesses i
+        USING vagas v, empresas e
+        WHERE i.id_vaga = v.id_vaga
+          AND v.id_empresa = e.id_empresa
+          AND i.id_candidato = ?
           AND i.id_vaga = ?
           AND i.origem = 'empresa'
           AND e.id_usuario = ?
         """;
 
-    try (java.sql.Connection conexao = Conexao.conectar();
-         java.sql.PreparedStatement pst =
-                 conexao.prepareStatement(sql)) {
+    try (java.sql.Connection conexao = Conexao.conectar()) {
 
-        pst.setInt(1, idCandidato);
-        pst.setInt(2, idVaga);
-        pst.setInt(3, idUsuario);
+        conexao.setAutoCommit(false);
 
-        int linhas = pst.executeUpdate();
+        try {
 
-if (linhas > 0) {
+            // 1. Remove o Match correspondente
+            try (java.sql.PreparedStatement stmt =
+                    conexao.prepareStatement(sqlRemoverMatch)) {
 
-    javax.swing.JOptionPane.showMessageDialog(
-        this,
-        "Curtida removida com sucesso!"
-    );
+                stmt.setInt(1, idCandidato);
+                stmt.setInt(2, idVaga);
+                stmt.setInt(3, idUsuario);
 
-    carregarProfissionaisCurtidos();
-    carregarMatchesEmpresa();
-}else {
+                stmt.executeUpdate();
+            }
+
+            // 2. Remove a curtida da empresa
+            int linhas;
+
+            try (java.sql.PreparedStatement stmt =
+                    conexao.prepareStatement(sqlRemoverCurtida)) {
+
+                stmt.setInt(1, idCandidato);
+                stmt.setInt(2, idVaga);
+                stmt.setInt(3, idUsuario);
+
+                linhas = stmt.executeUpdate();
+            }
+
+            if (linhas == 0) {
+                conexao.rollback();
+
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Nenhuma curtida foi encontrada para remover."
+                );
+
+                return;
+            }
+
+            // 3. Confirma as operações
+            conexao.commit();
 
             javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Nenhuma curtida foi encontrada para remover."
+                "Curtida removida com sucesso!"
             );
+
+            carregarProfissionaisCurtidos();
+            carregarMatchesEmpresa();
+
+        } catch (java.sql.SQLException e) {
+            conexao.rollback();
+            throw e;
         }
 
     } catch (java.sql.SQLException e) {
@@ -749,6 +787,7 @@ if (linhas > 0) {
         );
     }
 }
+
 
 
     /**

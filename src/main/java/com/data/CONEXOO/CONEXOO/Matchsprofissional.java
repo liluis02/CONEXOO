@@ -190,10 +190,7 @@ private void carregarMatches() {
             ) AS nome_empresa,
             CONCAT_WS(' - ', e.cidade, e.estado) AS localizacao,
             v.titulo AS vaga,
-            DATE_FORMAT(
-                GREATEST(ic.data_interesse, ie.data_interesse),
-                '%d/%m/%Y'
-            ) AS data_match
+            TO_CHAR(GREATEST(ic.data_interesse, ie.data_interesse), 'DD/MM/YYYY') AS data_match
         FROM interesses ic
         INNER JOIN interesses ie
             ON ic.id_candidato = ie.id_candidato

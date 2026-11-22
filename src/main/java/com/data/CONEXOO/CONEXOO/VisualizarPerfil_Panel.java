@@ -10,43 +10,23 @@ package com.data.CONEXOO.CONEXOO;
  */
 public class VisualizarPerfil_Panel extends javax.swing.JPanel {
        private int idUsuario;
-       
-       private boolean visualizandoOutroPerfil = false;
-       private Runnable acaoVoltarInteresses;
     /**
      * Creates new form VisualizarPerfil_Panel
      */
     public VisualizarPerfil_Panel() {
         initComponents();
     }
-    
-public void configurarVisualizacaoEmpresa(Runnable acaoVoltar) {
-    configurarVisualizacaoEmpresa(acaoVoltar, "Interesses");
-}
-
-public void configurarVisualizacaoEmpresa(
-        Runnable acaoVoltar, String origem) {
-
-    this.visualizandoOutroPerfil = true;
-    this.acaoVoltarInteresses = acaoVoltar;
-
-    lblTituloPerfil.setText("Perfil do Profissional");
-
-    lblSubtituloPerfil.setText(
-        "Conheça as informações deste profissional."
-    );
-
-    btnEditarPerfil.setText("← Voltar para " + origem);
-    btnEditarPerfil.setIcon(null);
-}
-    
     public VisualizarPerfil_Panel(int idUsuario) {
     this();
     this.idUsuario = idUsuario;
     carregarDadosPerfil();
     carregarHabilidades();
     carregarExperiencias();
-    carregarFotoPerfil(idUsuario);
+}
+    public void atualizarPerfil() {
+    carregarDadosPerfil();
+    carregarHabilidades();
+    carregarExperiencias();
 }
     
 private void carregarDadosPerfil() {
@@ -62,11 +42,7 @@ private void carregarDadosPerfil() {
         WHERE u.id = ?
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456");
+    try (java.sql.Connection conexao = Conexao.conectar();
 
          java.sql.PreparedStatement pst =
             conexao.prepareStatement(sql)) {
@@ -133,11 +109,7 @@ if (telefone != null && !telefone.isEmpty()) {
         ORDER BY h.nome
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456");
+    try (java.sql.Connection conexao = Conexao.conectar();
 
          java.sql.PreparedStatement pst =
             conexao.prepareStatement(sql)) {
@@ -181,11 +153,7 @@ if (telefone != null && !telefone.isEmpty()) {
         ORDER BY data_contratacao DESC
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456");
+    try (java.sql.Connection conexao = Conexao.conectar();
 
          java.sql.PreparedStatement pst =
             conexao.prepareStatement(sql)) {
@@ -208,7 +176,9 @@ if (telefone != null && !telefone.isEmpty()) {
                 java.sql.Date dataFim =
                         rs.getDate("data_demissao");
 
-                String inicio = dataInicio.toLocalDate().format(formato);
+                String inicio = (dataInicio == null)
+                            ? "Não informado"
+                            : dataInicio.toLocalDate().format(formato);
 
                 String fim = (dataFim == null)
                         ? "Atual"
@@ -254,7 +224,6 @@ if (telefone != null && !telefone.isEmpty()) {
         lblAreaAtuacaoPerfil = new javax.swing.JLabel();
         lblCargodesejado2 = new javax.swing.JLabel();
         lblareaatuacaoatual = new javax.swing.JLabel();
-        lblFotoPerfil = new javax.swing.JLabel();
         pnlInformacoesPessoais = new javax.swing.JPanel();
         lblTituloInformacoesPessoais = new javax.swing.JLabel();
         lblTituloCidade = new javax.swing.JLabel();
@@ -293,7 +262,7 @@ if (telefone != null && !telefone.isEmpty()) {
         lblSubtituloPerfil.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSubtituloPerfil.setText("Visualize todas as suas informações pessoais");
 
-        pnlIdentificacao.setBackground(new java.awt.Color(11, 37, 69));
+        pnlIdentificacao.setBackground(new java.awt.Color(16, 45, 75));
         pnlIdentificacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblNomeProfissional.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
@@ -323,16 +292,14 @@ if (telefone != null && !telefone.isEmpty()) {
             .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNomeProfissional, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                    .addComponent(lblCargoDesejado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblAreaAtuacaoPerfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
-                        .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCargoDesejado, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCargodesejado2)
-                            .addComponent(lblareaatuacaoatual)
-                            .addComponent(lblAreaAtuacaoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(lblNomeProfissional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblareaatuacaoatual))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlIdentificacaoLayout.setVerticalGroup(
@@ -341,20 +308,17 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap()
                 .addComponent(lblNomeProfissional)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlIdentificacaoLayout.createSequentialGroup()
-                        .addComponent(lblCargodesejado2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblCargoDesejado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblareaatuacaoatual)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblAreaAtuacaoPerfil))
-                    .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblCargodesejado2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCargoDesejado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblareaatuacaoatual)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblAreaAtuacaoPerfil)
                 .addContainerGap())
         );
 
-        pnlInformacoesPessoais.setBackground(new java.awt.Color(11, 37, 69));
+        pnlInformacoesPessoais.setBackground(new java.awt.Color(16, 45, 75));
         pnlInformacoesPessoais.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblTituloInformacoesPessoais.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -440,7 +404,7 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        pnlSobreMim.setBackground(new java.awt.Color(11, 37, 69));
+        pnlSobreMim.setBackground(new java.awt.Color(16, 45, 75));
         pnlSobreMim.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblTituloSobreMim.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -479,7 +443,7 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        pnlHabilidades.setBackground(new java.awt.Color(11, 37, 69));
+        pnlHabilidades.setBackground(new java.awt.Color(16, 45, 75));
         pnlHabilidades.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblTituloHabilidades.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -520,7 +484,7 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        pnlExperiencias.setBackground(new java.awt.Color(11, 37, 69));
+        pnlExperiencias.setBackground(new java.awt.Color(16, 45, 75));
         pnlExperiencias.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblTituloExperiencias.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -613,97 +577,14 @@ if (telefone != null && !telefone.isEmpty()) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPerfilActionPerformed
-if (visualizandoOutroPerfil) {
-
-    if (acaoVoltarInteresses != null) {
-        acaoVoltarInteresses.run();
-    }
-
-    return;
-}
-
-PerfilProfissional_Frame perfil =
-        new PerfilProfissional_Frame(idUsuario, true);
+           PerfilProfissional_Frame perfil =
+    new PerfilProfissional_Frame(idUsuario, true);
 
 perfil.setVisible(true);
 
 javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_btnEditarPerfilActionPerformed
-private void carregarFotoPerfil(int idUsuario) {
 
-    String sql = "SELECT foto_perfil FROM usuarios WHERE id = ?";
-
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/conexoo",
-                    "root",
-                    "123456"
-            );
-
-         java.sql.PreparedStatement pst =
-                 conexao.prepareStatement(sql)) {
-
-        pst.setInt(1, idUsuario);
-
-        try (java.sql.ResultSet rs = pst.executeQuery()) {
-
-            if (rs.next()) {
-
-                byte[] foto = rs.getBytes("foto_perfil");
-                if (foto == null || foto.length == 0) {
-
-    java.net.URL caminho = getClass().getResource(
-        "/com/data/CONEXOO/CONEXOO/perfil_padrao.png"
-    );
-
-    if (caminho != null) {
-
-        javax.swing.ImageIcon imagem =
-                new javax.swing.ImageIcon(caminho);
-
-        java.awt.Image imagemRedimensionada =
-                imagem.getImage().getScaledInstance(
-                    120, 120,
-                    java.awt.Image.SCALE_SMOOTH
-                );
-
-        lblFotoPerfil.setIcon(
-                new javax.swing.ImageIcon(imagemRedimensionada)
-        );
-    }
-
-    lblFotoPerfil.setText("");
-    return;
-}
-
-                if (foto != null && foto.length > 0) {
-
-                    javax.swing.ImageIcon imagem =
-                            new javax.swing.ImageIcon(foto);
-
-                    java.awt.Image imagemRedimensionada =
-                            imagem.getImage().getScaledInstance(
-                                    120, 120,
-                                    java.awt.Image.SCALE_SMOOTH
-                            );
-
-                    lblFotoPerfil.setIcon(
-                            new javax.swing.ImageIcon(imagemRedimensionada)
-                    );
-
-                    lblFotoPerfil.setText("");
-                }
-            }
-        }
-
-    } catch (java.sql.SQLException ex) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Erro ao carregar foto de perfil: " + ex.getMessage()
-        );
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditarPerfil;
@@ -715,7 +596,6 @@ private void carregarFotoPerfil(int idUsuario) {
     private javax.swing.JLabel lblCargodesejado2;
     private javax.swing.JLabel lblCidadePerfil;
     private javax.swing.JLabel lblEstadoPerfil;
-    private javax.swing.JLabel lblFotoPerfil;
     private javax.swing.JLabel lblNivelProfissional;
     private javax.swing.JLabel lblNomeProfissional;
     private javax.swing.JLabel lblSubtituloPerfil;

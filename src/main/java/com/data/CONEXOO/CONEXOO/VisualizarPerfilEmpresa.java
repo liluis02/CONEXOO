@@ -13,33 +13,20 @@ import javax.swing.JOptionPane;
 public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
 
     private int idUsuario;
-    
-    private Runnable acaoVoltarMatches;
-    private Integer idEmpresaVisualizada = null;
-
-public void setAcaoVoltarMatches(Runnable acao) {
-    this.acaoVoltarMatches = acao;
-}
 
     public VisualizarPerfilEmpresa() {
         initComponents();
     }
+
+    public VisualizarPerfilEmpresa(int idUsuario) {
+        initComponents();
+        this.idUsuario = idUsuario;
+
+        carregarDadosEmpresa();
+    }
     
-public void visualizarOutraEmpresa(int idEmpresa) {
-
-    this.idEmpresaVisualizada = idEmpresa;
-
-    lblTituloPerfilEmpresa.setText("Perfil da Empresa");
-
-    btnEditarPerfil.setText("← Voltar para Matches");
-
+    public void atualizarPerfilEmpresa() {
     carregarDadosEmpresa();
-    carregarFotoPerfil();
-}
-
-public VisualizarPerfilEmpresa(int idUsuario) {
-    initComponents();
-    this.idUsuario = idUsuario;
 }
 
     private void carregarDadosEmpresa() {
@@ -55,16 +42,12 @@ public VisualizarPerfilEmpresa(int idUsuario) {
             + "cidade, "
             + "descricao "
             + "FROM empresas "
-            + "WHERE " + (idEmpresaVisualizada == null
-        ? "id_usuario = ?"
-        : "id_empresa = ?");
+            + "WHERE id_usuario = ?";
 
     try (Connection conexao = Conexao.conectar();
          PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-        stmt.setInt(1, idEmpresaVisualizada == null
-        ? idUsuario
-        : idEmpresaVisualizada);
+        stmt.setInt(1, idUsuario);
 
         try (ResultSet rs = stmt.executeQuery()) {
 
@@ -120,9 +103,11 @@ if (telefone != null && !telefone.isEmpty()) {
 
                 String descricao = rs.getString("descricao");
 
-                lstSobreaEmpresaDescricao.setText(
-    descricao == null ? "" : descricao
-);
+                lstSobreaEmpresaDescricao.setListData(
+                        new String[]{
+                            descricao == null ? "" : descricao
+                        }
+                );
 
             } else {
                 JOptionPane.showMessageDialog(
@@ -140,12 +125,6 @@ if (telefone != null && !telefone.isEmpty()) {
             );
         }
     }
-    public void carregarPerfilProprio() {
-    idEmpresaVisualizada = null;
-    carregarDadosEmpresa();
-    carregarFotoPerfil();
-}
-    
 
     // A partir daqui continua o seu initComponents()
     
@@ -164,7 +143,6 @@ if (telefone != null && !telefone.isEmpty()) {
         lblporteempresa2 = new javax.swing.JLabel();
         lblrazaosocial2 = new javax.swing.JLabel();
         lblareaatuacaoempresa2 = new javax.swing.JLabel();
-        lblFotoPerfil = new javax.swing.JLabel();
         pnlInformacoesPessoais = new javax.swing.JPanel();
         lblTituloInformacoesEmpresa1 = new javax.swing.JLabel();
         lblcnpj1 = new javax.swing.JLabel();
@@ -177,14 +155,14 @@ if (telefone != null && !telefone.isEmpty()) {
         lblCidadeEmpresa1 = new javax.swing.JLabel();
         pnlHabilidades = new javax.swing.JPanel();
         lblSobreaEmpresa = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lstSobreaEmpresaDescricao = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lstSobreaEmpresaDescricao = new javax.swing.JList<>();
         btnEditarPerfil = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1535, 885));
 
         jPanelPerfilEmpresa.setBackground(new java.awt.Color(7, 27, 51));
-        jPanelPerfilEmpresa.setPreferredSize(new java.awt.Dimension(1535, 941));
+        jPanelPerfilEmpresa.setPreferredSize(new java.awt.Dimension(1535, 885));
 
         lblTituloPerfilEmpresa.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
         lblTituloPerfilEmpresa.setForeground(new java.awt.Color(255, 255, 255));
@@ -196,7 +174,7 @@ if (telefone != null && !telefone.isEmpty()) {
         lblSubtituloPerfilEmpresa.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSubtituloPerfilEmpresa.setText("Visualize todas as informações da sua empresa!");
 
-        pnlIdentificacao.setBackground(new java.awt.Color(11, 37, 69));
+        pnlIdentificacao.setBackground(new java.awt.Color(16, 45, 75));
         pnlIdentificacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblNomeFantasiaEmpresa1.setFont(new java.awt.Font("Segoe UI", 1, 22)); // NOI18N
@@ -232,43 +210,41 @@ if (telefone != null && !telefone.isEmpty()) {
         pnlIdentificacaoLayout.setHorizontalGroup(
             pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(29, 29, 29)
                 .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNomeFantasiaEmpresa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
                         .addGroup(pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblAreaAtuacaoEmpresa1, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblareaatuacaoempresa2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPorte01)
-                            .addComponent(lblporteempresa2)
-                            .addComponent(lblRazaoSocial1)
                             .addComponent(lblrazaosocial2)
-                            .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblRazaoSocial1)
+                            .addComponent(lblporteempresa2)
+                            .addComponent(lblPorte01)
+                            .addComponent(lblareaatuacaoempresa2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlIdentificacaoLayout.setVerticalGroup(
             pnlIdentificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlIdentificacaoLayout.createSequentialGroup()
+            .addGroup(pnlIdentificacaoLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lblNomeFantasiaEmpresa1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblrazaosocial2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(lblRazaoSocial1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblporteempresa2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblPorte01)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblareaatuacaoempresa2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblAreaAtuacaoEmpresa1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        pnlInformacoesPessoais.setBackground(new java.awt.Color(11, 37, 69));
+        pnlInformacoesPessoais.setBackground(new java.awt.Color(16, 45, 75));
         pnlInformacoesPessoais.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblTituloInformacoesEmpresa1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -327,12 +303,12 @@ if (telefone != null && !telefone.isEmpty()) {
                             .addComponent(lblTituloCidadeEmpresa)
                             .addComponent(lblEstadoPerfil)
                             .addComponent(lblTituloEstado))))
-                .addContainerGap(856, Short.MAX_VALUE))
+                .addContainerGap(852, Short.MAX_VALUE))
         );
         pnlInformacoesPessoaisLayout.setVerticalGroup(
             pnlInformacoesPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInformacoesPessoaisLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(lblTituloInformacoesEmpresa1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInformacoesPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -349,25 +325,33 @@ if (telefone != null && !telefone.isEmpty()) {
                     .addComponent(lblTituloCidadeEmpresa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInformacoesPessoaisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefonePerfil)
-                    .addComponent(lblCidadeEmpresa1))
-                .addContainerGap())
+                    .addComponent(lblCidadeEmpresa1)
+                    .addComponent(lblTelefonePerfil))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
-        pnlHabilidades.setBackground(new java.awt.Color(11, 37, 69));
+        pnlHabilidades.setBackground(new java.awt.Color(16, 45, 75));
         pnlHabilidades.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lblSobreaEmpresa.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lblSobreaEmpresa.setForeground(new java.awt.Color(19, 220, 233));
         lblSobreaEmpresa.setText("Sobre a empresa");
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
 
         lstSobreaEmpresaDescricao.setBackground(new java.awt.Color(16, 45, 75));
-        lstSobreaEmpresaDescricao.setColumns(20);
+        lstSobreaEmpresaDescricao.setBorder(null);
         lstSobreaEmpresaDescricao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        lstSobreaEmpresaDescricao.setRows(5);
-        jScrollPane1.setViewportView(lstSobreaEmpresaDescricao);
+        lstSobreaEmpresaDescricao.setForeground(new java.awt.Color(255, 255, 255));
+        lstSobreaEmpresaDescricao.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { " " };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        lstSobreaEmpresaDescricao.setSelectionBackground(new java.awt.Color(23, 97, 122));
+        lstSobreaEmpresaDescricao.setSelectionForeground(new java.awt.Color(255, 255, 255));
+        lstSobreaEmpresaDescricao.setVisibleRowCount(4);
+        jScrollPane2.setViewportView(lstSobreaEmpresaDescricao);
 
         javax.swing.GroupLayout pnlHabilidadesLayout = new javax.swing.GroupLayout(pnlHabilidades);
         pnlHabilidades.setLayout(pnlHabilidadesLayout);
@@ -379,8 +363,8 @@ if (telefone != null && !telefone.isEmpty()) {
                     .addGroup(pnlHabilidadesLayout.createSequentialGroup()
                         .addComponent(lblSobreaEmpresa)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+                    .addComponent(jScrollPane2))
+                .addGap(20, 20, 20))
         );
         pnlHabilidadesLayout.setVerticalGroup(
             pnlHabilidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,8 +372,8 @@ if (telefone != null && !telefone.isEmpty()) {
                 .addContainerGap()
                 .addComponent(lblSobreaEmpresa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnEditarPerfil.setBackground(new java.awt.Color(19, 220, 233));
@@ -412,10 +396,10 @@ if (telefone != null && !telefone.isEmpty()) {
                     .addGroup(jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblSubtituloPerfilEmpresa)
                         .addComponent(lblTituloPerfilEmpresa)
+                        .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlInformacoesPessoais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlIdentificacao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(265, Short.MAX_VALUE))
+                        .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(269, Short.MAX_VALUE))
         );
         jPanelPerfilEmpresaLayout.setVerticalGroup(
             jPanelPerfilEmpresaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -447,118 +431,29 @@ if (telefone != null && !telefone.isEmpty()) {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 923, Short.MAX_VALUE)
+            .addGap(0, 909, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addComponent(jPanelPerfilEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 923, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(jPanelPerfilEmpresa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPerfilActionPerformed
-     
-if (idEmpresaVisualizada != null) {
-    if (acaoVoltarMatches != null) {
-        acaoVoltarMatches.run();
-    }
-    return;
-}
-        
-        PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
+     PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
 
     perfil.setVisible(true);
 
     javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_btnEditarPerfilActionPerformed
-private void carregarFotoPerfil() {
 
-    
-String sql = idEmpresaVisualizada == null
-        ? "SELECT foto_perfil FROM usuarios WHERE id = ?"
-        : """
-          SELECT u.foto_perfil
-          FROM usuarios u
-          INNER JOIN empresas e ON e.id_usuario = u.id
-          WHERE e.id_empresa = ?
-          """;
-
-    try (java.sql.Connection conexao = Conexao.conectar();
-         java.sql.PreparedStatement pst =
-                 conexao.prepareStatement(sql)) {
-
-        pst.setInt(1, idEmpresaVisualizada == null
-        ? idUsuario
-        : idEmpresaVisualizada);
-
-        try (java.sql.ResultSet rs = pst.executeQuery()) {
-
-            if (rs.next()) {
-
-                byte[] foto = rs.getBytes("foto_perfil");
-                if (foto == null || foto.length == 0) {
-
-    java.net.URL caminho = getClass().getResource(
-        "/com/data/CONEXOO/CONEXOO/perfil_padrao.png"
-    );
-
-    if (caminho != null) {
-
-        javax.swing.ImageIcon imagem =
-                new javax.swing.ImageIcon(caminho);
-
-        java.awt.Image imagemRedimensionada =
-                imagem.getImage().getScaledInstance(
-                    120, 120,
-                    java.awt.Image.SCALE_SMOOTH
-                );
-
-        lblFotoPerfil.setIcon(
-                new javax.swing.ImageIcon(imagemRedimensionada)
-        );
-    }
-
-    lblFotoPerfil.setText("");
-    return;
-}
-
-                if (foto != null && foto.length > 0) {
-
-                    javax.swing.ImageIcon imagem =
-                            new javax.swing.ImageIcon(foto);
-
-                    java.awt.Image imagemRedimensionada =
-                            imagem.getImage().getScaledInstance(
-                                    120, 120,
-                                    java.awt.Image.SCALE_SMOOTH
-                            );
-
-                    lblFotoPerfil.setIcon(
-                            new javax.swing.ImageIcon(imagemRedimensionada)
-                    );
-
-                    lblFotoPerfil.setText("");
-                }
-            }
-        }
-
-    } catch (java.sql.SQLException ex) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Erro ao carregar foto da empresa: " + ex.getMessage()
-        );
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditarPerfil;
     private javax.swing.JPanel jPanelPerfilEmpresa;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAreaAtuacaoEmpresa1;
     private javax.swing.JLabel lblCNPJEmpresa1;
     private javax.swing.JLabel lblCidadeEmpresa1;
     private javax.swing.JLabel lblEstadoPerfil;
-    private javax.swing.JLabel lblFotoPerfil;
     private javax.swing.JLabel lblNomeFantasiaEmpresa1;
     private javax.swing.JLabel lblPorte01;
     private javax.swing.JLabel lblRazaoSocial1;
@@ -574,7 +469,7 @@ String sql = idEmpresaVisualizada == null
     private javax.swing.JLabel lblcnpj1;
     private javax.swing.JLabel lblporteempresa2;
     private javax.swing.JLabel lblrazaosocial2;
-    private javax.swing.JTextArea lstSobreaEmpresaDescricao;
+    private javax.swing.JList<String> lstSobreaEmpresaDescricao;
     private javax.swing.JPanel pnlHabilidades;
     private javax.swing.JPanel pnlIdentificacao;
     private javax.swing.JPanel pnlInformacoesPessoais;

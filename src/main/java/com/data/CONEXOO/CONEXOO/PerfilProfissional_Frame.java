@@ -9,15 +9,10 @@ package com.data.CONEXOO.CONEXOO;
  * @author liluis
  */
 public class PerfilProfissional_Frame extends javax.swing.JFrame {
-    private Menu_Frame menuOrigem;
-    private byte[] fotoPerfilBytes;
     private int idUsuario;
     private boolean modoEdicao = false;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(PerfilProfissional_Frame.class.getName());
-    
-    public void setMenuOrigem(Menu_Frame menuOrigem) {
-    this.menuOrigem = menuOrigem;
-}
+
     /**
      * Creates new form PerfilProfissional_Frame
      */
@@ -70,10 +65,7 @@ public class PerfilProfissional_Frame extends javax.swing.JFrame {
 
     this.idUsuario = idUsuario;
     carregarDadosUsuario();
-    carregarFotoPerfil();
 }
-    
-    
 public PerfilProfissional_Frame(int idUsuario, boolean modoEdicao) {
     this(idUsuario);
     this.modoEdicao = modoEdicao;
@@ -96,14 +88,9 @@ private void carregarExperienciasParaEdicao() {
         WHERE c.id_usuario = ?
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            );
-         java.sql.PreparedStatement pst =
-            conexao.prepareStatement(sql)) {
+    try (java.sql.Connection conexao = Conexao.conectar();
+     java.sql.PreparedStatement pst =
+        conexao.prepareStatement(sql)) {
 
         pst.setInt(1, idUsuario);
 
@@ -169,14 +156,9 @@ private void carregarExperienciasParaEdicao() {
         WHERE c.id_usuario = ?
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            );
-         java.sql.PreparedStatement pst =
-            conexao.prepareStatement(sql)) {
+    try (java.sql.Connection conexao = Conexao.conectar();
+     java.sql.PreparedStatement pst =
+        conexao.prepareStatement(sql)) {
 
         pst.setInt(1, idUsuario);
 
@@ -208,14 +190,9 @@ private void carregarDadosUsuario() {
 
     String sql = "SELECT nome FROM usuarios WHERE id = ?";
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                    "root",
-                    "123456"
-            );
-         java.sql.PreparedStatement stmt =
-                 conexao.prepareStatement(sql)) {
+    try (java.sql.Connection conexao = Conexao.conectar();
+     java.sql.PreparedStatement stmt =
+        conexao.prepareStatement(sql)) {
 
         stmt.setInt(1, idUsuario);
 
@@ -243,14 +220,9 @@ private void carregarPerfilParaEdicao() {
         WHERE id_usuario = ?
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            );
-         java.sql.PreparedStatement pst =
-            conexao.prepareStatement(sql)) {
+    try (java.sql.Connection conexao = Conexao.conectar();
+     java.sql.PreparedStatement pst =
+        conexao.prepareStatement(sql)) {
 
         pst.setInt(1, idUsuario);
 
@@ -305,8 +277,6 @@ private void carregarPerfilParaEdicao() {
         txtCidade1 = new javax.swing.JTextField();
         lblCPF = new javax.swing.JLabel();
         txtCPF = new javax.swing.JFormattedTextField();
-        lblFotoPerfil = new javax.swing.JLabel();
-        btnEscolherFoto = new javax.swing.JButton();
         pnlHabilidades = new javax.swing.JPanel();
         lblHabilidades = new javax.swing.JLabel();
         cmbNiveldeconhecimento = new javax.swing.JComboBox<>();
@@ -353,11 +323,10 @@ private void carregarPerfilParaEdicao() {
         setPreferredSize(new java.awt.Dimension(1200, 750));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(1090, 1600));
 
         pnlPrincipal.setBackground(new java.awt.Color(7, 21, 45));
         pnlPrincipal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
-        pnlPrincipal.setPreferredSize(new java.awt.Dimension(1090, 1600));
+        pnlPrincipal.setPreferredSize(new java.awt.Dimension(1080, 1520));
 
         lblTituloPerfil.setFont(new java.awt.Font("Segoe UI", 1, 30)); // NOI18N
         lblTituloPerfil.setForeground(new java.awt.Color(255, 255, 255));
@@ -440,15 +409,6 @@ private void carregarPerfilParaEdicao() {
         txtCPF.setCaretColor(new java.awt.Color(255, 255, 255));
         txtCPF.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        lblFotoPerfil.setPreferredSize(new java.awt.Dimension(120, 120));
-
-        btnEscolherFoto.setBackground(new java.awt.Color(0, 188, 212));
-        btnEscolherFoto.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEscolherFoto.setForeground(new java.awt.Color(255, 255, 255));
-        btnEscolherFoto.setText("Escolher sua foto de perfil");
-        btnEscolherFoto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEscolherFoto.addActionListener(this::btnEscolherFotoActionPerformed);
-
         javax.swing.GroupLayout pnlInformacoesPessoais1Layout = new javax.swing.GroupLayout(pnlInformacoesPessoais1);
         pnlInformacoesPessoais1.setLayout(pnlInformacoesPessoais1Layout);
         pnlInformacoesPessoais1Layout.setHorizontalGroup(
@@ -457,27 +417,23 @@ private void carregarPerfilParaEdicao() {
                 .addGap(20, 20, 20)
                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInformacoesPessoais1Layout.createSequentialGroup()
-                        .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlInformacoesPessoais1Layout.createSequentialGroup()
                         .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTelefone1)
                             .addComponent(txtNomeCompleto1)
-                            .addComponent(cmbEstado1, 0, 476, Short.MAX_VALUE)
+                            .addComponent(cmbEstado1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlInformacoesPessoais1Layout.createSequentialGroup()
                                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNomeCompleto1)
-                                    .addComponent(lblInformacoesPessoais1)
                                     .addComponent(lblTelefone1)
-                                    .addComponent(btnEscolherFoto))
+                                    .addComponent(lblNomeCompleto1)
+                                    .addComponent(lblInformacoesPessoais1))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblCPF)
-                            .addComponent(txtCidade1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCidade1))
-                        .addGap(100, 100, 100))
+                            .addComponent(txtCidade1, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
+                            .addComponent(lblCidade1)
+                            .addComponent(txtCPF))
+                        .addGap(106, 106, 106))
                     .addGroup(pnlInformacoesPessoais1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -486,23 +442,19 @@ private void carregarPerfilParaEdicao() {
             pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInformacoesPessoais1Layout.createSequentialGroup()
                 .addComponent(lblInformacoesPessoais1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblFotoPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEscolherFoto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNomeCompleto1)
                     .addComponent(lblCidade1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCidade1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNomeCompleto1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNomeCompleto1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCidade1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTelefone1)
                     .addComponent(lblCPF))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addGroup(pnlInformacoesPessoais1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTelefone1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -510,7 +462,7 @@ private void carregarPerfilParaEdicao() {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cmbEstado1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         pnlHabilidades.setBackground(new java.awt.Color(11, 37, 69));
@@ -613,8 +565,8 @@ private void carregarPerfilParaEdicao() {
                     .addComponent(btnAdicionarHabilidade)
                     .addComponent(btnRemoverHabilidade, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
         );
 
         pnlInformacoesProfissionais.setBackground(new java.awt.Color(11, 37, 69));
@@ -699,7 +651,7 @@ private void carregarPerfilParaEdicao() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescricaoProfissional1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -893,18 +845,18 @@ private void carregarPerfilParaEdicao() {
             .addGroup(pnlPrincipalLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
+                        .addComponent(btnVoltarInicio4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(pnlExperienciasProfissionais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblTituloPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblSubtituloPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(pnlHabilidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlInformacoesProfissionais, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE))
-                    .addGroup(pnlPrincipalLayout.createSequentialGroup()
-                        .addComponent(btnVoltarInicio4, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 20, Short.MAX_VALUE))
+                        .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.DEFAULT_SIZE, 1058, Short.MAX_VALUE)))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         pnlPrincipalLayout.setVerticalGroup(
             pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -914,18 +866,18 @@ private void carregarPerfilParaEdicao() {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblSubtituloPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlInformacoesPessoais1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlInformacoesProfissionais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlHabilidades, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlHabilidades, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlExperienciasProfissionais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSalvarPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnVoltarInicio4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jScrollPane2.setViewportView(pnlPrincipal);
@@ -935,13 +887,16 @@ private void carregarPerfilParaEdicao() {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1085, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         pack();
@@ -1216,11 +1171,6 @@ boolean experienciasSalvas = salvarExperiencias(idCandidato);
 if (!experienciasSalvas) {
     return;
 }
-boolean fotoSalva = salvarFotoPerfil();
-
-if (!fotoSalva) {
-    return;
-}
 javax.swing.JOptionPane.showMessageDialog(
     this,
     "Perfil profissional salvo com sucesso!"
@@ -1229,168 +1179,26 @@ Menu_Frame menu = new Menu_Frame(idUsuario, "PROFISSIONAL");
 menu.setVisible(true);
 this.dispose();
     }//GEN-LAST:event_btnSalvarPerfilActionPerformed
-private boolean salvarFotoPerfil() {
 
-    // Se nenhuma foto foi escolhida, não altera a foto existente.
-    if (fotoPerfilBytes == null) {
-        return true;
-    }
-
-    String sql = "UPDATE usuarios SET foto_perfil = ? WHERE id = ?";
-
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/conexoo",
-                    "root",
-                    "123456"
-            );
-
-         java.sql.PreparedStatement pst =
-                 conexao.prepareStatement(sql)) {
-
-        pst.setBytes(1, fotoPerfilBytes);
-        pst.setInt(2, idUsuario);
-
-        int linhasAtualizadas = pst.executeUpdate();
-
-        if (linhasAtualizadas == 0) {
-            throw new java.sql.SQLException("Usuário não encontrado.");
-        }
-
-        return true;
-
-    } catch (java.sql.SQLException ex) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Erro ao salvar foto de perfil: " + ex.getMessage()
-        );
-
-        return false;
-    }
-}
-private void carregarFotoPerfil() {
-
-    String sql = "SELECT foto_perfil FROM usuarios WHERE id = ?";
-
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/conexoo",
-                    "root",
-                    "123456"
-            );
-
-         java.sql.PreparedStatement pst =
-                 conexao.prepareStatement(sql)) {
-
-        pst.setInt(1, idUsuario);
-
-        try (java.sql.ResultSet rs = pst.executeQuery()) {
-
-            if (rs.next()) {
-
-                byte[] foto = rs.getBytes("foto_perfil");
-
-                if (foto != null && foto.length > 0) {
-
-                    javax.swing.ImageIcon imagem =
-                            new javax.swing.ImageIcon(foto);
-
-                    java.awt.Image imagemRedimensionada =
-                            imagem.getImage().getScaledInstance(
-                                    120, 120,
-                                    java.awt.Image.SCALE_SMOOTH
-                            );
-
-                    lblFotoPerfil.setIcon(
-                            new javax.swing.ImageIcon(imagemRedimensionada)
-                    );
-
-                    lblFotoPerfil.setText("");
-                }
-            }
-        }
-
-    } catch (java.sql.SQLException ex) {
-
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Erro ao carregar foto de perfil: " + ex.getMessage()
-        );
-    }
-}
     private void cmbHabilidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbHabilidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbHabilidadeActionPerformed
 
     private void btnVoltarInicio4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicio4ActionPerformed
-    if (menuOrigem != null) {
-        menuOrigem.voltarParaInicio();
-        menuOrigem.setVisible(true);
-        menuOrigem.toFront();
-        menuOrigem.requestFocus();
-    } else {
-        Menu_Frame menu = new Menu_Frame(idUsuario, "PROFISSIONAL");
+for (java.awt.Window janela : java.awt.Window.getWindows()) {
+
+    if (janela instanceof Menu_Frame) {
+        Menu_Frame menu = (Menu_Frame) janela;
+
         menu.setVisible(true);
-    }
+        menu.toFront();
+        menu.requestFocus();
 
-    this.dispose();
-    }//GEN-LAST:event_btnVoltarInicio4ActionPerformed
-
-    private void btnEscolherFotoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscolherFotoActionPerformed
-        javax.swing.JFileChooser seletor = new javax.swing.JFileChooser();
-
-seletor.setDialogTitle("Escolha sua foto de perfil");
-
-seletor.setFileFilter(
-    new javax.swing.filechooser.FileNameExtensionFilter(
-        "Imagens (*.jpg, *.jpeg, *.png)",
-        "jpg", "jpeg", "png"
-    )
-);
-
-int resultado = seletor.showOpenDialog(this);
-
-if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
-    java.io.File arquivo = seletor.getSelectedFile();
-    try {
-    if (arquivo.length() > 5 * 1024 * 1024) {
-        javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "A imagem deve ter no máximo 5 MB."
-        );
+        this.dispose();
         return;
     }
-
-    fotoPerfilBytes = java.nio.file.Files.readAllBytes(
-            arquivo.toPath()
-    );
-
-} catch (java.io.IOException ex) {
-    javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Erro ao carregar a foto: " + ex.getMessage()
-    );
-    return;
 }
-    javax.swing.ImageIcon imagem =
-        new javax.swing.ImageIcon(arquivo.getAbsolutePath());
-
-java.awt.Image imagemRedimensionada =
-        imagem.getImage().getScaledInstance(
-                120, 120, java.awt.Image.SCALE_SMOOTH
-        );
-
-lblFotoPerfil.setIcon(
-        new javax.swing.ImageIcon(imagemRedimensionada)
-);
-
-lblFotoPerfil.setText("");
-
-    System.out.println("Imagem selecionada: " + arquivo.getAbsolutePath());
-}
-
-    }//GEN-LAST:event_btnEscolherFotoActionPerformed
+    }//GEN-LAST:event_btnVoltarInicio4ActionPerformed
 private int atualizarDadosCandidato() {
 
     String sql = """
@@ -1400,12 +1208,7 @@ private int atualizarDadosCandidato() {
         WHERE id_usuario = ?
         """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            );
+    try (java.sql.Connection conexao = Conexao.conectar();
          java.sql.PreparedStatement pst =
             conexao.prepareStatement(sql)) {
 
@@ -1459,24 +1262,17 @@ private int atualizarDadosCandidato() {
     private int salvarDadosCandidato() {
 
 String sql = """
-        INSERT INTO candidatos
-        (id_usuario, cpf, telefone, cidade, estado,
-         descricao, cargo_desejado, nivel_profissional)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+    INSERT INTO candidatos
+    (id_usuario, cpf, telefone, cidade, estado,
+     descricao, cargo_desejado, nivel_profissional)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    RETURNING id_candidato
+    """;
 
-    try (java.sql.Connection conexao =
-            java.sql.DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-                "root",
-                "123456"
-            )) {
-
-try (java.sql.PreparedStatement pst =
-        conexao.prepareStatement(
-            sql,
-            java.sql.Statement.RETURN_GENERATED_KEYS
-        )) {
+    try (java.sql.Connection conexao = Conexao.conectar()) {
+        
+    try (java.sql.PreparedStatement pst =
+        conexao.prepareStatement(sql)) {
         
 pst.setInt(1, idUsuario);
 
@@ -1500,14 +1296,11 @@ if (cmbNivelProfissional2.getSelectedIndex() == 0) {
     pst.setString(8, cmbNivelProfissional2.getSelectedItem().toString());
 }
 
-pst.executeUpdate();
-
-try (java.sql.ResultSet rs = pst.getGeneratedKeys()) {
-if (rs.next()) {
-    int idCandidato = rs.getInt(1);
-    return idCandidato;
-}
+    try (java.sql.ResultSet rs = pst.executeQuery()) {
+    if (rs.next()) {
+    return rs.getInt("id_candidato");
     }
+}
 }
     } catch (java.sql.SQLException e) {
         javax.swing.JOptionPane.showMessageDialog(
@@ -1533,12 +1326,7 @@ private boolean salvarHabilidades(int idCandidato) {
     """;
         
 javax.swing.ListModel<String> modelo = lstHabilidades.getModel();
-try (java.sql.Connection conexao =
-        java.sql.DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-            "root",
-            "123456"
-        )) {
+try (java.sql.Connection conexao = Conexao.conectar()) {
     if (modoEdicao) {
     String sqlExcluir =
         "DELETE FROM habilidades_candidato WHERE id_candidato = ?";
@@ -1610,12 +1398,7 @@ private boolean salvarExperiencias(int idCandidato) {
          descricao, data_contratacao, data_demissao)
         VALUES (?, ?, ?, ?, ?, ?)
         """;
-    try (java.sql.Connection conexao =
-        java.sql.DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC",
-            "root",
-            "123456"
-        )) {
+    try (java.sql.Connection conexao = Conexao.conectar()) {
         if (modoEdicao) {
     String sqlExcluir =
         "DELETE FROM experiencias WHERE id_candidato = ?";
@@ -1641,7 +1424,7 @@ private boolean salvarExperiencias(int idCandidato) {
     pst.setInt(1, idCandidato);
     pst.setString(2, empresa);
     pst.setString(3, cargo);
-    pst.setString(4, descricao.isEmpty() ? null : descricao);
+    pst.setString(4, (descricao == null || descricao.isBlank()) ? null : descricao);
     
     
 java.time.format.DateTimeFormatter formato =
@@ -1686,7 +1469,6 @@ return true;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionarExperiencia;
     private javax.swing.JButton btnAdicionarHabilidade;
-    private javax.swing.JButton btnEscolherFoto;
     private javax.swing.JButton btnRemoverExperiencia;
     private javax.swing.JButton btnRemoverHabilidade;
     private javax.swing.JButton btnSalvarPerfil;
@@ -1712,7 +1494,6 @@ return true;
     private javax.swing.JLabel lblDescricaoProfissional1;
     private javax.swing.JLabel lblEmpresaExperiencia;
     private javax.swing.JLabel lblExperienciasProfissionais;
-    private javax.swing.JLabel lblFotoPerfil;
     private javax.swing.JLabel lblHabilidade;
     private javax.swing.JLabel lblHabilidades;
     private javax.swing.JLabel lblInformacoesPessoais1;

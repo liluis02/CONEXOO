@@ -428,10 +428,7 @@ vagasRecomendadas.add(new Object[]{
     rs.getBigDecimal("salario_min"),
     rs.getBigDecimal("salario_max"),
     maiorPontuacao
-});
-
-
-               
+});    
             }
             vagasRecomendadas.sort(
     (vaga1, vaga2) -> Integer.compare(

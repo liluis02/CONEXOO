@@ -1,7 +1,6 @@
 package com.data.CONEXOO.CONEXOO;
 
 import java.sql.Connection;//RESPONSÁVEL PELA CONEXÃO COM O BANCO
-import java.sql.DriverManager; // DRIVER OU MOTOR DE QUAL BANCO NO CASO MYSQL
 import java.sql.PreparedStatement; //PREPARA O SQL PARA SER EXECUTADO
 import java.sql.ResultSet; //GUARDA O RESULTADO DE UMA CONSULTA SELECT
 import java.sql.SQLException; // TRATA ERROS DO SQL 
@@ -263,43 +262,44 @@ public class Login_Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnacessarActionPerformed
 
     private void jBtnacessarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnacessarMouseClicked
-String url = "jdbc:mysql://localhost:3306/conexoo?useSSL=false&serverTimezone=UTC";
-String usuario = "root";
-String senha = "123456";
-
 String sql = "SELECT * FROM usuarios WHERE email = ? AND senha = ?";
 
-if (jTxtusuario.getText().length()==0)
-{
-    JOptionPane.showMessageDialog(null,
-            "E-mail ou senha incorretos!");
-    return;
-}
-try (Connection conexao = DriverManager.getConnection(url, usuario, senha);
-     PreparedStatement dec_sql = conexao.prepareStatement(sql)) {
+    if (jTxtusuario.getText().trim().isEmpty()
+            || jTxtsenha.getPassword().length == 0) {
 
-    dec_sql.setString(1, jTxtusuario.getText());
-    dec_sql.setString(2, new String(jTxtsenha.getPassword()));
-
-    try (ResultSet rslogin = dec_sql.executeQuery()) {
-
-    if (rslogin.next()) {
-
-    int idUsuario = rslogin.getInt("id");
-    String tipoUsuario = rslogin.getString("tipo_perfil");
-    Menu_Frame menu = new Menu_Frame(idUsuario, tipoUsuario);
-    menu.setVisible(true);
-
-    this.dispose();
-}
-        else
-            JOptionPane.showMessageDialog(null,
-                    "E-mail ou senha inválidos.");
+        JOptionPane.showMessageDialog(this,
+                "E-mail ou senha incorretos!");
+        return;
     }
 
-} catch (SQLException e) {
+    try (Connection conexao = Conexao.conectar();
+         PreparedStatement dec_sql = conexao.prepareStatement(sql)) {
 
-    System.err.println("Erro ao conectar ou consultar o banco de dados: " + e.getMessage());
+        dec_sql.setString(1, jTxtusuario.getText().trim());
+        dec_sql.setString(2, new String(jTxtsenha.getPassword()));
+
+        try (ResultSet rslogin = dec_sql.executeQuery()) {
+
+            if (rslogin.next()) {
+
+                int idUsuario = rslogin.getInt("id");
+                String tipoUsuario = rslogin.getString("tipo_perfil");
+
+                Menu_Frame menu = new Menu_Frame(idUsuario, tipoUsuario);
+                menu.setVisible(true);
+
+                this.dispose();
+
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "E-mail ou senha inválidos.");
+            }
+        }
+
+    } catch (SQLException e) {
+
+        JOptionPane.showMessageDialog(this,
+                "Erro ao conectar ou consultar o banco: " + e.getMessage());
 }
     }//GEN-LAST:event_jBtnacessarMouseClicked
     

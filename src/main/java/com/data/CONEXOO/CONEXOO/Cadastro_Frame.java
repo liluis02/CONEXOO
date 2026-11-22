@@ -145,7 +145,7 @@ public class Cadastro_Frame extends javax.swing.JFrame {
 
         cmbAreaAtuacao.setBackground(new java.awt.Color(20, 43, 73));
         cmbAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
-        cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione sua área de atuação", "Administração de Banco de Dados (DBA)", "Administração de Sistemas", "Análise de Dados", "Análise de Negócios", "Análise de Sistemas", "Arquitetura de Software", "Automação de Testes", "Banco de Dados", "Blockchain", "Business Intelligence (BI)", "Cibersegurança", "Ciência de Dados", "Computação em Nuvem (Cloud)", "Consultoria de TI", "Desenvolvimento Back-end", "Desenvolvimento de Jogos", "Desenvolvimento Desktop", "Desenvolvimento Front-end", "Desenvolvimento Full Stack", "Desenvolvimento Mobile", "DevOps", "Engenharia de Confiabilidade (SRE)", "Engenharia de Dados", "Engenharia de Software", "Gestão de Produtos Digitais", "Gestão de Projetos de TI", "Governança de TI", "Infraestrutura de TI", "Inteligência Artificial", "Internet das Coisas (IoT)", "Machine Learning", "Qualidade de Software (QA)", "Redes de Computadores", "Robótica e Automação", "Scrum Master", "Segurança da Informação", "Segurança Ofensiva (Pentest)", "Sistemas ERP", "Suporte Técnico", "UX/UI Design" }));
+        cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione sua área de atuação", "Desenvolvimento Front-end", "Desenvolvimento Back-end", "Desenvolvimento Full Stack", "Desenvolvimento Mobile", "Desenvolvimento Desktop", "Desenvolvimento de Jogos", "Engenharia de Software", "Arquitetura de Software", "Qualidade de Software (QA)", "Automação de Testes", "Banco de Dados", "Administração de Banco de Dados (DBA)", "Análise de Dados", "Ciência de Dados", "Engenharia de Dados", "Business Intelligence (BI)", "Inteligência Artificial", "Machine Learning", "Redes de Computadores", "Administração de Sistemas", "Infraestrutura de TI", "Suporte Técnico", "Segurança da Informação", "Cibersegurança", "Segurança Ofensiva (Pentest)", "Computação em Nuvem (Cloud)", "DevOps", "Engenharia de Confiabilidade (SRE)", "Análise de Sistemas", "Gestão de Projetos de TI", "Gestão de Produtos Digitais", "Governança de TI", "Consultoria de TI", "Análise de Negócios", "Sistemas ERP", "Scrum Master", "UX/UI Design", "Internet das Coisas (IoT)", "Robótica e Automação", "Blockchain" }));
         cmbAreaAtuacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(54, 87, 119)));
         cmbAreaAtuacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbAreaAtuacao.addActionListener(this::cmbAreaAtuacaoActionPerformed);
@@ -476,23 +476,23 @@ if (senha.length() < 8) {
         new Login_Frame().setVisible(true);
         this.dispose();
 
-    } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+        } catch (java.sql.SQLException e) {
+
+    if ("23505".equals(e.getSQLState())) {
         javax.swing.JOptionPane.showMessageDialog(this,
                 "Este e-mail já está cadastrado!");
-
-    } catch (java.sql.SQLException e) {
+    } else {
         javax.swing.JOptionPane.showMessageDialog(this,
                 "Erro ao cadastrar usuário: " + e.getMessage());
     }
 
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
      Login_Frame login = new Login_Frame();
      login.setLocationRelativeTo(null);
      login.setVisible(true);
      this.dispose();        
-// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnMostrarSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarSenhaActionPerformed

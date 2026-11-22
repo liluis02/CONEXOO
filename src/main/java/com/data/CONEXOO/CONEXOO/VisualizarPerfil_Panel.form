@@ -101,7 +101,7 @@
     <Container class="javax.swing.JPanel" name="pnlIdentificacao">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="45" green="25" red="b" type="rgb"/>
+          <Color blue="4b" green="2d" red="10" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -115,21 +115,19 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="lblNomeProfissional" alignment="0" pref="700" max="32767" attributes="0"/>
+                      <Component id="lblCargoDesejado" alignment="0" max="32767" attributes="0"/>
+                      <Component id="lblAreaAtuacaoPerfil" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <Component id="lblFotoPerfil" min="-2" pref="134" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblCargoDesejado" min="-2" pref="380" max="-2" attributes="0"/>
-                              <Component id="lblCargodesejado2" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblCargodesejado2" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="lblareaatuacaoatual" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblAreaAtuacaoPerfil" min="-2" pref="510" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="lblNomeProfissional" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -141,18 +139,13 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblNomeProfissional" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblCargodesejado2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblCargoDesejado" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblareaatuacaoatual" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lblAreaAtuacaoPerfil" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="lblFotoPerfil" min="-2" pref="94" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="lblCargodesejado2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblCargoDesejado" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblareaatuacaoatual" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="lblAreaAtuacaoPerfil" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -214,14 +207,12 @@
             <Property name="text" type="java.lang.String" value="&#xc1;rea de atua&#xe7;&#xe3;o atual"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblFotoPerfil">
-        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="pnlInformacoesPessoais">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="45" green="25" red="b" type="rgb"/>
+          <Color blue="4b" green="2d" red="10" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -396,7 +387,7 @@
     <Container class="javax.swing.JPanel" name="pnlSobreMim">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="45" green="25" red="b" type="rgb"/>
+          <Color blue="4b" green="2d" red="10" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -477,7 +468,7 @@
     <Container class="javax.swing.JPanel" name="pnlHabilidades">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="45" green="25" red="b" type="rgb"/>
+          <Color blue="4b" green="2d" red="10" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -567,7 +558,7 @@
     <Container class="javax.swing.JPanel" name="pnlExperiencias">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="45" green="25" red="b" type="rgb"/>
+          <Color blue="4b" green="2d" red="10" type="rgb"/>
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -664,9 +655,6 @@
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="33" green="1b" red="7" type="rgb"/>
-        </Property>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="C:\Users\gemar\Downloads\square-pen.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&#xfe0f; Editar perfil"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">

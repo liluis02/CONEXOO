@@ -31,52 +31,40 @@ public void setAcaoVerDetalhes(
         carregarVagas();
     }
     
-    private void carregarVagas() {
-            pnlListaVagas.removeAll();
-            
-            String sql = "SELECT v.id_vaga, v.titulo, "
+    
+private void carregarVagas() {
+    pnlListaVagas.removeAll();
+
+    String sql = "SELECT v.id_vaga, v.titulo, "
             + "v.localizacao, v.salario_min, v.salario_max, "
             + "e.nome_fantasia "
             + "FROM vagas v "
             + "INNER JOIN empresas e ON v.id_empresa = e.id_empresa "
             + "WHERE v.status = 'ATIVA'";
 
-            try {
-        java.sql.Connection conexao =
-                java.sql.DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/conexoo",
-                        "root",
-                        "123456"
-                );
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql);
+         java.sql.ResultSet rs = pst.executeQuery()) {
 
-        java.sql.PreparedStatement pst =
-                conexao.prepareStatement(sql);
-
-        java.sql.ResultSet rs = pst.executeQuery();
         while (rs.next()) {
 
-    int idVaga = rs.getInt("id_vaga");
-    String titulo = rs.getString("titulo");
-    String empresa = rs.getString("nome_fantasia");
-    String localizacao = rs.getString("localizacao");
+            int idVaga = rs.getInt("id_vaga");
+            String titulo = rs.getString("titulo");
+            String empresa = rs.getString("nome_fantasia");
+            String localizacao = rs.getString("localizacao");
 
-    java.math.BigDecimal salarioMin = rs.getBigDecimal("salario_min");
-    java.math.BigDecimal salarioMax = rs.getBigDecimal("salario_max");
-    
-    criarCardVaga(
-        idVaga,
-        titulo,
-        empresa,
-        localizacao,
-        salarioMin,
-        salarioMax
-);
+            java.math.BigDecimal salarioMin = rs.getBigDecimal("salario_min");
+            java.math.BigDecimal salarioMax = rs.getBigDecimal("salario_max");
 
-}
-
-        rs.close();
-        pst.close();
-        conexao.close();
+            criarCardVaga(
+                    idVaga,
+                    titulo,
+                    empresa,
+                    localizacao,
+                    salarioMin,
+                    salarioMax
+            );
+        }
 
     } catch (java.sql.SQLException e) {
         javax.swing.JOptionPane.showMessageDialog(
@@ -84,10 +72,11 @@ public void setAcaoVerDetalhes(
                 "Erro ao carregar vagas: " + e.getMessage()
         );
     }
-    
-            pnlListaVagas.revalidate();
-pnlListaVagas.repaint();
-    }
+
+    pnlListaVagas.revalidate();
+    pnlListaVagas.repaint();
+}
+
     private void pesquisarVagas(String pesquisa) {
 
     pnlListaVagas.removeAll();
@@ -104,9 +93,9 @@ pnlListaVagas.repaint();
             + "FROM vagas v "
             + "INNER JOIN empresas e ON v.id_empresa = e.id_empresa "
             + "WHERE v.status = 'ATIVA' "
-            + "AND (v.titulo LIKE ? "
-            + "OR e.nome_fantasia LIKE ? "
-            + "OR v.localizacao LIKE ?)";
+            + "AND (v.titulo ILIKE ? "
+            + "OR e.nome_fantasia ILIKE ? "
+            + "OR v.localizacao ILIKE ?)";
 
     try (java.sql.Connection conexao = Conexao.conectar();
          java.sql.PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -150,6 +139,11 @@ pnlListaVagas.repaint();
     pnlListaVagas.revalidate();
     pnlListaVagas.repaint();
 }
+    
+  public void atualizarVagas() {
+    carregarVagas();
+}  
+    
     private void criarCardVaga( 
         int idVaga,
         String titulo,
@@ -159,18 +153,6 @@ pnlListaVagas.repaint();
         java.math.BigDecimal salarioMax) {
 
     javax.swing.JPanel card = new javax.swing.JPanel();
-    
-    card.setPreferredSize(new java.awt.Dimension(800, 130));
-
-card.setMaximumSize(
-    new java.awt.Dimension(Integer.MAX_VALUE, 130)
-);
-
-card.setMinimumSize(
-    new java.awt.Dimension(0, 130)
-);
-
-card.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
 
     card.setBackground(new java.awt.Color(16, 39, 71));
     card.setBorder(
@@ -245,10 +227,6 @@ card.add(lblEmpresa, java.awt.BorderLayout.CENTER);
 card.add(painelInferior, java.awt.BorderLayout.SOUTH);
 
     pnlListaVagas.add(card);
-    
-    pnlListaVagas.add(
-    javax.swing.Box.createVerticalStrut(12)
-);
 }
     private void mostrarMensagemSemVagas() {
 
@@ -358,7 +336,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
                 .addGroup(pnlCardVagaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSalarioVaga)
                     .addComponent(btnVerDetalhesVaga))
-                .addContainerGap(634, Short.MAX_VALUE))
+                .addContainerGap(604, Short.MAX_VALUE))
         );
 
         pnlListaVagas.add(pnlCardVaga);
@@ -388,7 +366,7 @@ card.add(painelInferior, java.awt.BorderLayout.SOUTH);
         pnlVagasLayout.setHorizontalGroup(
             pnlVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVagasLayout.createSequentialGroup()
-                .addGap(235, 235, 235)
+                .addGap(250, 250, 250)
                 .addGroup(pnlVagasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlVagasLayout.createSequentialGroup()

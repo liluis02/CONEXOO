@@ -37,62 +37,133 @@ private int idUsuarioEmpresa;
     mostrarMensagemInicial();
     }
     
-    
+    public void atualizarProfissionais() {
+
+    Object item = cmbAreaAtuacao.getSelectedItem();
+
+    if (item == null || cmbAreaAtuacao.getSelectedIndex() <= 0) {
+        mostrarMensagemInicial();
+        return;
+    }
+
+    String area = item.toString();
+
+    buscarProfissionais(area);
+}
+
 private boolean curtirProfissional(int idUsuarioProfissional, int idVaga) {
 
-    String sql = """
+    String sqlCurtida = """
         INSERT INTO interesses
             (id_candidato, id_vaga, origem, data_interesse)
         SELECT c.id_candidato, v.id_vaga, 'empresa', NOW()
         FROM candidatos c
-        INNER JOIN vagas v
-            ON v.id_vaga = ?
-        INNER JOIN empresas e
-            ON v.id_empresa = e.id_empresa
+        INNER JOIN vagas v ON v.id_vaga = ?
+        INNER JOIN empresas e ON v.id_empresa = e.id_empresa
         WHERE c.id_usuario = ?
           AND e.id_usuario = ?
           AND v.status = 'ATIVA'
+        RETURNING id_candidato
         """;
 
-    try (java.sql.Connection conexao = Conexao.conectar();
-         java.sql.PreparedStatement stmt =
-                 conexao.prepareStatement(sql)) {
+    String sqlMatch = """
+        INSERT INTO matches (id_candidato, id_vaga)
+        SELECT ?, ?
+        WHERE EXISTS (
+            SELECT 1
+            FROM interesses
+            WHERE id_candidato = ?
+              AND id_vaga = ?
+              AND origem = 'candidato'
+        )
+        ON CONFLICT (id_candidato, id_vaga) DO NOTHING
+        """;
 
-        stmt.setInt(1, idVaga);
-        stmt.setInt(2, idUsuarioProfissional);
-        stmt.setInt(3, idUsuarioEmpresa);
+    try (java.sql.Connection conexao = Conexao.conectar()) {
 
-        int linhas = stmt.executeUpdate();
+        conexao.setAutoCommit(false);
 
-        if (linhas > 0) {
+        try {
+            int idCandidato;
+
+            try (java.sql.PreparedStatement stmt =
+                    conexao.prepareStatement(sqlCurtida)) {
+
+                stmt.setInt(1, idVaga);
+                stmt.setInt(2, idUsuarioProfissional);
+                stmt.setInt(3, idUsuarioEmpresa);
+
+                try (java.sql.ResultSet rs = stmt.executeQuery()) {
+
+                    if (!rs.next()) {
+                        conexao.rollback();
+
+                        javax.swing.JOptionPane.showMessageDialog(
+                            this,
+                            "Não foi possível registrar a curtida. "
+                            + "Verifique o candidato e a vaga ativa."
+                        );
+
+                        return false;
+                    }
+
+                    idCandidato = rs.getInt("id_candidato");
+                }
+            }
+
+            int matchesCriados;
+
+            try (java.sql.PreparedStatement stmt =
+                    conexao.prepareStatement(sqlMatch)) {
+
+                stmt.setInt(1, idCandidato);
+                stmt.setInt(2, idVaga);
+                stmt.setInt(3, idCandidato);
+                stmt.setInt(4, idVaga);
+
+                matchesCriados = stmt.executeUpdate();
+            }
+
+            conexao.commit();
+
+            if (matchesCriados > 0) {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "É um Match! Vocês demonstraram interesse mútuo!"
+                );
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Profissional curtido com sucesso!"
+                );
+            }
+
+            return true;
+
+        } catch (java.sql.SQLException e) {
+
+            conexao.rollback();
+            throw e;
+        }
+
+    } catch (java.sql.SQLException e) {
+
+        if ("23505".equals(e.getSQLState())) {
             javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Profissional curtido com sucesso!"
+                "Você já curtiu este profissional para essa vaga."
             );
-            return true;
         } else {
             javax.swing.JOptionPane.showMessageDialog(
                 this,
-                "Não foi possível registrar a curtida. Verifique o perfil do candidato e a vaga ativa."
+                "Erro ao curtir profissional: " + e.getMessage()
             );
-            return false;
         }
 
-    } catch (java.sql.SQLIntegrityConstraintViolationException e) {
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Você já curtiu este profissional para essa vaga."
-        );
-        return false;
-
-    } catch (java.sql.SQLException e) {
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Erro ao curtir profissional: " + e.getMessage()
-        );
         return false;
     }
 }
+
 
     
     
