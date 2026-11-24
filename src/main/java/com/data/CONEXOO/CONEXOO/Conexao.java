@@ -8,9 +8,9 @@ public class Conexao {
 
     public static Connection conectar() throws SQLException {
 
-        String url = "jdbc:postgresql://100.108.167.39:5432/Conexoo";
+        String url = "jdbc:postgresql://localhost:5432/conexoo";
         String usuario = "postgres";
-        String senha = "setesaias13";
+        String senha = "setesaias14";
 
         return DriverManager.getConnection(url, usuario, senha);
     }

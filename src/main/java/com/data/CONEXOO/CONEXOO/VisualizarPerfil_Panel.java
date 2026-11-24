@@ -10,6 +10,8 @@ package com.data.CONEXOO.CONEXOO;
  */
 public class VisualizarPerfil_Panel extends javax.swing.JPanel {
        private int idUsuario;
+       private boolean modoVisualizacao = false;
+       private Runnable acaoVoltar;
     /**
      * Creates new form VisualizarPerfil_Panel
      */
@@ -27,6 +29,21 @@ public class VisualizarPerfil_Panel extends javax.swing.JPanel {
     carregarDadosPerfil();
     carregarHabilidades();
     carregarExperiencias();
+}
+    
+    public void configurarModoVisualizacao(Runnable acaoVoltar) {
+
+    this.modoVisualizacao = true;
+    this.acaoVoltar = acaoVoltar;
+
+    lblTituloPerfil.setText("Perfil do profissional");
+
+    lblSubtituloPerfil.setText(
+        "Conheça as informações e experiências do profissional."
+    );
+
+    btnEditarPerfil.setIcon(null);
+    btnEditarPerfil.setText("← Voltar para Interesses");
 }
     
 private void carregarDadosPerfil() {
@@ -577,12 +594,19 @@ if (telefone != null && !telefone.isEmpty()) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPerfilActionPerformed
-           PerfilProfissional_Frame perfil =
-    new PerfilProfissional_Frame(idUsuario, true);
+            if (modoVisualizacao) {
+        if (acaoVoltar != null) {
+            acaoVoltar.run();
+        }
+        return;
+    }
 
-perfil.setVisible(true);
+    PerfilProfissional_Frame perfil =
+        new PerfilProfissional_Frame(idUsuario, true);
 
-javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
+    perfil.setVisible(true);
+
+    javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
     }//GEN-LAST:event_btnEditarPerfilActionPerformed
 
 

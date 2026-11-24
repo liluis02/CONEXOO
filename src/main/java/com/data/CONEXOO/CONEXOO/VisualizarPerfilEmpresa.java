@@ -13,6 +13,8 @@ import javax.swing.JOptionPane;
 public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
 
     private int idUsuario;
+    private boolean modoVisualizacao = false;
+    private Runnable acaoVoltar;
 
     public VisualizarPerfilEmpresa() {
         initComponents();
@@ -27,6 +29,20 @@ public class VisualizarPerfilEmpresa extends javax.swing.JPanel {
     
     public void atualizarPerfilEmpresa() {
     carregarDadosEmpresa();
+}
+        
+    public void configurarModoVisualizacao(Runnable acaoVoltar) {
+
+    this.modoVisualizacao = true;
+    this.acaoVoltar = acaoVoltar;
+
+    lblTituloPerfilEmpresa.setText("Perfil da empresa");
+
+    lblSubtituloPerfilEmpresa.setText(
+        "Conheça as informações da empresa."
+    );
+
+    btnEditarPerfil.setText("← Voltar para Matches");
 }
 
     private void carregarDadosEmpresa() {
@@ -438,7 +454,14 @@ if (telefone != null && !telefone.isEmpty()) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditarPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPerfilActionPerformed
-     PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
+     if (modoVisualizacao) {
+        if (acaoVoltar != null) {
+            acaoVoltar.run();
+        }
+        return;
+    }
+
+    PerfilEmpresa perfil = new PerfilEmpresa(idUsuario);
 
     perfil.setVisible(true);
 

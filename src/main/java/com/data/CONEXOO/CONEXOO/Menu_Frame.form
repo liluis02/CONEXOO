@@ -85,7 +85,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="pnlCompatibilidadeMedia" min="-2" pref="475" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="pnlMatchesRealizados" pref="347" max="32767" attributes="0"/>
+                                  <Component id="pnlMatchesRealizados" pref="349" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
@@ -574,7 +574,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="171" max="32767" attributes="0"/>
+                      <EmptySpace pref="165" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="lblvagasdisponiveis3" min="-2" max="-2" attributes="0"/>
@@ -648,7 +648,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace pref="178" max="32767" attributes="0"/>
+                      <EmptySpace pref="174" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="lblDescricaoVagas3" min="-2" max="-2" attributes="0"/>

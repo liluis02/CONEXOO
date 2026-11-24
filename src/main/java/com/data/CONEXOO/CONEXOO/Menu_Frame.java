@@ -5,7 +5,81 @@
 package com.data.CONEXOO.CONEXOO;
 
 public class Menu_Frame extends javax.swing.JFrame {
+private javax.swing.JPanel pnlConteudoDinamico;
     
+private void carregarCandidaturasEnviadas() {
+
+    String sql = """
+        SELECT COUNT(*)
+        FROM interesses i
+        INNER JOIN candidatos c
+            ON i.id_candidato = c.id_candidato
+        WHERE c.id_usuario = ?
+        AND i.origem = 'candidato'
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lblQuantidadeVagas3.setText(
+                    String.valueOf(rs.getInt(1))
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao contar candidaturas: " + e.getMessage()
+        );
+    }
+}
+
+private void carregarQuantidadeMatches() {
+
+    String sql = """
+        SELECT COUNT(*)
+        FROM interesses i
+        INNER JOIN candidatos c
+            ON i.id_candidato = c.id_candidato
+        WHERE c.id_usuario = ?
+        AND i.origem = 'candidato'
+        AND EXISTS (
+            SELECT 1
+            FROM interesses i2
+            WHERE i2.id_candidato = i.id_candidato
+            AND i2.id_vaga = i.id_vaga
+            AND i2.origem = 'empresa'
+        )
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lblQuantidadeVagas2.setText(
+                    String.valueOf(rs.getInt(1))
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao contar matches: " + e.getMessage()
+        );
+    }
+}
+
     private void carregarQuantidadeVagas() {
     String sql = "SELECT COUNT(*) FROM vagas WHERE status = 'ATIVA'";
 
@@ -46,6 +120,8 @@ public class Menu_Frame extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollInteressesEmpresa;
 
     private void mostrarPainelPerfilEmpresa() {
+        destacarAba(btnMeuPerfil);
+        ocultarTelasDinamicas();
         if (scrollVagas != null) {
     scrollVagas.setVisible(false);
 }
@@ -58,27 +134,65 @@ public class Menu_Frame extends javax.swing.JFrame {
     javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
 );
         scrollPerfilEmpresa.getVerticalScrollBar().setUnitIncrement(20);
-
-        pnlPrincipal.add(scrollPerfilEmpresa);
     }
         painelPerfilEmpresa.atualizarPerfilEmpresa();
-int inicioConteudo = pnlMenuLateral.getX()
-        + pnlMenuLateral.getWidth();
+        exibirTelaDinamica(scrollPerfilEmpresa);
 
-scrollPerfilEmpresa.setBounds(
-    inicioConteudo,
-    0,
-    pnlPrincipal.getWidth() - inicioConteudo,
-    pnlPrincipal.getHeight()
-);
-
-    scrollPerfilEmpresa.setVisible(true);
-
-    pnlPrincipal.revalidate();
-    pnlPrincipal.repaint();
+        pnlPrincipal.revalidate();
+        pnlPrincipal.repaint();
 }
     
+    private void mostrarPerfilEmpresaMatch(int idEmpresa) {
+
+    String sql = "SELECT id_usuario FROM empresas WHERE id_empresa = ?";
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idEmpresa);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+
+                int idUsuarioEmpresa = rs.getInt("id_usuario");
+
+                VisualizarPerfilEmpresa painel =
+                    new VisualizarPerfilEmpresa(idUsuarioEmpresa);
+
+                painel.configurarModoVisualizacao(
+                    () -> mostrarPainelMatches()
+                );
+
+                javax.swing.JScrollPane scroll =
+                    new javax.swing.JScrollPane(painel);
+
+                scroll.setHorizontalScrollBarPolicy(
+                    javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+                );
+
+                scroll.getVerticalScrollBar().setUnitIncrement(20);
+
+                exibirTelaDinamica(scroll);
+
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this, "Empresa não encontrada."
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Erro ao abrir perfil da empresa: " + e.getMessage()
+        );
+    }
+}
+    
+    
 private void mostrarPainelMatches() {
+    destacarAba(btnMatches1);
+    ocultarTelasDinamicas();
 
     // Esconde os outros painéis
     if (scrollPerfil != null) scrollPerfil.setVisible(false);
@@ -106,21 +220,11 @@ private void mostrarPainelMatches() {
                     javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollMatchesEmpresa.setVerticalScrollBarPolicy(
                     javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-            pnlPrincipal.add(scrollMatchesEmpresa);
         } else {
             painelMatchesEmpresa.atualizarDados();
         }
 
-        scrollMatchesEmpresa.setBounds(
-                inicioConteudo,
-                0,
-                pnlPrincipal.getWidth() - inicioConteudo,
-                pnlPrincipal.getHeight()
-        );
-
-        scrollMatchesEmpresa.setVisible(true);
-        pnlPrincipal.setComponentZOrder(scrollMatchesEmpresa, 0);
+            exibirTelaDinamica(scrollMatchesEmpresa);
 
     } else if ("PROFISSIONAL".equals(tipoUsuario)) {
 
@@ -130,36 +234,115 @@ private void mostrarPainelMatches() {
 
         if (painelMatchesProfissional == null) {
             painelMatchesProfissional = new Matchsprofissional(idUsuario);
+            painelMatchesProfissional.setAcaoVerPerfilEmpresa(
+            idEmpresa -> mostrarPerfilEmpresaMatch(idEmpresa)
+);
             scrollMatchesProfissional = new javax.swing.JScrollPane(painelMatchesProfissional);
 
             scrollMatchesProfissional.setHorizontalScrollBarPolicy(
                     javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollMatchesProfissional.setVerticalScrollBarPolicy(
                     javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-            pnlPrincipal.add(scrollMatchesProfissional);
         } else {
             painelMatchesProfissional.atualizarDados();
         }
 
-        scrollMatchesProfissional.setBounds(
-                inicioConteudo,
-                0,
-                pnlPrincipal.getWidth() - inicioConteudo,
-                pnlPrincipal.getHeight()
-        );
-
-        scrollMatchesProfissional.setVisible(true);
-        pnlPrincipal.setComponentZOrder(scrollMatchesProfissional, 0);
+        exibirTelaDinamica(scrollMatchesProfissional);
     }
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
 
+private void exibirTelaDinamica(javax.swing.JScrollPane tela) {
+
+    ocultarTelasDinamicas();
+    ocultarPaginaInicial();
+    
+    java.awt.Point posicao = javax.swing.SwingUtilities.convertPoint(
+    pnlPrincipal,
+    pnlMenuLateral.getX() + pnlMenuLateral.getWidth(),
+    0,
+    getLayeredPane()
+);
+
+pnlConteudoDinamico.setBounds(
+    posicao.x,
+    posicao.y,
+    pnlPrincipal.getWidth() - pnlMenuLateral.getX()
+        - pnlMenuLateral.getWidth(),
+    pnlPrincipal.getHeight()
+);
+
+    pnlConteudoDinamico.removeAll();
+
+    pnlConteudoDinamico.add(
+        tela, java.awt.BorderLayout.CENTER
+    );
+
+    tela.setVisible(true);
+    pnlConteudoDinamico.setVisible(true);
+
+    pnlConteudoDinamico.revalidate();
+    pnlConteudoDinamico.repaint();
+}
+private void destacarAba(javax.swing.JButton botaoSelecionado) {
+
+    javax.swing.JButton[] botoes = {
+        btnInicio1,
+        btnMeuPerfil,
+        btnVagas2,
+        btnInteresses,
+        btnMatches1
+    };
+
+    for (javax.swing.JButton botao : botoes) {
+
+        botao.setBackground(new java.awt.Color(11, 29, 56));
+        botao.setForeground(new java.awt.Color(168, 201, 235));
+    }
+
+    botaoSelecionado.setBackground(new java.awt.Color(8, 127, 167));
+    botaoSelecionado.setForeground(java.awt.Color.WHITE);
+}
+
+private void ocultarTelasDinamicas() {
+
+    if (scrollPerfil != null)
+        scrollPerfil.setVisible(false);
+
+    if (scrollPerfilEmpresa != null)
+        scrollPerfilEmpresa.setVisible(false);
+
+    if (scrollVagas != null)
+        scrollVagas.setVisible(false);
+
+    if (scrollVagasEmpresa != null)
+        scrollVagasEmpresa.setVisible(false);
+
+    if (scrollInteresses != null)
+        scrollInteresses.setVisible(false);
+
+    if (scrollInteressesEmpresa != null)
+        scrollInteressesEmpresa.setVisible(false);
+
+    if (scrollMatchesEmpresa != null)
+        scrollMatchesEmpresa.setVisible(false);
+
+    if (scrollMatchesProfissional != null)
+        scrollMatchesProfissional.setVisible(false);
+
+    if (scrollDetalhesVaga != null)
+        scrollDetalhesVaga.setVisible(false);
+
+    if (scrollPublicarVaga != null)
+        scrollPublicarVaga.setVisible(false);
+}
     
     
     private void mostrarPainelVagas() {
+    destacarAba(btnVagas2);
+    ocultarTelasDinamicas();
 if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
     mostrarPainelVagasEmpresa();
     return;
@@ -194,21 +377,10 @@ if (painelVagas == null) {
     );
 
     scrollVagas.getVerticalScrollBar().setUnitIncrement(20);
-    pnlPrincipal.add(scrollVagas);
 }
 
-    int inicioConteudo = pnlMenuLateral.getX()
-            + pnlMenuLateral.getWidth();
-
-    scrollVagas.setBounds(
-        inicioConteudo,
-        0,
-        pnlPrincipal.getWidth() - inicioConteudo,
-        pnlPrincipal.getHeight()
-    );
     painelVagas.atualizarVagas();
-    scrollVagas.setVisible(true);
-    pnlPrincipal.setComponentZOrder(scrollVagas, 0);
+    exibirTelaDinamica(scrollVagas);
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
@@ -221,8 +393,24 @@ if (painelVagas == null) {
 
     public Menu_Frame(int idUsuario, String tipoUsuario) {
         initComponents();
-jScrollPane1.setOpaque(false);
-jScrollPane1.getViewport().setOpaque(false);
+        
+        pnlConteudoDinamico = new javax.swing.JPanel();
+        pnlConteudoDinamico.setLayout(new java.awt.BorderLayout());
+        pnlConteudoDinamico.setOpaque(true);
+        
+        
+        pnlConteudoDinamico.setBackground(
+        new java.awt.Color(5, 20, 43)
+);
+
+pnlConteudoDinamico.setVisible(false);
+       
+    getLayeredPane().add(
+    pnlConteudoDinamico,
+    javax.swing.JLayeredPane.PALETTE_LAYER
+); 
+        jScrollPane1.setOpaque(false);
+        jScrollPane1.getViewport().setOpaque(false);
 
 txtDescricaoBanner.setOpaque(false);
 txtDescricaoBanner.setForeground(new java.awt.Color(168, 201, 235));
@@ -250,6 +438,9 @@ if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
 
     carregarEmpresasPlataforma();
     carregarResumoProfissional();
+    carregarCandidaturasEnviadas();
+    carregarQuantidadeMatches();
+    lblDescricaoVagas3.setText("Candidaturas enviadas");
 
 } else if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
 
@@ -267,6 +458,7 @@ if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
     lblQuantidadeVagas3.setText("0");
     lblQuantidadeVagas2.setText("0");
     carregarQuantidadeVagasEmpresa();
+    carregarCandidaturasRecebidas();
     lblEmpresasPlataforma.setText("Minhas vagas");
     lblAtividadesRecentes.setText("Resumo da empresa");
     carregarMinhasVagasInicio();
@@ -274,8 +466,30 @@ if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
 }
     }
     
+    private void mostrarPerfilProfissionalInteresse(int idUsuarioProfissional) {
+
+    VisualizarPerfil_Panel painel =
+        new VisualizarPerfil_Panel(idUsuarioProfissional);
+
+    painel.configurarModoVisualizacao(
+        () -> mostrarPainelInteresses()
+    );
+
+    javax.swing.JScrollPane scroll =
+        new javax.swing.JScrollPane(painel);
+
+    scroll.setHorizontalScrollBarPolicy(
+        javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+    );
+
+    scroll.getVerticalScrollBar().setUnitIncrement(20);
+
+    exibirTelaDinamica(scroll);
+}
     
 private void mostrarPainelInteresses() {
+    destacarAba(btnInteresses);
+    ocultarTelasDinamicas();
 
     // Esconde os outros painéis
     if (scrollVagas != null) scrollVagas.setVisible(false);
@@ -301,6 +515,10 @@ private void mostrarPainelInteresses() {
         if (painelInteressesEmpresa == null) {
 
             painelInteressesEmpresa = new InteresseEmpresa(idUsuario);
+            painelInteressesEmpresa.setAcaoVerPerfil(
+            idUsuarioProfissional ->
+            mostrarPerfilProfissionalInteresse(idUsuarioProfissional)
+);
 
             scrollInteressesEmpresa =
                     new javax.swing.JScrollPane(painelInteressesEmpresa);
@@ -311,19 +529,9 @@ private void mostrarPainelInteresses() {
 
             scrollInteressesEmpresa.getVerticalScrollBar()
                     .setUnitIncrement(20);
-
-            pnlPrincipal.add(scrollInteressesEmpresa);
         }
 
-        scrollInteressesEmpresa.setBounds(
-                inicioConteudo,
-                0,
-                pnlPrincipal.getWidth() - inicioConteudo,
-                pnlPrincipal.getHeight()
-        );
-        painelInteresses.atualizarVagasCurtidas();
-        scrollInteressesEmpresa.setVisible(true);
-        pnlPrincipal.setComponentZOrder(scrollInteressesEmpresa, 0);
+        exibirTelaDinamica(scrollInteressesEmpresa);
 
     // INTERESSES DO PROFISSIONAL
     } else if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
@@ -349,19 +557,10 @@ private void mostrarPainelInteresses() {
 
             scrollInteresses.getVerticalScrollBar()
                     .setUnitIncrement(20);
-
-            pnlPrincipal.add(scrollInteresses);
         }
 
-        scrollInteresses.setBounds(
-                inicioConteudo,
-                0,
-                pnlPrincipal.getWidth() - inicioConteudo,
-                pnlPrincipal.getHeight()
-        );
-
-        scrollInteresses.setVisible(true);
-        pnlPrincipal.setComponentZOrder(scrollInteresses, 0);
+        painelInteresses.atualizarVagasCurtidas();
+        exibirTelaDinamica(scrollInteresses);
     }
 
     pnlPrincipal.revalidate();
@@ -903,6 +1102,8 @@ private void ocultarPainelPerfil() {
     }
 }
     private void mostrarPainelPerfil() {
+        destacarAba(btnMeuPerfil);
+        ocultarTelasDinamicas();
         if (scrollVagas != null) {
     scrollVagas.setVisible(false);
 }
@@ -919,17 +1120,9 @@ scrollPerfil.setHorizontalScrollBarPolicy(
 );
 scrollPerfil.getVerticalScrollBar().setUnitIncrement(20);
 
-pnlPrincipal.add(scrollPerfil);
     }
     painelPerfil.atualizarPerfil();
-    scrollPerfil.setBounds(
-        pnlMenuLateral.getX() + pnlMenuLateral.getWidth() + 20,
-        0,
-        pnlPrincipal.getWidth() - pnlMenuLateral.getWidth() - 40,
-        pnlPrincipal.getHeight()
-    );
-
-    scrollPerfil.setVisible(true);
+    exibirTelaDinamica(scrollPerfil);
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
@@ -1059,7 +1252,21 @@ if (cidade != null && !cidade.isBlank()
  
 }
     private void mostrarPaginaInicial() {
+    destacarAba(btnInicio1);
 
+    if ("PROFISSIONAL".equalsIgnoreCase(tipoUsuario)) {
+        carregarQuantidadeVagas();
+        carregarCandidaturasEnviadas();
+        carregarQuantidadeMatches();
+
+    } else if ("EMPRESA".equalsIgnoreCase(tipoUsuario)) {
+        carregarQuantidadeVagasEmpresa();
+        carregarCandidaturasRecebidas();
+    }
+
+    ocultarTelasDinamicas();
+    pnlConteudoDinamico.setVisible(false);
+    pnlConteudoDinamico.removeAll();
     pnlBoasVindas.setVisible(true);
     pnlBanner.setVisible(true);
     pnlVagasRecomendadas1.setVisible(true);
@@ -1075,7 +1282,8 @@ if (cidade != null && !cidade.isBlank()
     
 
 private void mostrarPainelVagasEmpresa() {
-
+    destacarAba(btnVagas2);
+    ocultarTelasDinamicas();    
     if (scrollPerfil != null) {
         scrollPerfil.setVisible(false);
     }
@@ -1108,21 +1316,12 @@ private void mostrarPainelVagasEmpresa() {
         scrollVagasEmpresa.getVerticalScrollBar()
                 .setUnitIncrement(20);
 
-        pnlPrincipal.add(scrollVagasEmpresa);
     }
+    
     painelVagasEmpresa.atualizarVagasEmpresa();
-    int inicioConteudo = pnlMenuLateral.getX()
-            + pnlMenuLateral.getWidth();
-
-    scrollVagasEmpresa.setBounds(
-            inicioConteudo,
-            0,
-            pnlPrincipal.getWidth() - inicioConteudo,
-            pnlPrincipal.getHeight()
-    );
-
-    scrollVagasEmpresa.setVisible(true);
-    pnlPrincipal.setComponentZOrder(scrollVagasEmpresa, 0);
+        
+    
+    exibirTelaDinamica(scrollVagasEmpresa);
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
@@ -1139,7 +1338,7 @@ private void mostrarPainelEditarVaga(int idVaga) {
 private javax.swing.JScrollPane scrollPublicarVaga;
 
 private void mostrarPainelPublicarVaga() {
-
+ocultarTelasDinamicas();
     // Esconde a tela de gerenciamento de vagas
     if (scrollVagasEmpresa != null) {
         scrollVagasEmpresa.setVisible(false);
@@ -1163,7 +1362,7 @@ private void mostrarPainelPublicarVaga() {
 
         PublicarVaga_Panel painelPublicar =
         new PublicarVaga_Panel(idUsuario);
-painelPublicar.setAcaoPublicacaoConcluida(() -> {
+        painelPublicar.setAcaoPublicacaoConcluida(() -> {
     scrollPublicarVaga.setVisible(false);
 
     painelVagasEmpresa.atualizarVagasEmpresa();
@@ -1183,27 +1382,14 @@ painelPublicar.setAcaoCancelar(() -> {
 
         scrollPublicarVaga.getVerticalScrollBar()
                 .setUnitIncrement(20);
-
-        pnlPrincipal.add(scrollPublicarVaga);
     }
 
     // Posiciona o formulário ao lado do menu lateral
-    int inicioConteudo = pnlMenuLateral.getX()
-            + pnlMenuLateral.getWidth();
-
-    scrollPublicarVaga.setBounds(
-            inicioConteudo,
-            0,
-            pnlPrincipal.getWidth() - inicioConteudo,
-            pnlPrincipal.getHeight()
-    );
-
-    scrollPublicarVaga.setVisible(true);
+    exibirTelaDinamica(scrollPublicarVaga);
     PublicarVaga_Panel painel =
     (PublicarVaga_Panel) scrollPublicarVaga.getViewport().getView();
 
-painel.configurarNovaVaga();
-    pnlPrincipal.setComponentZOrder(scrollPublicarVaga, 0);
+    painel.configurarNovaVaga();
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
@@ -1216,7 +1402,7 @@ private void mostrarDetalhesVaga(int idVaga) {
 }
 
 private void mostrarDetalhesVaga(int idVaga, boolean veioDeInteresses) {
-
+    ocultarTelasDinamicas();
     if (scrollVagas != null) scrollVagas.setVisible(false);
     if (scrollVagasEmpresa != null) scrollVagasEmpresa.setVisible(false);
     if (scrollPerfil != null) scrollPerfil.setVisible(false);
@@ -1225,8 +1411,8 @@ private void mostrarDetalhesVaga(int idVaga, boolean veioDeInteresses) {
     if (scrollInteresses != null) scrollInteresses.setVisible(false);
 
     if (scrollDetalhesVaga != null) {
-        pnlPrincipal.remove(scrollDetalhesVaga);
-    }
+    pnlConteudoDinamico.remove(scrollDetalhesVaga);
+}   
 
     DetalhesVaga_Panel painelDetalhes =
             new DetalhesVaga_Panel(idVaga, idUsuario);
@@ -1252,24 +1438,46 @@ private void mostrarDetalhesVaga(int idVaga, boolean veioDeInteresses) {
 
     scrollDetalhesVaga.getVerticalScrollBar().setUnitIncrement(20);
 
-    pnlPrincipal.add(scrollDetalhesVaga);
-
-    int inicioConteudo =
-            pnlMenuLateral.getX() + pnlMenuLateral.getWidth();
-
-    scrollDetalhesVaga.setBounds(
-            inicioConteudo,
-            0,
-            pnlPrincipal.getWidth() - inicioConteudo,
-            pnlPrincipal.getHeight()
-    );
-
-    scrollDetalhesVaga.setVisible(true);
-    pnlPrincipal.setComponentZOrder(scrollDetalhesVaga, 0);
+    exibirTelaDinamica(scrollDetalhesVaga);
 
     pnlPrincipal.revalidate();
     pnlPrincipal.repaint();
 }
+private void carregarCandidaturasRecebidas() {
+
+    String sql = """
+        SELECT COUNT(*)
+        FROM interesses i
+        INNER JOIN vagas v
+            ON i.id_vaga = v.id_vaga
+        INNER JOIN empresas e
+            ON v.id_empresa = e.id_empresa
+        WHERE e.id_usuario = ?
+        AND i.origem = 'candidato'
+        """;
+
+    try (java.sql.Connection conexao = Conexao.conectar();
+         java.sql.PreparedStatement pst = conexao.prepareStatement(sql)) {
+
+        pst.setInt(1, idUsuario);
+
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                lblQuantidadeVagas2.setText(
+                    String.valueOf(rs.getInt(1))
+                );
+            }
+        }
+
+    } catch (java.sql.SQLException e) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Erro ao contar candidaturas recebidas: " + e.getMessage()
+        );
+    }
+}
+
 private void carregarQuantidadeVagasEmpresa() {
 
     String sql = """
