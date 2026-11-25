@@ -834,7 +834,7 @@ private void carregarPerfilParaEdicao() {
         btnVoltarInicio4.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnVoltarInicio4.setForeground(new java.awt.Color(255, 255, 255));
         btnVoltarInicio4.setText("← Voltar ao início");
-        btnVoltarInicio4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        btnVoltarInicio4.setBorder(null);
         btnVoltarInicio4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVoltarInicio4.addActionListener(this::btnVoltarInicio4ActionPerformed);
 

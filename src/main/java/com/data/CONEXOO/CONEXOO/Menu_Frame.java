@@ -188,7 +188,28 @@ private void carregarQuantidadeMatches() {
         );
     }
 }
-    
+    private void mostrarPerfilProfissionalMatch(int idUsuarioProfissional) {
+
+    VisualizarPerfil_Panel painel =
+        new VisualizarPerfil_Panel(idUsuarioProfissional);
+
+    painel.configurarModoVisualizacao(() -> {
+    mostrarPainelMatches();
+});
+
+painel.definirTextoVoltar("← Voltar para Matches");
+
+    javax.swing.JScrollPane scroll =
+        new javax.swing.JScrollPane(painel);
+
+    scroll.setHorizontalScrollBarPolicy(
+        javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+    );
+
+    scroll.getVerticalScrollBar().setUnitIncrement(20);
+
+    exibirTelaDinamica(scroll);
+}
     
 private void mostrarPainelMatches() {
     destacarAba(btnMatches1);
@@ -214,6 +235,9 @@ private void mostrarPainelMatches() {
 
         if (painelMatchesEmpresa == null) {
             painelMatchesEmpresa = new MatchsEmpresa(idUsuario);
+            painelMatchesEmpresa.setAcaoVerPerfil(
+            idUsuarioProfissional -> mostrarPerfilProfissionalMatch(idUsuarioProfissional)
+);
             scrollMatchesEmpresa = new javax.swing.JScrollPane(painelMatchesEmpresa);
 
             scrollMatchesEmpresa.setHorizontalScrollBarPolicy(

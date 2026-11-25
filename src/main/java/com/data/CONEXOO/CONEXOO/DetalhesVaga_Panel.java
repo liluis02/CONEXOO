@@ -401,13 +401,14 @@ private void carregarDetalhesVaga() {
         btnVoltarVagas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnVoltarVagas.setForeground(new java.awt.Color(255, 255, 255));
         btnVoltarVagas.setText("Voltar para Vagas");
-        btnVoltarVagas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        btnVoltarVagas.setBorder(null);
         btnVoltarVagas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVoltarVagas.addActionListener(this::btnVoltarVagasActionPerformed);
 
         btnCandidatar.setBackground(new java.awt.Color(6, 182, 212));
         btnCandidatar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnCandidatar.setText("Candidatar-se");
+        btnCandidatar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCandidatar.addActionListener(this::btnCandidatarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

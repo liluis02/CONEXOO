@@ -666,7 +666,7 @@ pnlListaProfissionais.repaint();
         cmbAreaAtuacao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         cmbAreaAtuacao.setForeground(new java.awt.Color(255, 255, 255));
         cmbAreaAtuacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione uma área de atuação", "Desenvolvimento Front-end", "Desenvolvimento Back-end", "Desenvolvimento Full Stack", "Desenvolvimento Mobile", "Desenvolvimento Desktop", "Desenvolvimento de Jogos", "Engenharia de Software", "Arquitetura de Software", "Qualidade de Software (QA)", "Automação de Testes", "Banco de Dados", "Administração de Banco de Dados (DBA)", "Análise de Dados", "Ciência de Dados", "Engenharia de Dados", "Business Intelligence (BI)", "Inteligência Artificial", "Machine Learning", "Redes de Computadores", "Administração de Sistemas", "Infraestrutura de TI", "Suporte Técnico", "Segurança da Informação", "Cibersegurança", "Segurança Ofensiva (Pentest)", "Computação em Nuvem (Cloud)", "DevOps", "Engenharia de Confiabilidade (SRE)", "Análise de Sistemas", "Gestão de Projetos de TI", "Gestão de Produtos Digitais", "Governança de TI", "Consultoria de TI", "Análise de Negócios", "Sistemas ERP", "Scrum Master", "UX/UI Design", "Internet das Coisas (IoT)", "Robótica e Automação", "Blockchain" }));
-        cmbAreaAtuacao.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(8, 127, 167)));
+        cmbAreaAtuacao.setBorder(null);
         cmbAreaAtuacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbAreaAtuacao.setPreferredSize(new java.awt.Dimension(250, 40));
         cmbAreaAtuacao.addActionListener(this::cmbAreaAtuacaoActionPerformed);

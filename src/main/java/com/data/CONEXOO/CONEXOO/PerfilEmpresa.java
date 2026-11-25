@@ -16,17 +16,43 @@ public class PerfilEmpresa extends javax.swing.JFrame {
         java.util.logging.Logger.getLogger(PerfilEmpresa.class.getName());
 
     public PerfilEmpresa(int idUsuario) {
-        initComponents();
-        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        this.idUsuario = idUsuario;
-        
-        carregarDadosEmpresa();
-    }
-    
-    public PerfilEmpresa() {
     initComponents();
+    configurarScroll();
+    setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+    this.idUsuario = idUsuario;
+
+    carregarDadosEmpresa();
+}
+
+public PerfilEmpresa() {
+    initComponents();
+    configurarScroll();
     setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
 }
+    
+    private void configurarScroll() {
+
+    pnlPrincipalEmpresa.setPreferredSize(
+        new java.awt.Dimension(1535, 885)
+    );
+
+    javax.swing.JScrollPane scroll =
+        new javax.swing.JScrollPane(pnlPrincipalEmpresa);
+
+    scroll.setVerticalScrollBarPolicy(
+        javax.swing.JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+    );
+
+    scroll.setHorizontalScrollBarPolicy(
+        javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+    );
+
+    scroll.getVerticalScrollBar().setUnitIncrement(20);
+    scroll.setBorder(null);
+
+    setContentPane(scroll);
+}
+   
 private void carregarDadosEmpresa() {
     String sql = "SELECT * FROM empresas WHERE id_usuario = ?";
 
@@ -583,20 +609,9 @@ stmt.executeUpdate();
     }//GEN-LAST:event_cmbPortedaEmpresaActionPerformed
 
     private void btnVoltarInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarInicioActionPerformed
-for (java.awt.Window janela : java.awt.Window.getWindows()) {
-
-    if (janela instanceof Menu_Frame) {
-
-        Menu_Frame menu = (Menu_Frame) janela;
-
-        menu.setVisible(true);
-        menu.toFront();
-        menu.requestFocus();
-
-        this.dispose();
-        return;
-    }
-}
+Menu_Frame menu = new Menu_Frame(idUsuario, "EMPRESA");
+    menu.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_btnVoltarInicioActionPerformed
 
     /**

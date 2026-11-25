@@ -46,6 +46,10 @@ public class VisualizarPerfil_Panel extends javax.swing.JPanel {
     btnEditarPerfil.setText("← Voltar para Interesses");
 }
     
+    public void definirTextoVoltar(String texto) {
+    btnEditarPerfil.setText(texto);
+}
+    
 private void carregarDadosPerfil() {
 
     String sql = """
